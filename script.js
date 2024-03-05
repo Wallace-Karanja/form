@@ -5,7 +5,9 @@ document.getElementById("form").addEventListener("submit", (event) => {
 
   for (const [key, value] of formData) {
     if (value.trim() == "") {
-      document.getElementById(key).textContent = `(provide your ${key})`;
+      // remove underscore from key
+      var newKey = key.replace(/_/, " ");
+      document.getElementById(key).textContent = `(provide your ${newKey})`;
       event.preventDefault();
       formOkay = false;
       return;
@@ -31,11 +33,11 @@ document.getElementById("form").addEventListener("submit", (event) => {
         var response = data["response"];
         var message = document.getElementById("message");
         if (response == 0) {
-          message.textContent = "Success";
+          message.textContent = "Success ! Record saved";
         } else if (response == 1) {
           message.textContent = "Insert query failed !";
         } else if (response == 2) {
-          message.textContent = "User is already registered !";
+          message.textContent = "Record already exists !";
         } else {
           message.textContent = "Error, contact admin !";
         }
