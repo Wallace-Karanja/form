@@ -24,7 +24,7 @@ class Form
 
     public function createDbConnection()
     {
-        $dsn = "mysql:host=localhost;dbname=form";
+        $dsn = "mysql:host=localhost;port=3306;dbname=form";
         $username = "admin";
         $password = "admin2024";
         try {

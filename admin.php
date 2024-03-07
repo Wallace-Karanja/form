@@ -48,12 +48,11 @@ include './Form.php';
             <?php
             $applications = new Form();
             foreach ($applications->selectAll() as $row) { ?>
-              <tr>
-                <td><?php echo $row['id']; ?></td>
-                <td><?php echo $row['firstname'] . " " . $row['lastname']; ?></td>
-                <td><?php echo $row['email_address']; ?></td>
-                <td><?php echo $row['phone_number']; ?></td>
-                <td><a href="">View</a></td>
+              <td><?php echo $row['id']; ?></td>
+              <td><?php echo $row['firstname'] . " " . $row['lastname']; ?></td>
+              <td><?php echo $row['email_address']; ?></td>
+              <td><?php echo $row['phone_number']; ?></td>
+              <td><a href="view.php?id=<?php echo $row['id']; ?>">View</a></td>
               </tr>
             <?php } ?>
           </tbody>

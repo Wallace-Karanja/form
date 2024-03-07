@@ -35,7 +35,7 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
 }
 
 #form {
@@ -74,4 +74,8 @@ table tbody tr:nth-child(2n + 1) {
 table thead th {
   background-color: black;
   color: white;
+}
+
+table {
+  margin: auto;
 }
