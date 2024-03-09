@@ -1,5 +1,6 @@
 <?php
 // include './process_form.php';
+// include './Form.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +61,11 @@
           <div><input type="submit" name="submit" value="submit" id="submit" /></div>
         </form>
         <p id="message"></p>
+        <?php
+        if (isset($_POST['submit'])) {
+          echo "submitted";
+        }
+        ?>
       </div>
     </main>
     <div></div>

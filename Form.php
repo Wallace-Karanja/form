@@ -7,7 +7,7 @@ class Form
     public $phoneNumber;
     public $connection;
     public $queryStatus;
-    // public  $post = $_POST; 
+    public $post;
 
     // db connection
 
@@ -18,13 +18,14 @@ class Form
             $this->lastname = $_POST['lastname'];
             $this->emailAddress = $_POST['email_address'];
             $this->phoneNumber = $_POST['phone_number'];
+            $this->post = $_POST;
         }
         $this->connection = $this->createDbConnection();
     }
 
     public function createDbConnection()
     {
-        $dsn = "mysql:host=localhost;port=3306;dbname=form";
+        $dsn = "mysql:host=localhost;port=3307;dbname=form";
         $username = "admin";
         $password = "admin2024";
         try {
@@ -68,5 +69,17 @@ class Form
         $result = $this->connection->query($sql);
         $records = $result->fetchAll(PDO::FETCH_ASSOC);
         return $records;
+    }
+
+    function selectById()
+    {
+        $sql = "SELECT * FROM application_form WHERE id = :id"; # named parameters
+        $stmt = $this->connection->prepare($sql);
+        if ($stmt->execute($_GET)) {
+            $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $record;
+        } else {
+            return null;
+        }
     }
 }

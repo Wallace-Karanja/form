@@ -1,5 +1,5 @@
 body {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header-container {
@@ -78,4 +78,14 @@ table thead th {
 
 table {
   margin: auto;
+}
+
+.info {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.info-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
