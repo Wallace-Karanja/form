@@ -1,23 +1,15 @@
 <?php
 class Form
 {
-    public $firstname;
-    public $lastname;
-    public $emailAddress;
-    public $phoneNumber;
     public $connection;
-    public $queryStatus;
     public $post;
+    public $queryStatus;
 
     // db connection
-
+    // check if the fields are okay, incase client side refuses to work
     public function __construct()
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") { // what would be a solution for very many fields?
-            $this->firstname = $_POST['firstname'];
-            $this->lastname = $_POST['lastname'];
-            $this->emailAddress = $_POST['email_address'];
-            $this->phoneNumber = $_POST['phone_number'];
             $this->post = $_POST;
         }
         $this->connection = $this->createDbConnection();
@@ -39,9 +31,10 @@ class Form
     public function insert()
     {
         if ($this->checkIfUserExists() == false) {
-            $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES ('" . $this->firstname . "','" . $this->lastname . "','" . $this->emailAddress . "','" . $this->phoneNumber . "')";
-
-            $result = $this->connection->query($sql);
+            // $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES ('" . $this->firstname . "','" . $this->lastname . "','" . $this->emailAddress . "','" . $this->phoneNumber . "')";
+            $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES (:firstname, :lastname, :email_address, :phone_number)";
+            $stmt = $this->connection->prepare($sql);
+            $result = $stmt->execute($this->post);
             if ($result != false) {
                 //SUCCESS
                 $this->queryStatus = 0;
@@ -57,9 +50,10 @@ class Form
 
     public function checkIfUserExists()
     {
-        $sql = "SELECT COUNT(*) FROM application_form WHERE email_address = '" . $this->emailAddress . "' OR phone_number = '" . $this->phoneNumber . "'";
-        $result = $this->connection->query($sql);
-        $count = $result->fetchColumn();
+        $sql = "SELECT COUNT(*) FROM application_form WHERE email_address = :email_address OR phone_number = :phone_number";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute(['email_address' => $this->post['email_address'], 'phone_number' => $this->post['phone_number']]);
+        $count = $stmt->fetchColumn();
         return $count >= 1 ? true : false;
     }
 
