@@ -4,6 +4,7 @@ class Form
     public $connection;
     public $post;
     public $queryStatus;
+    public $fieldsOkay;
 
     // db connection
     // check if the fields are okay, incase client side refuses to work
@@ -13,6 +14,18 @@ class Form
             $this->post = $_POST;
         }
         $this->connection = $this->createDbConnection();
+    }
+
+    public function checkFields($array) // post or get
+    {
+        foreach ($array as $key => $value) {
+            if ($value == "") {
+                $this->fieldsOkay = false;
+                return $this->fieldsOkay;
+            }
+            $this->fieldsOkay = true;
+            return $this->fieldsOkay;
+        }
     }
 
     public function createDbConnection()
@@ -30,21 +43,28 @@ class Form
 
     public function insert()
     {
-        if ($this->checkIfUserExists() == false) {
-            // $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES ('" . $this->firstname . "','" . $this->lastname . "','" . $this->emailAddress . "','" . $this->phoneNumber . "')";
-            $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES (:firstname, :lastname, :email_address, :phone_number)";
-            $stmt = $this->connection->prepare($sql);
-            $result = $stmt->execute($this->post);
-            if ($result != false) {
-                //SUCCESS
-                $this->queryStatus = 0;
+        if ($this->checkFields($this->post)) {
+            if ($this->checkIfUserExists() == false) {
+                try {
+                    $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES (:firstname, :lastname, :email_address, :phone_number)";
+                    $stmt = $this->connection->prepare($sql);
+                    $result = $stmt->execute($this->post);
+                    if ($result != false) {
+                        //SUCCESS
+                        $this->queryStatus = 0;
+                    } else {
+                        // SOMETHING WENT WRONG
+                        $this->queryStatus = 1;
+                    }
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
             } else {
-                // SOMETHING WENT WRONG
-                $this->queryStatus = 1;
+                // USER ALREADY EXISTS
+                $this->queryStatus = 2;
             }
         } else {
-            // USER ALREADY EXISTS
-            $this->queryStatus = 2;
+            $this->queryStatus = 3;
         }
     }
 

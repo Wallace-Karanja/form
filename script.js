@@ -38,6 +38,8 @@ document.getElementById("form").addEventListener("submit", (event) => {
           message.textContent = "Insert query failed !";
         } else if (response == 2) {
           message.textContent = "Record already exists !";
+        } else if (response == 3) {
+          message.textContent = "Supply values for all the fields";
         } else {
           message.textContent = "Error, contact admin !";
         }
