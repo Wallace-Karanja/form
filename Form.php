@@ -12,20 +12,21 @@ class Form
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") { // what would be a solution for very many fields?
             $this->post = $_POST;
+            $this->checkFields($this->post);
         }
         $this->connection = $this->createDbConnection();
     }
 
     public function checkFields($array) // post or get
     {
-        foreach ($array as $key => $value) {
-            if ($value == "") {
+        foreach ($array as $value) {
+            if (empty(trim($value))) {
                 $this->fieldsOkay = false;
-                return $this->fieldsOkay;
+                return false;
             }
-            $this->fieldsOkay = true;
-            return $this->fieldsOkay;
         }
+        $this->fieldsOkay = true;
+        return true;
     }
 
     public function createDbConnection()
@@ -43,7 +44,7 @@ class Form
 
     public function insert()
     {
-        if ($this->checkFields($this->post)) {
+        if ($this->fieldsOkay) {
             if ($this->checkIfUserExists() == false) {
                 try {
                     $sql = "INSERT INTO application_form (firstname, lastname, email_address, phone_number) VALUES (:firstname, :lastname, :email_address, :phone_number)";

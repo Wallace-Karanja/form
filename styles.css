@@ -41,7 +41,7 @@ body {
 #form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid gray;
+  border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
 }
@@ -55,10 +55,10 @@ body {
 form #submit {
   width: 25%;
   color: white;
-  background-color: gray;
-  border: solid 1px gray;
+  background-color: black;
+  border: solid 1px black;
   border-radius: 1px;
-  box-shadow: 5px 5px 5px black;
+  box-shadow: 5px 5px 5px gray;
 }
 
 span {
@@ -67,7 +67,7 @@ span {
 }
 
 table tbody tr:nth-child(2n + 1) {
-  background-color: grey;
+  background-color: gray;
   color: white;
 }
 

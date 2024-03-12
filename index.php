@@ -63,7 +63,9 @@
         <p id="message"></p>
         <?php
         if (isset($_POST['submit'])) {
-          echo "submitted";
+          // $form = new Form();
+          // $form->checkFields($_POST);
+          // var_dump($form->fieldsOkay);
         }
         ?>
       </div>
