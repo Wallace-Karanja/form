@@ -58,13 +58,13 @@ include './Form.php';
           </tbody>
         </table>
         <div style="border: 2px dashed black;">
-          <?php
-          foreach ($applications->showLogs() as $row) {
-            foreach ($row as $key => $value) {
-              echo "$key => $value <br>";
-            }
-          }
-          ?>
+          <h3>Logs</h3>
+          <ol>
+            <?php
+            foreach ($applications->showLogs() as $row) { ?>
+              <li><?php echo $row['name'] . ' ' . $row['date'] . ' ' . $row['time']; ?></li>
+            <?php } ?>
+          </ol>
         </div>
     </main>
     <div></div>
