@@ -30,7 +30,7 @@
             <li class="links"><a href="">Contact Us</a></li>
           </div>
           <div>
-            <li class="links"><a href="admin.php">Admin</a></li>
+            <li class="links"><a href="./admin/">Admin</a></li>
           </div>
         </ul>
       </nav>
