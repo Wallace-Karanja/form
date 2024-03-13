@@ -37,7 +37,7 @@ document.getElementById("form").addEventListener("submit", (event) => {
         } else if (response == 1) {
           message.textContent = "Insert query failed !";
         } else if (response == 2) {
-          message.textContent = "Record already exists !";
+          message.innerHTML = "Record already exists ! Continue with application. <a href='application.php'>Application<a/>";
         } else if (response == 3) {
           message.textContent = "Supply values for all the fields";
         } else {

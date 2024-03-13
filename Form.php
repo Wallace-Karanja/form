@@ -52,10 +52,13 @@ class Form
                     $result = $stmt->execute($this->post);
                     if ($result != false) {
                         //SUCCESS
+                        $this->createLog();
                         $this->queryStatus = 0;
+                        return true;
                     } else {
                         // SOMETHING WENT WRONG
                         $this->queryStatus = 1;
+                        return false;
                     }
                 } catch (Exception $e) {
                     echo $e->getMessage();
@@ -63,9 +66,11 @@ class Form
             } else {
                 // USER ALREADY EXISTS
                 $this->queryStatus = 2;
+                return false;
             }
         } else {
             $this->queryStatus = 3;
+            return false;
         }
     }
 
@@ -95,6 +100,41 @@ class Form
             return $record;
         } else {
             return null;
+        }
+    }
+
+    function showLogs()
+    {
+        // create a log to sqlite db 
+        // admin can view logs online
+        try {
+            //code...
+            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
+            $sql = "SELECT * FROM log";
+            $result = $pdo->query($sql);
+            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $records;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function createLog()
+    {
+        try {
+            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
+            $sql = 'INSERT INTO log (name, date, time) VALUES (:name,  :date, :time)';
+            $name = $this->post['firstname'] . ' ' . $this->post['lastname'];
+            $stmt = $pdo->prepare($sql);
+            $date = date("d-m-Y");
+            $time = date("H:i:s");
+            $result =  $stmt->execute(["name" => $name, "date" => $date, "time" => $time]);
+            if ($result != false) {
+                return true;
+            }
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
     }
 }

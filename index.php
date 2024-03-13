@@ -62,11 +62,10 @@
         </form>
         <p id="message"></p>
         <?php
-        if (isset($_POST['submit'])) {
-          // $form = new Form();
-          // $form->checkFields($_POST);
-          // var_dump($form->fieldsOkay);
-        }
+        // if (isset($_POST['submit'])) {
+        //   $form = new Form();
+        //   var_dump($form->createLog($_POST));
+        // }
         ?>
       </div>
     </main>

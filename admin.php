@@ -57,6 +57,15 @@ include './Form.php';
             <?php } ?>
           </tbody>
         </table>
+        <div style="border: 2px dashed black;">
+          <?php
+          foreach ($applications->showLogs() as $row) {
+            foreach ($row as $key => $value) {
+              echo "$key => $value <br>";
+            }
+          }
+          ?>
+        </div>
     </main>
     <div></div>
   </div>
