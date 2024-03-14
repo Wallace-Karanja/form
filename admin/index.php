@@ -58,10 +58,16 @@ include '../Form.php';
           <h3>Logs</h3>
           <ol>
             <?php
-            foreach ($applications->showLogs() as $row) { ?>
-              <li><?php echo $row['name'] . ' ' . $row['date'] . ' ' . $row['time']; ?></li>
-            <?php } ?>
+            // foreach ($applications->showLogs() as $row) { 
+            ?>
+            <!-- <li><?php // echo $row['name'] . ' ' . $row['date'] . ' ' . $row['time']; 
+                      ?></li> -->
+            <?php //} 
+            ?>
           </ol>
+          <?php
+          var_dump($applications->showLogs());
+          ?>
         </div>
     </main>
     <div></div>
