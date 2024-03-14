@@ -21,6 +21,9 @@ include '../Form.php';
           <div class="links">
             <li><a href="index.php">Home</a></li>
           </div>
+          <div class="links">
+            <li><a href="logs.php">Logs</a></li>
+          </div>
           <div>
             <li class="links"><a href="">Logout</a></li>
           </div>
@@ -54,21 +57,6 @@ include '../Form.php';
             <?php } ?>
           </tbody>
         </table>
-        <div style="border: 2px dashed black;">
-          <h3>Logs</h3>
-          <ol>
-            <?php
-            // foreach ($applications->showLogs() as $row) { 
-            ?>
-            <!-- <li><?php // echo $row['name'] . ' ' . $row['date'] . ' ' . $row['time']; 
-                      ?></li> -->
-            <?php //} 
-            ?>
-          </ol>
-          <?php
-          var_dump($applications->showLogs());
-          ?>
-        </div>
     </main>
     <div></div>
   </div>
