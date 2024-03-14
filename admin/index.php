@@ -25,7 +25,7 @@ include '../Form.php';
             <li><a href="logs.php">Logs</a></li>
           </div>
           <div>
-            <li class="links"><a href="">Logout</a></li>
+            <li class="links"><a href="logout.php">Logout</a></li>
           </div>
         </ul>
       </nav>
