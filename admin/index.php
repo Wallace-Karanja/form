@@ -1,5 +1,10 @@
 <?php
+session_start();
 include '../Form.php';
+if (!isset($_SESSION['id'])) {
+  $url = './login.php';
+  header("Location:" . $url);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

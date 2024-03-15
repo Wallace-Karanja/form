@@ -1,6 +1,7 @@
 <?php
 // include './process_form.php';
 // include './Form.php';
+include './Admin.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,20 +42,27 @@
                 <form action="" method="post" id="form">
                     <div>
                         <label for="idNumber">Id Number/Staff No<span id="id_number"></span></label>
-                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" />
+                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="pass">Password<span id="password"></span></label>
-                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" />
+                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" required />
                     </div>
-                    <div><input type="submit" name="submit" value="Login" id="submit" /></div>
+                    <div><input type="submit" name="submit" value="Login" id="submit" required /></div>
                 </form>
                 <p id="message"></p>
                 <?php
                 if (isset($_POST['submit'])) {
-                    //   $form = new Form();
-                    //   var_dump($form->createLog($_POST));
-                    var_dump($_POST);
+                    $admin = new Admin();
+                    $admin->login();
+                    if ($admin->queryStatus == 0) {
+                        echo "Success !";
+                        // header( "refresh:5;url=wherever.php" );
+                        $url = "./index.php";
+                        header("Location:" . $url);
+                    } else {
+                        echo "Wrong Id number/PF Number or Password !";
+                    }
                 }
                 ?>
             </div>

@@ -1,6 +1,7 @@
 <?php
 // include './process_form.php';
 // include './Form.php';
+include './Admin.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,51 +39,77 @@
                 <form action="" method="post" id="form">
                     <div>
                         <label for="firstName">Firstname<span id="firstname"></span></label>
-                        <input type="text" name="firstname" id="firstName" value="<?php echo (isset($_POST['firstname']) ? $_POST['firstname'] : ""); ?>" />
+                        <input type="text" name="firstname" id="firstName" value="<?php echo (isset($_POST['firstname']) ? $_POST['firstname'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="lastName">Lastname <span id="lastname"></span></label>
-                        <input type="text" name="lastname" id="lastName" value="<?php echo (isset($_POST['lastname']) ? $_POST['lastname'] : ""); ?>" />
+                        <input type="text" name="lastname" id="lastName" value="<?php echo (isset($_POST['lastname']) ? $_POST['lastname'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="secondName">Second Name<span id="second_name"></span></label>
-                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($_POST['second_name']) ? $_POST['second_name'] : ""); ?>" />
+                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($_POST['second_name']) ? $_POST['second_name'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="emailAddress">Email<span id="email_address"></span></label>
-                        <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($_POST['email_address']) ? $_POST['email_address'] : ""); ?>" />
+                        <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($_POST['email_address']) ? $_POST['email_address'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" />
+                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="idNumber">Id Number/Staff No<span id="id_number"></span></label>
-                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" />
+                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="pass">Password<span id="password"></span></label>
-                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" />
+                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="confirm_pass">Confirm Password<span id="confirm_password"></span></label>
-                        <input type="password" name="confirm_password" id="confirm_pass" value="<?php echo (isset($_POST['confirm_password']) ? $_POST['confirm_password'] : ""); ?>" />
+                        <input type="password" name="confirm_password" id="confirm_pass" value="<?php echo (isset($_POST['confirm_password']) ? $_POST['confirm_password'] : ""); ?>" required />
                     </div>
                     <div><input type="submit" name="submit" value="Register" id="submit" /></div>
                 </form>
                 <p id="message"></p>
                 <?php
                 if (isset($_POST['submit'])) {
-                    //   $form = new Form();
-                    //   var_dump($form->createLog($_POST));
-                    var_dump($_POST);
+                    $admin = new Admin();
+                    // $admin->verifyPassword();
+                    // var_dump($admin->post);
+                    if ($admin->register() && $admin->queryStatus == 0) {
+                        echo "successifully registered";
+                    } elseif (!$admin->register() &&  $admin->queryStatus == 3) {
+                        echo "Already registered, please login : ";
+                    } else {
+                        echo "registration failure : " . $admin->queryStatus;
+                    }
                 }
                 ?>
             </div>
         </main>
         <div></div>
     </div>
-
+    <script>
+        // var message = document.getElementById("message");
+        // var form = document.getElementById("form");
+        // form.addEventListener("submit", (event) => {
+        //     event.preventDefault();
+        //     var formData = new FormData(form);
+        //     const password = formData.get('password');
+        //     const confirmPassword = formData.get('confirm_password');
+        //     if (password.trim() == confirmPassword.trim()) {
+        //         if (password.length >= 8) {
+        //             message.textContent = "password length OK !";
+        //             formData.delete('confirm_password');
+        //         } else {
+        //             message.textContent = "password is too short !";
+        //         }
+        //     } else {
+        //         message.textContent = "passwords do not match !";
+        //     }
+        // })
+    </script>
 </body>
 
 </html>
