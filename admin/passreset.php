@@ -1,6 +1,7 @@
 <?php
 // include './process_form.php';
 // include './Form.php';
+include './Admin.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +60,9 @@
                 if (isset($_POST['submit'])) {
                     //   $form = new Form();
                     //   var_dump($form->createLog($_POST));
-                    var_dump($_POST);
+                    // var_dump($_POST);
+                    $admin = new Admin();
+                    var_dump($admin->resetPassword());
                 }
                 ?>
             </div>

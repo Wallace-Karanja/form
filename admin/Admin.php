@@ -124,6 +124,32 @@ class Admin
         }
     }
 
+    function resetPassword()
+    {
+        if ($this->userExists()) {
+            try {
+                if ($this->confirmPassword()) {
+                    $sql = "UPDATE admin SET password = :password WHERE id_number = :id_number AND email_address = :email_address";
+                    $stmt = $this->connection->prepare($sql);
+                    $result = $stmt->execute($this->post);
+                    if ($result != false) {
+                        $this->queryStatus = 0;
+                        return true;
+                    } else {
+                        $this->queryStatus = 1;
+                        return false;
+                    }
+                }
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                return false;
+            }
+        }
+        $this->queryStatus = 2;
+        return false;
+    }
+
+
     function startSession()
     {
         session_start();
