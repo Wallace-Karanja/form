@@ -54,14 +54,23 @@ include './Admin.php';
                 <?php
                 if (isset($_POST['submit'])) {
                     $admin = new Admin();
-                    $admin->login();
-                    if ($admin->queryStatus == 0) {
-                        echo "Success !";
-                        // header( "refresh:5;url=wherever.php" );
-                        $url = "./index.php";
-                        header("Location:" . $url);
-                    } else {
-                        echo "Wrong Id number/PF Number or Password !";
+                    $admin->loginAdmin();
+                    $queryStatus = $admin->queryStatus;
+                    switch ($queryStatus) {
+                        case 0:
+                            echo "Success";
+                            $url = "./index.php";
+                            header("Location:" . $url);
+                            break;
+                        case 1:
+                            echo "Incorrect password !";
+                            break;
+                        case 2:
+                            echo "Incorrect Id number/Staff number"; // user does not exist
+                            break;
+                        default:
+                            echo "Contact Admin !";
+                            break;
                     }
                 }
                 ?>

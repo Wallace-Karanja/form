@@ -75,17 +75,35 @@ include './Admin.php';
                 <?php
                 if (isset($_POST['submit'])) {
                     $admin = new Admin();
-                    // $admin->verifyPassword();
-                    // var_dump($admin->post);
-                    if ($admin->register() && $admin->queryStatus == 0) {
-                        echo "successifully registered";
-                    } elseif ($admin->queryStatus == 2) {
-                        echo "passwords dont match !";
-                    } elseif ($admin->queryStatus == 3) {
-                        $url = './login.php';
-                        echo "Already registered, please <a href=" . $url . ">login</a>";
-                    } else {
-                        echo "registration failure : " . $admin->queryStatus;
+                    $admin->registerAdmin();
+                    $queryStatus = $admin->queryStatus;
+
+                    switch ($queryStatus) {
+                        case 0:
+                            echo "SUCCESS";
+                            break;
+
+                        case 1:
+                            echo "DB Error";
+                            break;
+                        case 2:
+                            echo "Password too short ! Password should have atleast 8 characters";
+                            break;
+
+                        case 3:
+                            echo "Passwords don't match";
+                            break;
+
+                        case 4:
+                            echo "User already exist's, please login";
+                            break;
+
+                        case 5:
+                            echo "Supply all input fields";
+                            break;
+                        default:
+                            echo "Contact the admin";
+                            break;
                     }
                 }
                 ?>

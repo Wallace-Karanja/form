@@ -58,11 +58,40 @@ include './Admin.php';
                 <p id="message"></p>
                 <?php
                 if (isset($_POST['submit'])) {
-                    //   $form = new Form();
-                    //   var_dump($form->createLog($_POST));
-                    // var_dump($_POST);
                     $admin = new Admin();
-                    var_dump($admin->resetPassword());
+                    $admin->resetPassword();
+                    $queryStatus = $admin->queryStatus;
+                    switch ($queryStatus) {
+                        case 0:
+                            echo "Password reset successiful, you will be redirected to login";
+                            $url = './login.php';
+                            header("refresh:3;" . $url);
+                            break;
+
+                        case 1:
+                            echo "Password reset fail, contact admin";
+                            break;
+
+                        case 2:
+                            echo "Password too short ! Password should have atleast 8 characters";
+                            break;
+
+                        case 3:
+                            echo "Password don't match";
+                            break;
+
+                        case 4:
+                            echo "User not found";
+                            break;
+
+                        case 5:
+                            echo "Provide all input fields";
+                            break;
+
+                        default:
+                            echo "Contact Admin";
+                            break;
+                    }
                 }
                 ?>
             </div>

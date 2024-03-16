@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../Form.php';
+include './Admin.php';
 if (!isset($_SESSION['id'])) {
   $url = './login.php';
   header("Location:" . $url);

@@ -41,7 +41,7 @@ include '../Form.php';
                         <?php } else {
                         foreach ($applications->showLogs() as $row) {
                         ?>
-                            <li><?php echo $row['name'] . ' ' . $row['date'] . ' ' . $row['time'];
+                            <li><?php echo $row['id'] . ' ' . $row['date'] . ' ' . $row['time'];
                                 ?></li>
                     <?php }
                     }

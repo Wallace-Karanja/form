@@ -1,6 +1,6 @@
 <?php
 include "./Admin.php";
 $form = new Admin();
-$form->register();
+$form->registerAdmin();
 $serverResponse = ["response" => $form->queryStatus];
 echo json_encode($serverResponse);

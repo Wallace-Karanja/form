@@ -37,27 +37,66 @@ class Admin
     // check pass length
     //
 
-    function confirmPassword()
+
+    function checkPasswordLength()
     {
-        if ($this->fieldsOkay) {
-            if (trim($this->post['password']) == trim($this->post['confirm_password'])) {
-                if ($this->post['password'] >= 8) {
-                    unset($this->post['confirm_password']);
-                    unset($this->post['submit']);
-                    $this->post['password'] = password_hash(trim($this->post['password']), CRYPT_BLOWFISH);
-                    $this->passwordStatus = 0; // pass okay and hashed waiting db saving
-                    return true;
-                }
-                $this->passwordStatus = 1; // pass length not equal or greater to 8
-                return false;
-            }
-            $this->passwordStatus = 2; // pass & confirm pass dont match
-            return false;
-        }
-        $this->passwordStatus = 3; // post fields are not okay
-        return false;
+        return strlen(trim($this->post['password'])) >= 8; // returns true if len >= 8
     }
 
+    function confirmPassword()
+    {
+        return trim($this->post['password']) == trim($this->post['confirm_password']);
+    }
+
+    function hashPassword()
+    {
+        return password_hash(trim($this->post['password']), CRYPT_BLOWFISH);
+    }
+
+    function registerAdmin()
+    {
+        if ($this->fieldsOkay) {
+            if (!$this->userExists()) {
+                if ($this->confirmPassword()) {
+                    if ($this->checkPasswordLength()) {
+                        $this->post['password'] = $this->hashPassword();
+                        unset($this->post['confirm_password']);
+                        unset($this->post['submit']);
+                        try {
+                            $sql = "INSERT INTO admin (firstname, lastname, second_name, email_address, phone_number, id_number, password) VALUES (:firstname, :lastname, :second_name, :email_address, :phone_number, :id_number, :password)";
+                            $stmt = $this->connection->prepare($sql);
+                            $result = $stmt->execute($this->post);
+                            if ($result != false) {
+                                //SUCCESS
+                                // $this->createLog(); // log to be created during login 
+                                $this->queryStatus = 0;
+                                return true;
+                            } else {
+                                // SOMETHING WENT WRONG
+                                $this->queryStatus = 1;
+                                return false;
+                            }
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                            return false;
+                        }
+                    } else {
+                        $this->queryStatus = 2; //pass length
+                        return false;
+                    }
+                } else {
+                    $this->queryStatus = 3; // pass dont match
+                    return false;
+                }
+            } else {
+                $this->queryStatus = 4; // user alreasy exists
+                return false;
+            }
+        } else {
+            $this->queryStatus = 5; // fields not okay
+            return false;
+        }
+    }
 
     public function createDbConnection()
     {
@@ -72,81 +111,68 @@ class Admin
         }
     }
 
-    public function register()
+    function loginAdmin()
     {
-        if ($this->fieldsOkay) {
-            if (!$this->userExists()) {
-                if ($this->confirmPassword()) {
-                    try {
-                        $sql = "INSERT INTO admin (firstname, lastname, second_name, email_address, phone_number, id_number, password) VALUES (:firstname, :lastname, :second_name, :email_address, :phone_number, :id_number, :password)";
-                        $stmt = $this->connection->prepare($sql);
-                        $result = $stmt->execute($this->post);
-                        if ($result != false) {
-                            //SUCCESS
-                            // $this->createLog(); // log to be created during login 
-                            $this->queryStatus = 0;
-                            return true;
-                        } else {
-                            // SOMETHING WENT WRONG
-                            $this->queryStatus = 1;
-                            return false;
-                        }
-                    } catch (Exception $e) {
-                        echo $e->getMessage();
-                        return false;
-                    }
-                } else {
-                    $this->queryStatus = 2;
-                    return false;
-                }
+        if ($this->userExists()) {
+            if ($this->verifyPassword()) {
+                $this->queryStatus = 0; // success
+                $this->startSession();
+                $this->createLog(); // create a log
+                return true;
             } else {
-                // USER ALREADY EXISTS
-                $this->queryStatus = 3;
-                return false;
+                $this->queryStatus = 1;  // wrong password
             }
         } else {
-            // FIELDS ARE NOT OKAY
-            $this->queryStatus = 4;
-            return false;
-        }
-    }
-
-    function login()
-    {
-        if ($this->verifyPassword()) {
-            $this->queryStatus = 0; // SUCCESS 
-            $this->createLog();
-            $this->startSession();
-            return true;
-        } else {
-            $this->queryStatus = 1; // FAILURE
+            $this->queryStatus = 2; // user does not exist
             return false;
         }
     }
 
     function resetPassword()
     {
-        if ($this->userExists()) {
-            try {
+        if ($this->fieldsOkay) {
+            if ($this->userExists()) {
                 if ($this->confirmPassword()) {
-                    $sql = "UPDATE admin SET password = :password WHERE id_number = :id_number AND email_address = :email_address";
-                    $stmt = $this->connection->prepare($sql);
-                    $result = $stmt->execute($this->post);
-                    if ($result != false) {
-                        $this->queryStatus = 0;
-                        return true;
+                    if ($this->checkPasswordLength()) {
+                        $this->post['password'] = $this->hashPassword();
+                        unset($this->post['confirm_password']);
+                        unset($this->post['submit']);
+                        try {
+                            $sql = "UPDATE admin SET password = :password WHERE id_number = :id_number AND email_address = :email_address";
+                            $stmt = $this->connection->prepare($sql);
+                            $result = $stmt->execute($this->post);
+                            if ($result != false) {
+                                // success
+                                $this->queryStatus = 0;
+                                return true;
+                            } else {
+                                $this->queryStatus = 1;
+                                return false;
+                            }
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                            return false;
+                        }
                     } else {
-                        $this->queryStatus = 1;
+                        // password less than 8
+                        $this->queryStatus = 2;
                         return false;
                     }
+                } else {
+                    // pass does not match
+                    $this->queryStatus = 3;
+                    return false;
                 }
-            } catch (Exception $e) {
-                echo $e->getMessage();
+            } else {
+                // user does not exist
+                $this->queryStatus = 4;
                 return false;
             }
+        } else {
+            // field are not okay
+            $this->queryStatus = 5;
+            return false;
         }
-        $this->queryStatus = 2;
-        return false;
     }
 
 
@@ -158,19 +184,14 @@ class Admin
 
     function verifyPassword()
     {
-        if ($this->userExists()) {
-            try {
-                $sql = "SELECT password FROM admin WHERE id_number = :id_number ";
-                $stmt = $this->connection->prepare($sql);
-                $stmt->execute(['id_number' => $this->post['id_number']]);
-                $hash = $stmt->fetchColumn();
-                return  password_verify(trim($this->post['password']), $hash);
-            } catch (Exception $e) {
-                echo $e->getMessage();
-                return false;
-            }
-        } else {
-            $this->queryStatus = 2; // USER does not exist
+        try {
+            $sql = "SELECT password FROM admin WHERE id_number = :id_number ";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['id_number' => $this->post['id_number']]);
+            $hash = $stmt->fetchColumn();
+            return  password_verify(trim($this->post['password']), $hash);
+        } catch (Exception $e) {
+            echo $e->getMessage();
             return false;
         }
     }
@@ -212,7 +233,7 @@ class Admin
         // admin can view logs online
         try {
             //code...
-            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
+            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true)); // ensure permission is set 
             $sql = "SELECT * FROM log";
             $result = $pdo->query($sql);
             $records = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -226,12 +247,12 @@ class Admin
     {
         try {
             $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
-            $sql = 'INSERT INTO log (name, date, time) VALUES (:name,  :date, :time)';
-            $name = $this->post['id_number'];
+            $sql = 'INSERT INTO log (id, date, time) VALUES (:id,  :date, :time)';
+            $id = $this->post['id_number'];
             $stmt = $pdo->prepare($sql);
             $date = date("d-m-Y");
             $time = date("H:i:s");
-            $result =  $stmt->execute(["name" => $name, "date" => $date, "time" => $time]);
+            $result =  $stmt->execute(["id" => $id, "date" => $date, "time" => $time]);
             if ($result != false) {
                 return true;
             }
