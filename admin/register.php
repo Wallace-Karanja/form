@@ -79,8 +79,11 @@ include './Admin.php';
                     // var_dump($admin->post);
                     if ($admin->register() && $admin->queryStatus == 0) {
                         echo "successifully registered";
-                    } elseif (!$admin->register() &&  $admin->queryStatus == 3) {
-                        echo "Already registered, please login : ";
+                    } elseif ($admin->queryStatus == 2) {
+                        echo "passwords dont match !";
+                    } elseif ($admin->queryStatus == 3) {
+                        $url = './login.php';
+                        echo "Already registered, please <a href=" . $url . ">login</a>";
                     } else {
                         echo "registration failure : " . $admin->queryStatus;
                     }
