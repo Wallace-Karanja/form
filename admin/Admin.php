@@ -1,27 +1,35 @@
 <?php
 class Admin
 {
-    // register
-    // login
-    // reset password
-    public $connection;
+    private $connection;
     public $post;
     public $queryStatus;
-    public $fieldsOkay;
-    public $passwordStatus;
+    private $fieldsOkay;
 
-    // db connection
-    // check if the fields are okay, incase client side refuses to work
+
     public function __construct()
     {
-        if ($_SERVER['REQUEST_METHOD'] == "POST") { // what would be a solution for very many fields?
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->post = $_POST;
             $this->checkFields($this->post);
         }
         $this->connection = $this->createDbConnection();
     }
 
-    public function checkFields($array) // post or get
+    private function createDbConnection(): object
+    {
+        require_once './includes/config.php';
+        $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";
+        $USERNAME = USER;
+        $PASSWORD = PASSWORD;
+        try {
+            $PDO = new PDO($DSN, $USERNAME, $PASSWORD);
+            return $PDO;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    private function checkFields($array): bool
     {
         foreach ($array as $value) {
             if (empty(trim($value))) {
@@ -34,26 +42,28 @@ class Admin
     }
 
 
-    // check pass length
-    //
-
-
-    function checkPasswordLength()
+    private function checkPasswordLength(): bool
     {
         return strlen(trim($this->post['password'])) >= 8; // returns true if len >= 8
     }
 
-    function confirmPassword()
+    private function confirmPassword(): bool
     {
         return trim($this->post['password']) == trim($this->post['confirm_password']);
     }
 
-    function hashPassword()
+    private function hashPassword(): string
     {
         return password_hash(trim($this->post['password']), CRYPT_BLOWFISH);
     }
 
-    function registerAdmin()
+    private function startSession(): void
+    {
+        session_start();
+        $_SESSION['id'] = $this->post['id_number'];
+    }
+
+    public function registerAdmin(): bool
     {
         if ($this->fieldsOkay) {
             if (!$this->userExists()) {
@@ -98,20 +108,7 @@ class Admin
         }
     }
 
-    public function createDbConnection()
-    {
-        $dsn = "mysql:host=localhost;port=3307;dbname=form";
-        $username = "admin";
-        $password = "admin2024";
-        try {
-            $pdo = new PDO($dsn, $username, $password);
-            return $pdo;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    function loginAdmin()
+    public function loginAdmin(): bool
     {
         if ($this->userExists()) {
             if ($this->verifyPassword()) {
@@ -128,7 +125,7 @@ class Admin
         }
     }
 
-    function resetPassword()
+    public function resetPassword(): bool
     {
         if ($this->fieldsOkay) {
             if ($this->userExists()) {
@@ -175,14 +172,7 @@ class Admin
         }
     }
 
-
-    function startSession()
-    {
-        session_start();
-        $_SESSION['id'] = $this->post['id_number'];
-    }
-
-    function verifyPassword()
+    private function verifyPassword(): bool
     {
         try {
             $sql = "SELECT password FROM admin WHERE id_number = :id_number ";
@@ -196,7 +186,7 @@ class Admin
         }
     }
 
-    public function userExists()
+    private function userExists(): bool
     {
         // $sql = "SELECT COUNT(*) FROM admin WHERE email_address = :email_address OR phone_number = :phone_number OR id_number = :id_number";
         $sql = "SELECT COUNT(*) FROM admin WHERE id_number = :id_number";
@@ -207,7 +197,7 @@ class Admin
         return $count >= 1 ? true : false;
     }
 
-    public function selectAll()
+    public function selectAll(): array
     {
         $sql = "SELECT * FROM admin";
         $result = $this->connection->query($sql);
@@ -215,7 +205,7 @@ class Admin
         return $records;
     }
 
-    function selectById()
+    public function selectById(): array
     {
         $sql = "SELECT * FROM admin WHERE id = :id"; # named parameters
         $stmt = $this->connection->prepare($sql);
@@ -227,7 +217,7 @@ class Admin
         }
     }
 
-    function showLogs()
+    public function showLogs(): array
     {
         // create a log to sqlite db 
         // admin can view logs online
@@ -243,7 +233,7 @@ class Admin
         }
     }
 
-    function createLog()
+    private function createLog(): bool
     {
         try {
             $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
@@ -261,4 +251,6 @@ class Admin
             return $e->getMessage();
         }
     }
+
+    // consider using json to store logs 
 }
