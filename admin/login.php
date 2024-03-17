@@ -50,30 +50,31 @@ include './Admin.php';
                     </div>
                     <div><input type="submit" name="submit" value="Login" id="submit" required /></div>
                 </form>
-                <p id="message"></p>
-                <?php
-                if (isset($_POST['submit'])) {
-                    $admin = new Admin();
-                    $admin->loginAdmin();
-                    $queryStatus = $admin->queryStatus;
-                    switch ($queryStatus) {
-                        case 0:
-                            echo "Success";
-                            $url = "./index.php";
-                            header("Location:" . $url);
-                            break;
-                        case 1:
-                            echo "Incorrect password !";
-                            break;
-                        case 2:
-                            echo "Incorrect Id number/Staff number"; // user does not exist
-                            break;
-                        default:
-                            echo "Contact Admin !";
-                            break;
+                <p id="message">
+                    <?php
+                    if (isset($_POST['submit'])) {
+                        $admin = new Admin();
+                        $admin->loginAdmin();
+                        $queryStatus = $admin->queryStatus;
+                        switch ($queryStatus) {
+                            case 0:
+                                echo "Success";
+                                $url = "./index.php";
+                                header("Location:" . $url);
+                                break;
+                            case 1:
+                                echo "Incorrect password !";
+                                break;
+                            case 2:
+                                echo "Incorrect Id number/Staff number"; // user does not exist
+                                break;
+                            default:
+                                echo "Contact Admin !";
+                                break;
+                        }
                     }
-                }
-                ?>
+                    ?>
+                </p>
             </div>
         </main>
         <div></div>

@@ -114,10 +114,12 @@ class Admin
             if ($this->verifyPassword()) {
                 $this->queryStatus = 0; // success
                 $this->startSession();
-                $this->createLog(); // create a log
+                // $this->createLog(); // create a log
+                $this->createLog();
                 return true;
             } else {
                 $this->queryStatus = 1;  // wrong password
+                return false;
             }
         } else {
             $this->queryStatus = 2; // user does not exist
@@ -219,37 +221,29 @@ class Admin
 
     public function showLogs(): array
     {
-        // create a log to sqlite db 
-        // admin can view logs online
         try {
-            //code...
-            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true)); // ensure permission is set 
-            $sql = "SELECT * FROM log";
-            $result = $pdo->query($sql);
-            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            $logFile = "./logs.json";
+            $jsonLogs = file_get_contents($logFile);
+            $records = json_decode($jsonLogs);
             return $records;
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-    private function createLog(): bool
+
+
+    public function createLog(): void
     {
-        try {
-            $pdo = new PDO('sqlite:./log.db', null, null, array(PDO::ATTR_PERSISTENT => true));
-            $sql = 'INSERT INTO log (id, date, time) VALUES (:id,  :date, :time)';
-            $id = $this->post['id_number'];
-            $stmt = $pdo->prepare($sql);
-            $date = date("d-m-Y");
-            $time = date("H:i:s");
-            $result =  $stmt->execute(["id" => $id, "date" => $date, "time" => $time]);
-            if ($result != false) {
-                return true;
-            }
-            return $result;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
+        // create a log containing the id, actor, date and time to a json file
+        $logFile = "./logs.json"; // log file
+        $date = date("d-m-Y");
+        $time = date("H:i:s");
+        $log = ["actor" => "admin", "id" => $this->post['id_number'], "date" => $date, "time" => $time]; // json structure
+        $logs = file_exists($logFile) ? json_decode(file_get_contents($logFile), true) : array();
+        $logs[] = $log;
+        $jsonLogs = json_encode($logs, JSON_PRETTY_PRINT);
+        file_put_contents($logFile, $jsonLogs);
     }
 
     // consider using json to store logs 

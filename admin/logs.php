@@ -1,5 +1,6 @@
 <?php
 include '../Form.php';
+include './Admin.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,17 +36,16 @@ include '../Form.php';
                 <h1>Logs</h1>
                 <ol>
                     <?php
-                    $applications = new Form();
-                    if (empty($applications->showLogs())) { ?>
-                        <li>No records yet !</li>
-                        <?php } else {
-                        foreach ($applications->showLogs() as $row) {
-                        ?>
-                            <li><?php echo $row['id'] . ' ' . $row['date'] . ' ' . $row['time'];
-                                ?></li>
-                    <?php }
-                    }
-                    ?>
+                    $admin = new Admin();
+                    $logs = $admin->showLogs(); ?>
+                    <?php
+                    for ($i = 0; $i < count($logs); $i++) { ?>
+                        <li>
+                            <?php foreach ($logs[$i] as $key => $value) {
+                                echo $key . " : " . $value . " ";
+                            } ?>
+                        </li>
+                    <?php } ?>
                 </ol>
             </div>
         </main>

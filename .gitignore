@@ -1,2 +1,3 @@
-
-
+log.db
+./admin/log.db
+./admin/logs.json
