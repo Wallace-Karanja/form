@@ -80,7 +80,9 @@ include './Admin.php';
 
                     switch ($queryStatus) {
                         case 0:
-                            echo "SUCCESS";
+                            echo "Successful registration, you will be redirected to login";
+                            $url = './login.php';
+                            header("refresh:3;" . $url);
                             break;
 
                         case 1:

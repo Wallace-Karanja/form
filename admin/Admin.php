@@ -245,6 +245,4 @@ class Admin
         $jsonLogs = json_encode($logs, JSON_PRETTY_PRINT);
         file_put_contents($logFile, $jsonLogs);
     }
-
-    // consider using json to store logs 
 }
