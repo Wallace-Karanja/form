@@ -18,7 +18,7 @@ class Applicant
 
     private function createDbConnection(): object
     {
-        require_once './admin/includes/config.php';
+        require_once './includes/config.php';
         $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";
         $USERNAME = USER;
         $PASSWORD = PASSWORD;
@@ -72,7 +72,7 @@ class Applicant
     public function registerApplicant(): bool
     {
         if ($this->fieldsOkay) {
-            if (!$this->userExists()) {
+            if (!$this->applicantExists()) {
                 if ($this->confirmPassword()) {
                     if ($this->checkPasswordLength()) {
                         $this->post['password'] = $this->hashPassword();
@@ -116,7 +116,7 @@ class Applicant
 
     public function loginApplicant(): bool
     {
-        if ($this->userExists()) {
+        if ($this->applicantExists()) {
             if ($this->verifyPassword()) {
                 $this->queryStatus = 0; // success
                 $this->startSession();
@@ -135,7 +135,7 @@ class Applicant
     public function resetPassword(): bool
     {
         if ($this->fieldsOkay) {
-            if ($this->userExists()) {
+            if ($this->applicantExists()) {
                 if ($this->confirmPassword()) {
                     if ($this->checkPasswordLength()) {
                         $this->post['password'] = $this->hashPassword();
@@ -193,7 +193,7 @@ class Applicant
         }
     }
 
-    private function userExists(): bool
+    private function applicantExists(): bool
     {
         $sql = "SELECT COUNT(*) FROM applicant_register WHERE phone_number = :phone_number";
         $stmt = $this->connection->prepare($sql);
