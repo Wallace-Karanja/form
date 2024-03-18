@@ -27,7 +27,7 @@
             <li class="links"><a href="">About</a></li>
           </div>
           <div>
-            <li class="links"><a href="">Contact Us</a></li>
+            <li class="links"><a href="login.php">Login</a></li>
           </div>
           <div>
             <li class="links"><a href="./admin/">Admin</a></li>
