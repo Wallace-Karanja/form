@@ -38,35 +38,35 @@ include './Applicant.php';
             <div>
                 <form action="" method="post" id="form">
                     <div>
-                        <label for="firstName">Firstname<span id="firstname"></span></label>
+                        <label for="firstName">Firstname*<span id="firstname"></span></label>
                         <input type="text" name="firstname" id="firstName" value="<?php echo (isset($_POST['firstname']) ? $_POST['firstname'] : ""); ?>" required />
                     </div>
                     <div>
-                        <label for="lastName">Lastname <span id="lastname"></span></label>
+                        <label for="lastName">Lastname* <span id="lastname"></span></label>
                         <input type="text" name="lastname" id="lastName" value="<?php echo (isset($_POST['lastname']) ? $_POST['lastname'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="secondName">Second Name<span id="second_name"></span></label>
-                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($_POST['second_name']) ? $_POST['second_name'] : ""); ?>" required />
+                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($_POST['second_name']) ? $_POST['second_name'] : ""); ?>" />
                     </div>
                     <div>
                         <label for="emailAddress">Email<span id="email_address"></span></label>
-                        <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($_POST['email_address']) ? $_POST['email_address'] : ""); ?>" required />
+                        <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($_POST['email_address']) ? $_POST['email_address'] : ""); ?>" />
                     </div>
                     <div>
-                        <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" required />
+                        <label for="phoneNumber">Phone Number*<span id="phone_number"></span></label>
+                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" />
                     </div>
                     <div>
-                        <label for="idNumber">Id Number/Staff No<span id="id_number"></span></label>
-                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" required />
+                        <label for="idNumber">Id Number<span id="id_number"></span></label>
+                        <input type="tel" name="id_number" id="idNumber" value="<?php echo (isset($_POST['id_number']) ? $_POST['id_number'] : ""); ?>" />
                     </div>
                     <div>
-                        <label for="pass">Password<span id="password"></span></label>
+                        <label for="pass">Password*<span id="password"></span></label>
                         <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" required />
                     </div>
                     <div>
-                        <label for="confirm_pass">Confirm Password<span id="confirm_password"></span></label>
+                        <label for="confirm_pass">Confirm Password*<span id="confirm_password"></span></label>
                         <input type="password" name="confirm_password" id="confirm_pass" value="<?php echo (isset($_POST['confirm_password']) ? $_POST['confirm_password'] : ""); ?>" required />
                     </div>
                     <div><input type="submit" name="submit" value="Register" id="submit" /></div>
@@ -101,7 +101,7 @@ include './Applicant.php';
                             break;
 
                         case 5:
-                            echo "Supply all input fields";
+                            echo "Supply all mandatory * input fields";
                             break;
                         default:
                             echo "Contact the applicant";

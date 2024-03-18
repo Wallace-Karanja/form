@@ -43,15 +43,15 @@ include './Applicant.php';
                     </div>
                     <div>
                         <label for="phoneNumber">Phone Number<span id="phone_number"></span></label>
-                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" />
+                        <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($_POST['phone_number']) ? $_POST['phone_number'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="pass">Password<span id="password"></span></label>
-                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" />
+                        <input type="password" name="password" id="pass" value="<?php echo (isset($_POST['password']) ? $_POST['password'] : ""); ?>" required />
                     </div>
                     <div>
                         <label for="confirm_pass">Confirm Password<span id="confirm_password"></span></label>
-                        <input type="password" name="confirm_password" id="confirm_pass" value="<?php echo (isset($_POST['confirm_password']) ? $_POST['confirm_password'] : ""); ?>" />
+                        <input type="password" name="confirm_password" id="confirm_pass" value="<?php echo (isset($_POST['confirm_password']) ? $_POST['confirm_password'] : ""); ?>" required />
                     </div>
                     <div><input type="submit" name="submit" value="Reset" id="submit" /></div>
                 </form>

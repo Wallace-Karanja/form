@@ -18,7 +18,7 @@ class Applicant
 
     private function createDbConnection(): object
     {
-        require_once './includes/config.php';
+        require_once './admin/includes/config.php';
         $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";
         $USERNAME = USER;
         $PASSWORD = PASSWORD;
@@ -29,17 +29,23 @@ class Applicant
             echo $e->getMessage();
         }
     }
+
     private function checkFields($array): bool
     {
-        foreach ($array as $value) {
-            if (empty(trim($value))) {
+        foreach ($array as $key => $value) {
+            // skip second_name and id number
+            if ($key === "second_name" || $key === "email_address" || $key === "id_number") {
+                continue;
+            }
+            if (empty(trim($value))) { // check if other fields are empty
                 $this->fieldsOkay = false;
-                return false;
+                return $this->fieldsOkay;
             }
         }
         $this->fieldsOkay = true;
-        return true;
+        return $this->fieldsOkay;
     }
+
 
 
     private function checkPasswordLength(): bool
@@ -60,7 +66,7 @@ class Applicant
     private function startSession(): void
     {
         session_start();
-        $_SESSION['id'] = $this->post['id_number'];
+        $_SESSION['id'] = $this->post['phone_number'];
     }
 
     public function registerApplicant(): bool
@@ -73,7 +79,7 @@ class Applicant
                         unset($this->post['confirm_password']);
                         unset($this->post['submit']);
                         try {
-                            $sql = "INSERT INTO admin (firstname, lastname, second_name, email_address, phone_number, id_number, password) VALUES (:firstname, :lastname, :second_name, :email_address, :phone_number, :id_number, :password)";
+                            $sql = "INSERT INTO applicant_register (firstname, lastname, second_name, email_address, phone_number, id_number, password) VALUES (:firstname, :lastname, :second_name, :email_address, :phone_number, :id_number, :password)";
                             $stmt = $this->connection->prepare($sql);
                             $result = $stmt->execute($this->post);
                             if ($result != false) {
@@ -114,7 +120,6 @@ class Applicant
             if ($this->verifyPassword()) {
                 $this->queryStatus = 0; // success
                 $this->startSession();
-                // $this->createLog(); // create a log
                 $this->createLog();
                 return true;
             } else {
@@ -137,7 +142,7 @@ class Applicant
                         unset($this->post['confirm_password']);
                         unset($this->post['submit']);
                         try {
-                            $sql = "UPDATE admin SET password = :password WHERE id_number = :id_number AND email_address = :email_address";
+                            $sql = "UPDATE applicant_register SET password = :password WHERE phone_number = :phone_number OR email_address = :email_address";
                             $stmt = $this->connection->prepare($sql);
                             $result = $stmt->execute($this->post);
                             if ($result != false) {
@@ -177,9 +182,9 @@ class Applicant
     private function verifyPassword(): bool
     {
         try {
-            $sql = "SELECT password FROM admin WHERE id_number = :id_number ";
+            $sql = "SELECT password FROM applicant_register WHERE phone_number = :phone_number ";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute(['id_number' => $this->post['id_number']]);
+            $stmt->execute(['phone_number' => $this->post['phone_number']]);
             $hash = $stmt->fetchColumn();
             return  password_verify(trim($this->post['password']), $hash);
         } catch (Exception $e) {
@@ -190,16 +195,16 @@ class Applicant
 
     private function userExists(): bool
     {
-        $sql = "SELECT COUNT(*) FROM admin WHERE id_number = :id_number";
+        $sql = "SELECT COUNT(*) FROM applicant_register WHERE phone_number = :phone_number";
         $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id_number' => $this->post['id_number']]);
+        $stmt->execute(['phone_number' => $this->post['phone_number']]);
         $count = $stmt->fetchColumn();
         return $count >= 1 ? true : false;
     }
 
     public function selectAll(): array
     {
-        $sql = "SELECT * FROM admin";
+        $sql = "SELECT * FROM applicant_register";
         $result = $this->connection->query($sql);
         $records = $result->fetchAll(PDO::FETCH_ASSOC);
         return $records;
@@ -207,7 +212,7 @@ class Applicant
 
     public function selectById(): array
     {
-        $sql = "SELECT * FROM admin WHERE id = :id"; # named parameters
+        $sql = "SELECT * FROM applicant_register WHERE id = :id"; # named parameters
         $stmt = $this->connection->prepare($sql);
         if ($stmt->execute($_GET)) {
             $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -237,7 +242,7 @@ class Applicant
         $logFile = "./logs.json"; // log file
         $date = date("d-m-Y");
         $time = date("H:i:s");
-        $log = ["actor" => "admin", "id" => $this->post['id_number'], "date" => $date, "time" => $time]; // json structure
+        $log = ["actor" => "applicant", "id" => $this->post['phone_number'], "date" => $date, "time" => $time]; // json structure
         $logs = file_exists($logFile) ? json_decode(file_get_contents($logFile), true) : array();
         $logs[] = $log;
         $jsonLogs = json_encode($logs, JSON_PRETTY_PRINT);

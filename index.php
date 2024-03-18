@@ -1,6 +1,10 @@
 <?php
-// include './process_form.php';
-// include './Form.php';
+session_start();
+include './Applicant.php';
+if (!isset($_SESSION['id'])) {
+  $url = './login.php';
+  header("Location:" . $url);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,10 +31,7 @@
             <li class="links"><a href="">About</a></li>
           </div>
           <div>
-            <li class="links"><a href="login.php">Login</a></li>
-          </div>
-          <div>
-            <li class="links"><a href="./admin/">Admin</a></li>
+            <li class="links"><a href="logout.php">Logout</a></li>
           </div>
         </ul>
       </nav>

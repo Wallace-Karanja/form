@@ -66,10 +66,11 @@ include './Applicant.php';
                                 header("Location:" . $url);
                                 break;
                             case 1:
-                                echo "Incorrect password !";
+                                $url = 'passreset.php';
+                                echo "Incorrect password ! <a href='$url'>Reset Password</a>";
                                 break;
                             case 2:
-                                echo "Incorrect Id number/Staff number"; // user does not exist
+                                echo "Incorrect phone number"; // user does not exist
                                 break;
                             default:
                                 echo "Contact Applicant !";
