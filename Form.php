@@ -42,7 +42,7 @@ class Form
         }
     }
 
-    public function insert()
+    public function register()
     {
         if ($this->fieldsOkay) {
             if ($this->checkIfUserExists() == false) {

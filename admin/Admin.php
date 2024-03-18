@@ -190,10 +190,8 @@ class Admin
 
     private function userExists(): bool
     {
-        // $sql = "SELECT COUNT(*) FROM admin WHERE email_address = :email_address OR phone_number = :phone_number OR id_number = :id_number";
         $sql = "SELECT COUNT(*) FROM admin WHERE id_number = :id_number";
         $stmt = $this->connection->prepare($sql);
-        // $stmt->execute(['email_address' => $this->post['email_address'], 'phone_number' => $this->post['phone_number'], 'id_number' => $this->post['id_number']]);
         $stmt->execute(['id_number' => $this->post['id_number']]);
         $count = $stmt->fetchColumn();
         return $count >= 1 ? true : false;
