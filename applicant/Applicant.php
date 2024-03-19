@@ -222,6 +222,19 @@ class Applicant
         }
     }
 
+    public function selectApplicantByPhoneNumber($phoneNumber): array
+    {
+        $sql = "SELECT * FROM applicant_register WHERE phone_number = :phone_number"; # named parameters
+        $stmt = $this->connection->prepare($sql);
+        $result = $stmt->execute(["phone_number" => $phoneNumber]); // call the method after session is set
+        if ($result) {
+            $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $record;
+        } else {
+            return null;
+        }
+    }
+
     public function showLogs(): array
     {
         try {

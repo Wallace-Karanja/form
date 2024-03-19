@@ -5,6 +5,9 @@ if (!isset($_SESSION['id'])) {
   $url = './login.php';
   header("Location:" . $url);
 }
+// generate applicant information
+$applicantInformation = new Applicant();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +45,10 @@ if (!isset($_SESSION['id'])) {
     <main>
       <h1>Application Form</h1>
       <div>
+        <?php
+        var_dump($applicantInformation->selectApplicantByPhoneNumber($_SESSION['id']));
+        echo $_SESSION['id'];
+        ?>
         <form action="" method="post" id="form">
           <div>
             <label for="firstName">Firstname<span id="firstname"></span></label>
