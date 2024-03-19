@@ -39,9 +39,9 @@
     <div class="container">
         <div></div>
         <main>
-            <h1>Application Form</h1>
+            <h1>Upload Documents</h1>
             <div>
-                <form action="" method="post" id="form" enctype="multipart/form-data">
+                <!-- <form action="" method="post" id="form" enctype="multipart/form-data">
                     <div>
                         <label for="name">Name of Document</label>
                         <input type="text" name="name" id="name">
@@ -52,7 +52,14 @@
                     </div>
                     <div></div>
                     <div><input type="submit" name="submit" value="upload" id="submit" /></div>
+                </form> -->
+
+                <form action="upload.php" method="post" enctype="multipart/form-data">
+                    <label for="document">Kenya Certificate of Secondary Education (KCSE):</label>
+                    <input type="file" id="document" name="document" accept=".pdf,.doc,.docx"><br><br>
+                    <input type="submit" value="Upload">
                 </form>
+
                 <p id="message"></p>
                 <?php
                 if (isset($_FILES['document'])) {
@@ -72,7 +79,7 @@
                     //     echo "Failed to upload file";
                     // }
 
-                    var_dump($_POST);
+                    var_dump($_FILES);
                 } else {
                     echo "Error uploading file";
                 }

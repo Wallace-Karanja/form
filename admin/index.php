@@ -38,7 +38,15 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
   <div class="container">
-    <div></div>
+    <div>
+      <nav>
+        <ul>
+          <li><a href="create_departments.php">Create Departments</a></li>
+          <li><a href="create_examining_bodies.php">Create Examining Bodies</a></li>
+          <li><a href="create_courses.php">Create Courses</a></li>
+        </ul>
+      </nav>
+    </div>
     <main>
       <div>
         <h1>List of Applications</h1>
@@ -65,10 +73,12 @@ if (!isset($_SESSION['id'])) {
         </table>
     </main>
     <div>
-      <ul>
-        <li><a href="adminLogs.php">Admin Logs</a></li>
-        <li><a href="applicantLogs.php">Applicant Logs</a></li>
-      </ul>
+      <nav>
+        <ul>
+          <li><a href="adminLogs.php">Admin Logs</a></li>
+          <li><a href="applicantLogs.php">Applicant Logs</a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 
