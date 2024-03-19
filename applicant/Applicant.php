@@ -235,10 +235,10 @@ class Applicant
         }
     }
 
-    public function showLogs(): array
+    public function showLogs(): array // show logs to be shown on the admins side
     {
         try {
-            $logFile = "./logs.json";
+            $logFile = '../applicant/logs.json'; // path adjusted when method is called on applicantLogs.php
             $jsonLogs = file_get_contents($logFile);
             $records = json_decode($jsonLogs);
             return $records;

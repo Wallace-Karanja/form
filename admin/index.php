@@ -64,7 +64,12 @@ if (!isset($_SESSION['id'])) {
           </tbody>
         </table>
     </main>
-    <div></div>
+    <div>
+      <ul>
+        <li><a href="adminLogs.php">Admin Logs</a></li>
+        <li><a href="applicantLogs.php">Applicant Logs</a></li>
+      </ul>
+    </div>
   </div>
 
 </body>
