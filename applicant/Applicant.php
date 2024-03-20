@@ -1,7 +1,7 @@
 <?php
 class Applicant
 {
-    private $connection;
+    public $connection;
     public $post;
     public $queryStatus;
     private $fieldsOkay;
@@ -16,7 +16,7 @@ class Applicant
         $this->connection = $this->createDbConnection();
     }
 
-    private function createDbConnection(): object
+    public function createDbConnection(): object
     {
         require_once './includes/config.php';
         $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";

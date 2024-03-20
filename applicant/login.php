@@ -1,6 +1,4 @@
 <?php
-// include './process_form.php';
-// include './Form.php';
 include './Applicant.php';
 ?>
 <!DOCTYPE html>
@@ -9,7 +7,7 @@ include './Applicant.php';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <!-- <script src="../script.js" defer></script> -->
     <title>Form</title>
     <style>
