@@ -1,11 +1,14 @@
 <?php
 session_start();
+ob_start(); // to capture any warnings that may be produced during upload
 include './Applicant.php';
 include './FileUpload.php';
+include './includes/helper_funcs.php';
 if (!isset($_SESSION['id'])) {
     $url = './login.php';
     header("Location:" . $url);
 }
+$output = ob_get_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,10 +58,36 @@ if (!isset($_SESSION['id'])) {
                             <div class="form-field"><input type="file" name="birth_certificate" id="birth_certificate" />
                             </div class="form-field">
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
+                            <?php
+                            if (isset($_POST['submit'])) {
+                                $message = upload("birth_certificate");  // helper func to upload a file and produce a message;
+                                $url = './upload.php';
+                                header("refresh:10;" . $url);
+                            }
+                            ?>
+                        </div>
+                        <?php if (isset($message)) { ?>
+                            <div>
+                                <p style="color: orange;"><?php echo $message; ?></p>
+                            </div>
+                        <?php } ?>
+                        <div class="file-info">
+                            <div>
+                                <?php
+                                $upload = new FileUpload("birth_certificate");
+                                if (!empty($upload->uploadRecord)) { ?>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?>><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "delete_upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
+                                <?php
+                                }
+                                ?>
+                                <?php
+
+                                ?>
+                            </div>
                         </div>
                     </form>
                 </div>
-                <div class="form-content">
+                <div class=" form-content">
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="form">
                             <div class="form-field"><label for="kcse">Kenya Certificate of Secondary Education (KCSE)</label></div>
@@ -99,15 +128,9 @@ if (!isset($_SESSION['id'])) {
                     </form>
                 </div>
             </div>
-            <p id="message"></p>
-            <?php
+            <p id="message">
 
-            if (isset($_FILES['birth_certificate'])) {
-                $birthCertificate = new FileUpload("birth_certificate");
-                var_dump($birthCertificate->uploadFile());
-                echo $birthCertificate->uploadStatus;
-            }
-            ?>
+            </p>
         </main>
         <div></div>
     </div>
