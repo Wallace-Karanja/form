@@ -129,7 +129,7 @@ class FileUpload extends Applicant // inherits from Applicant
     public function deleteRecord()
     {
         try {
-            $sql = "DELETE FROM applicant_documents WHERE " . "'" . $this->fileKey . "' = " . "'" . $this->uploadRecord . "'";
+            $sql = "DELETE FROM applicant_documents WHERE $this->fileKey = " . "'" . $this->uploadRecord . "'";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $deleted = $stmt->rowCount();

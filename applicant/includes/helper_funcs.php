@@ -34,3 +34,25 @@ function upload($file)
     }
     return "file not set"; // for debug
 }
+
+function delete()
+{
+
+    if (isset($_GET['filename'])) {
+        $name = $_GET['filename'];
+        $uploaded = new FileUpload($name);
+        $uploaded->delete();
+        $deleteStatus = $uploaded->deleteStatus;
+        switch ($deleteStatus) {
+            case  0:
+                $message =  "File deleted Successfully";
+                return $message;
+            case  1:
+                $message =  "File delete failed";
+                return $message;
+            default:
+                $message = "Error";
+                return $message;
+        }
+    }
+}

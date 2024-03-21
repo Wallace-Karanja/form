@@ -60,15 +60,15 @@ $output = ob_get_clean();
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
                             <?php
                             if (isset($_POST['submit'])) {
-                                $message = upload("birth_certificate");  // helper func to upload a file and produce a message;
+                                $uploadMessage = upload("birth_certificate");  // helper func to upload a file and produce a message;
                                 $url = './upload.php';
-                                header("refresh:10;" . $url);
+                                header("refresh:5;" . $url);
                             }
                             ?>
                         </div>
-                        <?php if (isset($message)) { ?>
+                        <?php if (isset($uploadMessage)) { ?>
                             <div>
-                                <p style="color: orange;"><?php echo $message; ?></p>
+                                <p style="color: orange;"><?php echo $uploadMessage; ?></p>
                             </div>
                         <?php } ?>
                         <div class="file-info">
@@ -76,13 +76,20 @@ $output = ob_get_clean();
                                 <?php
                                 $upload = new FileUpload("birth_certificate");
                                 if (!empty($upload->uploadRecord)) { ?>
-                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?>><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "delete_upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?>><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
                                 <?php
                                 }
+                                if (isset($_GET['filename'])) {
+                                    $deleteMessage = delete();  // helper func to upload a file and produce a message;
+                                    $url = './upload.php';
+                                    header("refresh:3;" . $url);
+                                }
                                 ?>
-                                <?php
-
-                                ?>
+                                <?php if (isset($deleteMessage)) { ?>
+                                    <div>
+                                        <p style="color: orange;"><?php echo $deleteMessage; ?></p>
+                                    </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </form>
