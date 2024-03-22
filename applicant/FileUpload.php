@@ -1,16 +1,6 @@
 <?php
 class FileUpload extends Applicant // inherits from Applicant
 {
-    // $file_tmp_name = $_FILES['birth_certificate']['tmp_name'];
-    // $file_name = $_FILES['birth_certificate']['name'];
-    // $fileSize = $_FILES['birth_certificate']['size'];
-    // $maxFileSize = 2 * 1024 * 1024;
-    // $uploadDir = "./uploads/";
-    // $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
-    // $_FILES['birth_certificate']['name'] = $applicantName . "_birth_certificate" . "." . $fileExtension; // change file name
-    // $file_name = $_FILES['birth_certificate']['name'];
-    // $destination = $uploadDir . $file_name;
-
     public $file;
     public $fileKey;
     public $fileTmpName;
@@ -23,6 +13,7 @@ class FileUpload extends Applicant // inherits from Applicant
     public $uploadStatus;
     public $deleteStatus;
     public $uploadRecord;
+    public $filePath;
 
     public $maxFileSize = 2 * 1023 * 1023;
     public $uploadDir = "./uploads/";
@@ -43,18 +34,12 @@ class FileUpload extends Applicant // inherits from Applicant
         $this->uploadRecordExists();
     }
 
-    // check file size
-    // set applicant name,
-    // change the file name
-    // set file destination
-    // move the file
-
-    public function fileSizeOkay()
+    public function fileSizeOkay()  // check file size
     {
         return $this->fileSize <= $this->maxFileSize;
     }
 
-    public function setApplicantName()
+    public function setApplicantName() // set applicant name,
     {
         $applicant = $this->selectApplicantByPhoneNumber($_SESSION['id'])[0]; // get the first record
         $this->applicantId = $applicant['id'];
@@ -62,18 +47,18 @@ class FileUpload extends Applicant // inherits from Applicant
         return $this->applicantName;
     }
 
-    public function changeFileName()
+    public function changeFileName() // change the file name
     {
         return $this->fileName = $this->applicantName . "_" . $this->fileKey . "." . $this->fileExtension;
     }
 
-    public function setDestination()
+    public function setDestination() // set file destination
     {
         $this->destination = $this->uploadDir . $this->fileName;
         return $this->destination;
     }
 
-    public function upload()
+    public function upload()  // move the file
     {
         return move_uploaded_file($this->fileTmpName, $this->destination);
     }
@@ -126,7 +111,7 @@ class FileUpload extends Applicant // inherits from Applicant
         }
     }
 
-    public function deleteRecord()
+    public function deleteRecord() // dele record from db
     {
         try {
             $sql = "DELETE FROM applicant_documents WHERE $this->fileKey = " . "'" . $this->uploadRecord . "'";
@@ -144,21 +129,25 @@ class FileUpload extends Applicant // inherits from Applicant
         }
     }
 
-    function fileExists()
+    public function getFilePath()
     {
-        $file = "$this->uploadDir/$this->uploadRecord";
-        return file_exists($file);
+        $this->filePath = "$this->uploadDir/$this->uploadRecord";
+        return $this->filePath;
     }
 
-    function deleteFile()
+    function fileExists() // check if file exists in directory
     {
-        return unlink("$this->uploadDir/$this->uploadRecord");
+        return file_exists($this->filePath);
     }
 
-
-
-    public function delete()
+    function deleteFile() // delete file for from directory
     {
+        return unlink($this->filePath);
+    }
+
+    public function delete() // delete method
+    {
+        $this->getFilePath(); // get the path of the file
         if ($this->fileExists()) {
             if ($this->uploadRecordExists()) {
                 // echo "ready to delete";
@@ -190,7 +179,7 @@ class FileUpload extends Applicant // inherits from Applicant
         }
     }
 
-    public function createUploadRecord()
+    public function createUploadRecord() // create upload record in db 
     {
         try {
             $sql = "INSERT INTO applicant_documents (applicant_id, $this->fileKey) VALUES (:applicant_id, :$this->fileKey)";
@@ -201,12 +190,13 @@ class FileUpload extends Applicant // inherits from Applicant
             }
         } catch (Exception $e) {
             echo $e->getMessage();
+            // possible db error
             // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'applicant_documents.PRIMARY'
             return false;
         }
     }
 
-    public function uploadRecordExists()
+    public function uploadRecordExists() // check if upload record 
     {
         try {
             $sql = "SELECT $this->fileKey FROM applicant_documents WHERE applicant_id = :applicant_id";
@@ -216,6 +206,7 @@ class FileUpload extends Applicant // inherits from Applicant
             return !empty($this->uploadRecord);
         } catch (Exception $e) {
             echo $e->getMessage();
+            return false;
         }
     }
 }

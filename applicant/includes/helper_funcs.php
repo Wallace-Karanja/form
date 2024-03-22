@@ -48,7 +48,16 @@ function delete()
                 $message =  "File deleted Successfully";
                 return $message;
             case  1:
-                $message =  "File delete failed";
+                $message =  "File delete fail !";
+                return $message;
+            case  2:
+                $message =  "File delete fail, deleting record failed"; // for debug
+                return $message;
+            case  3:
+                $message =  "File delete fail, record does not exist"; // for debug
+                return $message;
+            case  4:
+                $message =  "File delete fail, file does not exist"; // for debug
                 return $message;
             default:
                 $message = "Error";

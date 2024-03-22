@@ -14,7 +14,7 @@ if (!isset($_SESSION['id'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <!-- <script src="script.js" defer></script> -->
     <title>Form</title>
 </head>
@@ -66,7 +66,7 @@ if (!isset($_SESSION['id'])) {
                         </div>
                         <?php if (isset($uploadMessage)) { ?>
                             <div>
-                                <p style="color: orange;"><?php echo $uploadMessage; ?></p>
+                                <p class="status-message"><?php echo $uploadMessage; ?></p>
                             </div>
                         <?php } ?>
                         <div class="file-info">
@@ -80,12 +80,12 @@ if (!isset($_SESSION['id'])) {
                                 if (isset($_GET['filename'])) {
                                     $deleteMessage = delete();  // helper func to upload a file and produce a message;
                                     $url = './upload.php';
-                                    header("refresh:3;" . $url);
+                                    header("refresh:5;" . $url);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage)) { ?>
                                     <div>
-                                        <p style="color: orange;"><?php echo $deleteMessage; ?></p>
+                                        <p class="status-message"><?php echo $deleteMessage; ?></p>
                                     </div>
                                 <?php } ?>
                             </div>
