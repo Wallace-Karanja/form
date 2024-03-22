@@ -74,7 +74,7 @@ if (!isset($_SESSION['id'])) {
                                 <?php
                                 $upload = new FileUpload("birth_certificate");
                                 if (!empty($upload->uploadRecord)) { ?>
-                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?>><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
                                 <?php
                                 }
                                 if (isset($_GET['filename'])) {
