@@ -1,6 +1,5 @@
 <?php
 session_start();
-ob_start(); // to capture any warnings that may be produced during upload
 include './Applicant.php';
 include './FileUpload.php';
 include './includes/helper_funcs.php';
@@ -8,7 +7,6 @@ if (!isset($_SESSION['id'])) {
     $url = './login.php';
     header("Location:" . $url);
 }
-$output = ob_get_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">
