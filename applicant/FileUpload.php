@@ -47,6 +47,20 @@ class FileUpload extends Applicant // inherits from Applicant
         return $this->applicantName;
     }
 
+    public function getApplicantId() //find applicant_id in documents uploads
+    {
+        try {
+            $sql = "SELECT applicant_id FROM applicant_documents WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(["applicant_id" => $this->applicantId]);
+            $applicantId = $stmt->fetchColumn(); // capture the upload record (from db)
+            return $applicantId;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
     public function changeFileName() // change the file name
     {
         return $this->fileName = $this->applicantName . "_" . $this->fileKey . "." . $this->fileExtension;
@@ -114,11 +128,14 @@ class FileUpload extends Applicant // inherits from Applicant
     public function deleteRecord() // dele record from db
     {
         try {
-            $sql = "DELETE FROM applicant_documents WHERE $this->fileKey = " . "'" . $this->uploadRecord . "'";
+            // $sql = "DELETE FROM applicant_documents WHERE $this->fileKey = " . "'" . $this->uploadRecord . "'";
+            // UPDATE items SET name = '' WHERE id = 3 ;
+            $sql = "UPDATE applicant_documents SET $this->fileKey = :$this->fileKey WHERE applicant_id = :applicant_id";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute();
-            $deleted = $stmt->rowCount();
-            if ($deleted == 1) {
+            // $stmt->execute();
+            $results = $stmt->execute([$this->fileKey => "", "applicant_id" => $this->getApplicantId()]);
+            // $deleted = $stmt->rowCount();
+            if ($results != false) {
                 return true;
             } else {
                 return false;
@@ -182,16 +199,23 @@ class FileUpload extends Applicant // inherits from Applicant
     public function createUploadRecord() // create upload record in db 
     {
         try {
-            $sql = "INSERT INTO applicant_documents (applicant_id, $this->fileKey) VALUES (:applicant_id, :$this->fileKey)";
-            $stmt = $this->connection->prepare($sql);
-            $results = $stmt->execute(["applicant_id" => $this->applicantId, $this->fileKey => $this->fileName]);
-            if ($results != false) {
-                return true;
+            if (empty($this->getApplicantId())) {
+                $sql = "INSERT INTO applicant_documents (applicant_id, $this->fileKey) VALUES (:applicant_id, :$this->fileKey)";
+                $stmt = $this->connection->prepare($sql);
+                $results = $stmt->execute(["applicant_id" => $this->applicantId, $this->fileKey => $this->fileName]);
+                if ($results != false) {
+                    return true;
+                }
+            } else {
+                $sql = "UPDATE applicant_documents SET $this->fileKey = :$this->fileKey WHERE applicant_id = :applicant_id";
+                $stmt = $this->connection->prepare($sql);
+                $results = $stmt->execute([$this->fileKey => $this->fileName, "applicant_id" => $this->applicantId]);
+                if ($results != false) {
+                    return true;
+                }
             }
         } catch (Exception $e) {
             echo $e->getMessage();
-            // possible db error
-            // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'applicant_documents.PRIMARY'
             return false;
         }
     }

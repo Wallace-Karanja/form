@@ -32,7 +32,7 @@ function upload($file)
                 return $message;
         }
     }
-    return "file not set"; // for debug
+    return ""; // for debug
 }
 
 function delete()
