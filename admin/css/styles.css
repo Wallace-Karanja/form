@@ -1,0 +1,13 @@
+.documents {
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+.doc {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.doc p {
+    margin: 0px;
+}

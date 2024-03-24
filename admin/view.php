@@ -8,6 +8,7 @@ include '../applicant/Form.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../applicant/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <title>Form</title>
 </head>
 
@@ -58,6 +59,36 @@ include '../applicant/Form.php';
                         <?php } ?>
                     </div>
                 </main>
+            </div>
+            <div class="documents">
+                <h2>Applicant Documents</h2>
+                <?php
+                $documents = $application->selectDocumentsById();
+                if (empty($documents)) { ?>
+                    <p>Documents have not been uploaded by applicant</p>
+                <?php } else { ?>
+                    <?php
+                    foreach ($documents as $row) { ?>
+                        <div class="doc">
+                            <div>
+                                <p>Birth Certificate</p>
+                            </div>
+                            <div>
+                                <p><a href=" <?php echo "../applicant/uploads/" . $row['birth_certificate']; ?>" target="_blank"><?php echo $row['birth_certificate']; ?></a></p>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="doc">
+                        <div>
+                            <p>KCSE</p>
+                        </div>
+                        <div>
+                            <p><a href=" <?php echo "../applicant/uploads/" . $row['kcse']; ?>" target="_blank"><?php echo $row['kcse']; ?></a></p>
+                        </div>
+                    </div>
+                    <div>Row 3</div>
+                    <div>Row N</div>
+                <?php } ?>
             </div>
         </div>
         <div></div>

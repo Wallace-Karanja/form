@@ -77,7 +77,7 @@ if (!isset($_SESSION['id'])) {
                                     <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=birth_certificate"; ?>">Delete</a></span></a></p>
                                 <?php
                                 }
-                                if (isset($_GET['filename'])) {
+                                if (isset($_GET['filename']) && $_GET['filename'] == 'birth_certificate') {
                                     $deleteMessage = delete();  // helper func to upload a file and produce a message;
                                     $url = './upload.php';
                                     header("refresh:5;" . $url);
@@ -86,6 +86,49 @@ if (!isset($_SESSION['id'])) {
                                 <?php if (isset($deleteMessage)) { ?>
                                     <div>
                                         <p class="status-message"><?php echo $deleteMessage; ?></p>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-content">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="form">
+                            <div class="form-field"><label for="kcse">Kenya Certificate of Secondary Education (KCSE)</label></div>
+                            <div class="form-field"><input type="file" name="kcse" id="kcse" />
+                            </div class="form-field">
+                            <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
+                            <?php
+                            if (isset($_POST['submit'])) {
+                                $uploadMessage2 = upload("kcse");  // helper func to upload a file and produce a message;
+                                $url = './upload.php';
+                                header("refresh:5;" . $url);
+                            }
+                            ?>
+                        </div>
+                        <?php if (isset($uploadMessage2)) { ?>
+                            <div>
+                                <p class="status-message"><?php echo $uploadMessage2; ?></p>
+                            </div>
+                        <?php } ?>
+                        <div class="file-info">
+                            <div>
+                                <?php
+                                $upload = new FileUpload("kcse");
+                                if (!empty($upload->uploadRecord)) { ?>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=kcse"; ?>">Delete</a></span></a></p>
+                                <?php
+                                }
+                                if (isset($_GET['filename']) && $_GET['filename'] == 'kcse') {
+                                    $deleteMessage2 = delete();  // helper func to upload a file and produce a message;
+                                    $url = './upload.php';
+                                    header("refresh:5;" . $url);
+                                }
+                                ?>
+                                <?php if (isset($deleteMessage2)) { ?>
+                                    <div>
+                                        <p class="status-message"><?php echo $deleteMessage2; ?></p>
                                     </div>
                                 <?php } ?>
                             </div>

@@ -103,6 +103,18 @@ class Form
         }
     }
 
+    function selectDocumentsById()
+    {
+        $sql = "SELECT * FROM applicant_documents WHERE applicant_id = :id"; # named parameters
+        $stmt = $this->connection->prepare($sql);
+        if ($stmt->execute($_GET)) {
+            $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $record;
+        } else {
+            return null;
+        }
+    }
+
     function showLogs()
     {
         // create a log to sqlite db 
