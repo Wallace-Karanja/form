@@ -86,8 +86,30 @@ include '../applicant/Form.php';
                             <p><a href=" <?php echo "../applicant/uploads/" . $row['kcse']; ?>" target="_blank"><?php echo $row['kcse']; ?></a></p>
                         </div>
                     </div>
-                    <div>Row 3</div>
-                    <div>Row N</div>
+                    <div class="doc">
+                        <div>
+                            <p>KCPE</p>
+                        </div>
+                        <div>
+                            <p><a href=" <?php echo "../applicant/uploads/" . $row['kcpe']; ?>" target="_blank"><?php echo $row['kcpe']; ?></a></p>
+                        </div>
+                    </div>
+                    <div class="doc">
+                        <div>
+                            <p>Identity Card</p>
+                        </div>
+                        <div>
+                            <p><a href=" <?php echo "../applicant/uploads/" . $row['id_card']; ?>" target="_blank"><?php echo $row['id_card']; ?></a></p>
+                        </div>
+                    </div>
+                    <div class="doc">
+                        <div>
+                            <p>School Leaving Certleaving_certificate</p>
+                        </div>
+                        <div>
+                            <p><a href=" <?php echo "../applicant/uploads/" . $row['leaving_certificate']; ?>" target="_blank"><?php echo $row['leaving_certificate']; ?></a></p>
+                        </div>
+                    </div>
                 <?php } ?>
             </div>
         </div>

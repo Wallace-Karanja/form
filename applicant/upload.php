@@ -58,9 +58,7 @@ if (!isset($_SESSION['id'])) {
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
                             <?php
                             if (isset($_POST['submit'])) {
-                                $uploadMessage = upload("birth_certificate");  // helper func to upload a file and produce a message;
-                                $url = './upload.php';
-                                header("refresh:5;" . $url);
+                                $uploadMessage = upload("birth_certificate"); // upload() from helper function
                             }
                             ?>
                         </div>
@@ -78,9 +76,7 @@ if (!isset($_SESSION['id'])) {
                                 <?php
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'birth_certificate') {
-                                    $deleteMessage = delete();  // helper func to upload a file and produce a message;
-                                    $url = './upload.php';
-                                    header("refresh:5;" . $url);
+                                    $deleteMessage = delete();
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage)) { ?>
@@ -101,9 +97,7 @@ if (!isset($_SESSION['id'])) {
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
                             <?php
                             if (isset($_POST['submit'])) {
-                                $uploadMessage2 = upload("kcse");  // helper func to upload a file and produce a message;
-                                $url = './upload.php';
-                                header("refresh:5;" . $url);
+                                $uploadMessage2 = upload("kcse");
                             }
                             ?>
                         </div>
@@ -121,9 +115,7 @@ if (!isset($_SESSION['id'])) {
                                 <?php
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'kcse') {
-                                    $deleteMessage2 = delete();  // helper func to upload a file and produce a message;
-                                    $url = './upload.php';
-                                    header("refresh:5;" . $url);
+                                    $deleteMessage2 = delete();
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage2)) { ?>
@@ -135,33 +127,81 @@ if (!isset($_SESSION['id'])) {
                         </div>
                     </form>
                 </div>
-                <div class=" form-content">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <div class="form">
-                            <div class="form-field"><label for="kcse">Kenya Certificate of Secondary Education (KCSE)</label></div>
-                            <div class="form-field"><input type="file" name="kcse" id="kcse" />
-                            </div>
-                            <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
-                        </div>
-                    </form>
-                </div>
                 <div class="form-content">
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="form">
                             <div class="form-field"><label for="kcpe">Kenya Certificate of Primary Education (KCPE)</label></div>
-                            <div class="form-field"><input type="file" name="kcpe" id="kcse" />
-                            </div>
+                            <div class="form-field"><input type="file" name="kcpe" id="kcpe" />
+                            </div class="form-field">
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
+                            <?php
+                            if (isset($_POST['submit'])) {
+                                $uploadMessage3 = upload("kcpe");
+                            }
+                            ?>
+                        </div>
+                        <?php if (isset($uploadMessage3)) { ?>
+                            <div>
+                                <p class="status-message"><?php echo $uploadMessage3; ?></p>
+                            </div>
+                        <?php } ?>
+                        <div class="file-info">
+                            <div>
+                                <?php
+                                $upload = new FileUpload("kcpe");
+                                if (!empty($upload->uploadRecord)) { ?>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=kcpe"; ?>">Delete</a></span></a></p>
+                                <?php
+                                }
+                                if (isset($_GET['filename']) && $_GET['filename'] == 'kcpe') {
+                                    $deleteMessage3 = delete();
+                                }
+                                ?>
+                                <?php if (isset($deleteMessage3)) { ?>
+                                    <div>
+                                        <p class="status-message"><?php echo $deleteMessage3; ?></p>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="form-content">
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="form">
-                            <div class="form-field"><label for="id">Identity Card</label></div>
-                            <div class="form-field"><input type="file" name="id_card" id="id" />
-                            </div>
+                            <div class="form-field"><label for="id_card">Identity Card</label></div>
+                            <div class="form-field"><input type="file" name="id_card" id="id_card" />
+                            </div class="form-field">
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
+                            <?php
+                            if (isset($_POST['submit'])) {
+                                $uploadMessage4 = upload("id_card");
+                            }
+                            ?>
+                        </div>
+                        <?php if (isset($uploadMessage4)) { ?>
+                            <div>
+                                <p class="status-message"><?php echo $uploadMessage4; ?></p>
+                            </div>
+                        <?php } ?>
+                        <div class="file-info">
+                            <div>
+                                <?php
+                                $upload = new FileUpload("id_card");
+                                if (!empty($upload->uploadRecord)) { ?>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=id_card"; ?>">Delete</a></span></a></p>
+                                <?php
+                                }
+                                if (isset($_GET['filename']) && $_GET['filename'] == 'id_card') {
+                                    $deleteMessage4 = delete();
+                                }
+                                ?>
+                                <?php if (isset($deleteMessage4)) { ?>
+                                    <div>
+                                        <p class="status-message"><?php echo $deleteMessage4; ?></p>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -169,16 +209,42 @@ if (!isset($_SESSION['id'])) {
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="form">
                             <div class="form-field"><label for="leaving_certificate">School Leaving Certificate</label></div>
-                            <div class="form-field"><input type="file" name="leaving_certificate" id="id" />
-                            </div>
+                            <div class="form-field"><input type="file" name="leaving_certificate" id="leaving_certificate" />
+                            </div class="form-field">
                             <div class="form-field"><input type="submit" name="submit" value="Upload" id="submit" /></div>
+                            <?php
+                            if (isset($_POST['submit'])) {
+                                $uploadMessage5 = upload("leaving_certificate");
+                            }
+                            ?>
+                        </div>
+                        <?php if (isset($uploadMessage5)) { ?>
+                            <div>
+                                <p class="status-message"><?php echo $uploadMessage5; ?></p>
+                            </div>
+                        <?php } ?>
+                        <div class="file-info">
+                            <div>
+                                <?php
+                                $upload = new FileUpload("leaving_certificate");
+                                if (!empty($upload->uploadRecord)) { ?>
+                                    <p><a href=<?php echo "./uploads/" . $upload->uploadRecord; ?> target="_blank"><?php echo $upload->uploadRecord; ?><span id="button"><a href="<?php echo "upload.php?filename=leaving_certificate"; ?>">Delete</a></span></a></p>
+                                <?php
+                                }
+                                if (isset($_GET['filename']) && $_GET['filename'] == 'leaving_certificate') {
+                                    $deleteMessage5 = delete();
+                                }
+                                ?>
+                                <?php if (isset($deleteMessage5)) { ?>
+                                    <div>
+                                        <p class="status-message"><?php echo $deleteMessage5; ?></p>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </form>
                 </div>
-            </div>
-            <p id="message">
-
-            </p>
+                <p id="message"></p>
         </main>
         <div></div>
     </div>
