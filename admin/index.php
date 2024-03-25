@@ -41,7 +41,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     <div>
       <nav>
         <ul>
-          <li><a href="create_departments.php">Create Departments</a></li>
+          <li><a href="departments.php">Create Departments</a></li>
           <li><a href="create_examining_bodies.php">Create Examining Bodies</a></li>
           <li><a href="create_courses.php">Create Courses</a></li>
         </ul>
@@ -55,6 +55,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
         </p>
         <p>Finaly he/she will then create a course belongin to given departments with the corresponding examining bodies</p>
         <p>Instructions will be provided</p>
+      </div>
     </main>
     <div>
       <nav>
