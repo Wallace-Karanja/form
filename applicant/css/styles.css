@@ -104,3 +104,18 @@ table {
 .status-message{
   color: orange;
 }
+
+.file-info {
+  /* background-color: #cdc5c5; */
+  border-radius: 5px;
+}
+
+.file-info p a {
+  color: #336699;
+  
+}
+
+.file-info p a:hover {
+  color: orange;
+}
+

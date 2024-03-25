@@ -65,3 +65,8 @@ function delete()
         }
     }
 }
+
+function refresh($url, $time)
+{
+    header("refresh:$time;" . $url);
+}

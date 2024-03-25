@@ -49,12 +49,28 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     </div>
     <main>
       <div>
-        <h1>Create Courses</h1>
-        <p>
-          Courses are study areas in which an applicant is applying for. So as to create a course, the admin will need to create departments and examining bodies. Then create courses for each department with the corresponding examining body.
-        </p>
-        <p>Finaly he/she will then create a course belongin to given departments with the corresponding examining bodies</p>
-        <p>Instructions will be provided</p>
+        <h1>List of Applications</h1>
+        <table>
+          <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Application</th>
+          </thead>
+          <tbody>
+            <?php
+            $applications = new Form();
+            foreach ($applications->selectAll() as $row) { ?>
+              <td><?php echo $row['id']; ?></td>
+              <td><?php echo $row['firstname'] . " " . $row['lastname']; ?></td>
+              <td><?php echo $row['email_address']; ?></td>
+              <td><?php echo $row['phone_number']; ?></td>
+              <td><a href="view.php?id=<?php echo $row['id']; ?>">View</a></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
     </main>
     <div>
       <nav>

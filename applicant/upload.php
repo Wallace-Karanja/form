@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Start output buffering
 session_start();
 include './Applicant.php';
 include './FileUpload.php';
@@ -59,6 +60,7 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_POST['submit'])) {
                                 $uploadMessage = upload("birth_certificate"); // upload() from helper function
+                                refresh($_SERVER['PHP_SELF'], 5);
                             }
                             ?>
                         </div>
@@ -77,6 +79,7 @@ if (!isset($_SESSION['id'])) {
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'birth_certificate') {
                                     $deleteMessage = delete();
+                                    refresh($_SERVER['PHP_SELF'], 5);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage)) { ?>
@@ -98,6 +101,7 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_POST['submit'])) {
                                 $uploadMessage2 = upload("kcse");
+                                refresh($_SERVER['PHP_SELF'], 5);
                             }
                             ?>
                         </div>
@@ -116,6 +120,7 @@ if (!isset($_SESSION['id'])) {
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'kcse') {
                                     $deleteMessage2 = delete();
+                                    refresh($_SERVER['PHP_SELF'], 5);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage2)) { ?>
@@ -137,6 +142,7 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_POST['submit'])) {
                                 $uploadMessage3 = upload("kcpe");
+                                refresh($_SERVER['PHP_SELF'], 5);
                             }
                             ?>
                         </div>
@@ -155,6 +161,7 @@ if (!isset($_SESSION['id'])) {
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'kcpe') {
                                     $deleteMessage3 = delete();
+                                    refresh($_SERVER['PHP_SELF'], 5);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage3)) { ?>
@@ -176,6 +183,7 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_POST['submit'])) {
                                 $uploadMessage4 = upload("id_card");
+                                refresh($_SERVER['PHP_SELF'], 5);
                             }
                             ?>
                         </div>
@@ -194,6 +202,7 @@ if (!isset($_SESSION['id'])) {
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'id_card') {
                                     $deleteMessage4 = delete();
+                                    refresh($_SERVER['PHP_SELF'], 5);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage4)) { ?>
@@ -215,6 +224,7 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_POST['submit'])) {
                                 $uploadMessage5 = upload("leaving_certificate");
+                                refresh($_SERVER['PHP_SELF'], 5);
                             }
                             ?>
                         </div>
@@ -233,6 +243,7 @@ if (!isset($_SESSION['id'])) {
                                 }
                                 if (isset($_GET['filename']) && $_GET['filename'] == 'leaving_certificate') {
                                     $deleteMessage5 = delete();
+                                    refresh($_SERVER['PHP_SELF'], 5);
                                 }
                                 ?>
                                 <?php if (isset($deleteMessage5)) { ?>
@@ -252,3 +263,5 @@ if (!isset($_SESSION['id'])) {
 </body>
 
 </html>
+<?php ob_end_flush(); // Send buffered output to the browser
+?>
