@@ -51,53 +51,53 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
         </div>
         <main>
             <div>
-                
+
                 <div>
-                <?php
+                    <?php
                     if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
-                        $course = new Course();
-                        $course->createDepartment();
-                        $message = "Department created successifuly";
-                        header("refresh:5;url=".$_SERVER['PHP_SELF']);
+                        $course = new Course("departments", "department");
+                        $course->create();
+                        $message = " created successifuly";
+                        header("refresh:5;url=" . $_SERVER['PHP_SELF']);
                     }
 
                     if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
-                        $course = new Course();
-                        $course->updateDepartment();
-                        $message = "Department updated successifuly";
-                        header("refresh:5;url=".$_SERVER['PHP_SELF']);
+                        $course = new Course("departments", "department");
+                        $course->update();
+                        $message = " updated successifuly";
+                        header("refresh:5;url=" . $_SERVER['PHP_SELF']);
                     }
 
                     if (isset($_GET['deleteId'])) {
-                        $course = new Course();
-                        $course->deleteDepartment();
+                        $course = new Course("departments", "department");
+                        $course->delete();
                     }
-                ?>
+                    ?>
 
-                    <?php if(isset($_GET['updateId']))
-                    { $course = new Course(); ?>
-                    <h1>Update Department</h1>
-                    <form action="" method="post" id="form">
-                        <input type="hidden" name="id" value="<?php echo $_GET['updateId'];?>">
-                        <div><label for="department">Department name</label></div>
-                        <div><input type="text" name="department" value = "<?php echo $course->selectDepartmentById();?>" id="department" required />
-                        </div>
-                        <div><input type="submit" name="submit" value="Update" id="submit"></div>
-                    </form>
-                    <p class="message"><?php echo(isset($message) ? $message : "");?></p>
+                    <?php if (isset($_GET['updateId'])) {
+                        $course = new Course("departments", "department"); ?>
+                        <h1>Update Department</h1>
+                        <form action="" method="post" id="form">
+                            <input type="hidden" name="id" value="<?php echo $_GET['updateId']; ?>">
+                            <div><label for="department">Department name</label></div>
+                            <div><input type="text" name="department" value="<?php echo $course->selectDepartmentById(); ?>" id="department" required />
+                            </div>
+                            <div><input type="submit" name="submit" value="Update" id="submit"></div>
+                        </form>
+                        <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
                     <?php } else { ?>
-                    <h1>Create Department</h1>
-                    <form action="" method="post" id="form">
-                        <div><label for="department">Department name</label></div>
-                        <div><input type="text" name="department" id="department" required />
-                        </div>
-                        <div><input type="submit" name="submit" value="Register" id="submit"></div>
-                    </form>
-                    <p class="message"><?php echo(isset($message) ? $message : "");?></p>
-                    <?php }?>
+                        <h1>Create Department</h1>
+                        <form action="" method="post" id="form">
+                            <div><label for="department">Department name</label></div>
+                            <div><input type="text" name="department" id="department" required />
+                            </div>
+                            <div><input type="submit" name="submit" value="Register" id="submit"></div>
+                        </form>
+                        <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
+                    <?php } ?>
                     <?php
-                    $course = new Course();
-                    $departments = $course->selectDepartments();
+                    $course = new Course("departments", "department");
+                    $departments = $course->selectAll();
                     ?>
                     <h2>Departments</h2>
                     <table>
