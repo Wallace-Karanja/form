@@ -80,7 +80,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <form action="" method="post" id="form">
                             <input type="hidden" name="id" value="<?php echo $_GET['updateId']; ?>">
                             <div><label for="department">Department name</label></div>
-                            <div><input type="text" name="department" value="<?php echo $course->selectDepartmentById(); ?>" id="department" required />
+                            <div><input type="text" name="department" value="<?php echo $course->selectById(); ?>" id="department" required />
                             </div>
                             <div><input type="submit" name="submit" value="Update" id="submit"></div>
                         </form>
