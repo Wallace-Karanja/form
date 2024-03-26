@@ -54,12 +54,15 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id";
                         $course = new Course($table, $columns, $parameters);
                         $course->create();
-                        $message = " created successifuly";
+                        $message = "created successifuly";
                         header("refresh:5;url=" . $_SERVER['PHP_SELF']);
                     }
 
                     if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
-                        $course = new Course("courses");
+                        $table = "courses";
+                        $columns = "course, department_id, level_id, exam_body_id, duration_id";
+                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id";
+                        $course = new Course($table, $columns, $parameters);
                         $course->update();
                         $message = " updated successifuly";
                         header("refresh:5;url=" . $_SERVER['PHP_SELF']);
@@ -72,12 +75,80 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     ?>
 
                     <?php if (isset($_GET['updateId'])) {
-                        $course = new Course("courses"); ?>
+                        $course = new Course("courses", "course");
+                        $record = $course->selectAllById()[0];
+                    ?>
                         <h1>Update Course</h1>
                         <form action="" method="post" id="form">
                             <input type="hidden" name="id" value="<?php echo $_GET['updateId']; ?>">
-                            <div><label for="department">Department name</label></div>
-                            <div><input type="text" name="department" value="<?php echo $course->selectById(); ?>" id="department" required />
+                            <div><label for="course">Course</label></div>
+                            <div><input type="text" name="course" value="<?php echo $record['course']; ?>" id="course" required /></div>
+                            <div><label for="department">Department</label></div>
+                            <div>
+                                <?php
+                                $course = new Course("departments", "department", ":department");
+                                $departments = $course->selectAll();
+                                ?>
+                                <select name="department_id" id="department">
+                                    <option value="<?php echo $record['department_id']; ?>">
+                                        <?php echo $course->selectColumn($record['department_id']); ?>
+                                    </option>
+                                    <?php foreach ($departments as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['department']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div><label for="level">Level</label></div>
+                            <div>
+                                <?php
+                                $course = new Course("levels", "level", ":level");
+                                $levels = $course->selectAll();
+                                ?>
+                                <select name="level_id" id="level">
+                                    <option value="<?php echo $record['level_id']; ?>">
+                                        <?php echo $course->selectColumn($record['level_id']); ?>
+                                    </option>
+                                    <?php foreach ($levels as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['level']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div><label for="exam_body">Exam Body</label></div>
+                            <div>
+                                <?php
+                                $course = new Course("exam_bodies", "exam_body", ":exam_body");
+                                $exam_bodies = $course->selectAll();
+                                ?>
+                                <select name="exam_body_id" id="exam_body">
+                                    <option value="<?php echo $record['exam_body_id']; ?>">
+                                        <?php echo $course->selectColumn($record['exam_body_id']);
+                                        ?>
+                                    </option>
+                                    <?php foreach ($exam_bodies as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['exam_body']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div><label for="duration">Duration</label></div>
+                            <div>
+                                <!-- <select name="duration_id" id="duration">
+                                    <option value="1">Duration 1</option>
+                                    <option value="2">Duration 2</option>
+                                    <option value="3">Duration N</option>
+                                </select> -->
+                                <?php
+                                $course = new Course("durations", "duration", ":duration");
+                                $durations = $course->selectAll();
+                                ?>
+                                <select name="duration_id" id="duration">
+                                    <option value="<?php echo $record['duration_id']; ?>">
+                                        <?php echo $course->selectColumn($record['duration_id']);
+                                        ?>
+                                    </option>
+                                    <?php foreach ($durations as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['duration']; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <div><input type="submit" name="submit" value="Update" id="submit"></div>
                         </form>
@@ -86,7 +157,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <h1>Create Course</h1>
                         <form action="" method="post" id="form">
                             <div><label for="course">Course</label></div>
-                            <div><input type="text" name="course" id="course" required /></div>
+                            <div><input type="text" name="course" id="course" placeholder="Provide a course name" required /></div>
                             <div><label for="department">Department</label></div>
                             <div>
                                 <?php
@@ -94,36 +165,49 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 $departments = $course->selectAll();
                                 ?>
                                 <select name="department_id" id="department">
-                                <option value="0">--Select a Department --</option>
-                                    <?php foreach($departments as $row) { ?>
+                                    <option value="0">--Select a Department --</option>
+                                    <?php foreach ($departments as $row) { ?>
                                         <option value="<?php echo $row['id']; ?>"><?php echo $row['department']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div><label for="level">Level</label></div>
                             <div>
-                                <!-- <input type="text" name="level" id="level" required /> -->
+                                <?php
+                                $course = new Course("levels", "level");
+                                $levels = $course->selectAll();
+                                ?>
                                 <select name="level_id" id="level">
-                                    <option value="1">Level 1</option>
-                                    <option value="2">Level 2</option>
-                                    <option value="3">Level N</option>
+                                    <option value="0">--Select a level --</option>
+                                    <?php foreach ($levels as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['level']; ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div><label for="exam_body">Exam Body</label></div>
                             <div>
+                                <?php
+                                $course = new Course("exam_bodies", "exam_body");
+                                $exam_bodies = $course->selectAll();
+                                ?>
                                 <select name="exam_body_id" id="exam_body">
-                                    <option value="1">Exam Body 1</option>
-                                    <option value="2">Exam Body 2</option>
-                                    <option value="3">Exam Body N</option>
+                                    <option value="0">--Select a exam body --</option>
+                                    <?php foreach ($exam_bodies as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['exam_body']; ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div><label for="duration">Duration</label></div>
                             <div>
-                                <!-- <input type="text" name="duration" id="duration" required /> -->
+                                <?php
+                                $course = new Course("durations", "duration");
+                                $durations = $course->selectAll();
+                                ?>
                                 <select name="duration_id" id="duration">
-                                    <option value="1">Duration 1</option>
-                                    <option value="2">Duration 2</option>
-                                    <option value="3">Duration N</option>
+                                    <option value="0">--Select a exam body --</option>
+                                    <?php foreach ($durations as $row) { ?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['duration']; ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div><input type="submit" name="submit" value="Register" id="submit"></div>
@@ -134,7 +218,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     $course = new Course("courses", "");
                     $courses = $course->selectAll();
                     ?>
-                    <h2>Courses</h2>
+                    <h2>Course Catalogue</h2>
                     <table>
                         <thead>
                             <th>Id</th>
@@ -155,8 +239,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                     <td><?php echo $row['level_id']; ?></td>
                                     <td><?php echo $row['exam_body_id']; ?></td>
                                     <td><?php echo $row['duration_id']; ?></td>
-                                    <td><a href="<?php echo $_SERVER['PHP_SELF']."?updateId=" . $row['id'] ?>">Update</a></td>
-                                    <td><a href="<?php echo $_SERVER['PHP_SELF']."?deleteId=" . $row['id'] ?>">Delete</a></td>
+                                    <td><a href="<?php echo $_SERVER['PHP_SELF'] . "?updateId=" . $row['id'] ?>">Update</a></td>
+                                    <td><a href="<?php echo $_SERVER['PHP_SELF'] . "?deleteId=" . $row['id'] ?>">Delete</a></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
