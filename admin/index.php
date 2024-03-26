@@ -39,13 +39,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
   </div>
   <div class="container">
     <div>
-      <nav>
-        <ul>
-          <li><a href="departments.php">Create Departments</a></li>
-          <li><a href="create_examining_bodies.php">Create Examining Bodies</a></li>
-          <li><a href="create_courses.php">Create Courses</a></li>
-        </ul>
-      </nav>
+      <?php include './includes/side_navigation.html'; ?>
     </div>
     <main>
       <div>

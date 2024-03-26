@@ -4,19 +4,21 @@ class Course
     private $connection;
     public $post;
     public $queryStatus;
-    private $fieldsOkay;
+    private $fieldssOkay;
     public $table;
-    public $field;
+    public $fields;
+    public $parameters;
 
 
-    public function __construct($table, $column)
+    public function __construct($table, $column = null, $parameters = null)
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->post = $_POST;
-            $this->fieldsOkay = $this->checkFields($this->post);
+            $this->fieldssOkay = $this->checkfieldss($this->post);
         }
         $this->table = $table;
-        $this->field = $column;
+        $this->fields = $column;
+        $this->parameters = $parameters;
         $this->connection = $this->createDbConnection();
     }
 
@@ -34,14 +36,14 @@ class Course
         }
     }
 
-    private function checkFields($array): bool
+    private function checkfieldss($array): bool
     {
         foreach ($array as $value) {
             if (empty(trim($value))) {
                 return false;
             }
         }
-        $this->fieldsOkay = true;
+        $this->fieldssOkay = true;
         return true;
     }
 
@@ -64,8 +66,10 @@ class Course
     {
         try {
             unset($this->post['submit']);
-            $sql = "INSERT INTO $this->table ($this->field) VALUES (:$this->field)";
+            $sql = "INSERT INTO $this->table ($this->fields) VALUES ($this->parameters)";
+            echo $sql;
             $stmt = $this->connection->prepare($sql);
+            // echo $sql;
             $result = $stmt->execute($this->post);
             if ($stmt->rowCount() == 1) {
                 return true;
@@ -92,7 +96,7 @@ class Course
     public function selectById()
     {
         try {
-            $sql = "SELECT $this->field FROM $this->table WHERE id = :id";
+            $sql = "SELECT $this->fields FROM $this->table WHERE id = :id";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute(["id" => $_GET['updateId']]);
             return $stmt->fetchColumn();
@@ -106,7 +110,7 @@ class Course
     {
         try {
             unset($this->post['submit']);
-            $sql = "UPDATE $this->table SET $this->field = :$this->field WHERE id = :id";
+            $sql = "UPDATE $this->table SET $this->fields = :$this->fields WHERE id = :id";
             $stmt = $this->connection->prepare($sql);
             $result = $stmt->execute($this->post);
             if ($stmt->rowCount() == 1) {

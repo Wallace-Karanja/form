@@ -40,14 +40,15 @@ body {
   
   #form {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    /* grid-template-columns: 1fr 2fr 1fr; */
+    grid-template-columns: 1fr 1fr;
     border: 1px solid black;
     border-radius: 5px;
     padding: 5px;
     column-gap: -10px;
   }
   
-  #form input {
+  #form input, select {
     display: inline;
     width: 90%;
     margin-bottom: 5px;
