@@ -204,7 +204,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 $durations = $course->selectAll();
                                 ?>
                                 <select name="duration_id" id="duration">
-                                    <option value="0">--Select a exam body --</option>
+                                    <option value="0">--Select Duration --</option>
                                     <?php foreach ($durations as $row) { ?>
                                         <option value="<?php echo $row['id']; ?>"><?php echo $row['duration']; ?></option>
                                     <?php } ?>
@@ -215,7 +215,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
                     <?php } ?>
                     <?php
-                    $course = new Course("courses", "");
+                    $course = new Course("courses_view", ""); // select from a view
                     $courses = $course->selectAll();
                     ?>
                     <h2>Course Catalogue</h2>
@@ -235,10 +235,10 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 <tr>
                                     <td><?php echo $row['id']; ?></td>
                                     <td><?php echo $row['course']; ?></td>
-                                    <td><?php echo $row['department_id']; ?></td>
-                                    <td><?php echo $row['level_id']; ?></td>
-                                    <td><?php echo $row['exam_body_id']; ?></td>
-                                    <td><?php echo $row['duration_id']; ?></td>
+                                    <td><?php echo $row['department']; ?></td>
+                                    <td><?php echo $row['level']; ?></td>
+                                    <td><?php echo $row['exam_body']; ?></td>
+                                    <td><?php echo $row['duration']; ?></td>
                                     <td><a href="<?php echo $_SERVER['PHP_SELF'] . "?updateId=" . $row['id'] ?>">Update</a></td>
                                     <td><a href="<?php echo $_SERVER['PHP_SELF'] . "?deleteId=" . $row['id'] ?>">Delete</a></td>
                                 </tr>

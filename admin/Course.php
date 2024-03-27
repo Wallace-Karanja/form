@@ -33,6 +33,7 @@ class Course
             return $PDO;
         } catch (PDOException $e) {
             echo $e->getMessage();
+            exit;
         }
     }
 
