@@ -1,0 +1,24 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+
+table tr {
+  border-bottom: 1px;
+}
+
+button {
+  background-color: orange;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 2px 2px black;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: white;
+}

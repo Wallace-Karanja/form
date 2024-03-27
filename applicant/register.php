@@ -1,7 +1,10 @@
 <?php
 // include './process_form.php';
 // include './Form.php';
+session_start();
+$_SESSION['courseId'] = isset($_GET['id']) ? $_GET['id'] : null;
 include './Applicant.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

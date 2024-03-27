@@ -1,13 +1,5 @@
 <?php
-session_start();
-include './Applicant.php';
-if (!isset($_SESSION['id'])) {
-  $url = './login.php';
-  header("Location:" . $url);
-}
-// generate applicant information
-$applicantInformation = new Applicant();
-
+require '../admin/Course.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +8,7 @@ $applicantInformation = new Applicant();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/application_styles.css">
   <!-- <script src="script.js" defer></script> -->
   <title>Form</title>
 </head>
@@ -31,10 +24,10 @@ $applicantInformation = new Applicant();
             <li><a href="index.php">Home</a></li>
           </div>
           <div>
-            <li class="links"><a href="">About</a></li>
+            <li class="links"><a href="#">About</a></li>
           </div>
           <div>
-            <li class="links"><a href="logout.php">Logout</a></li>
+            <li class="links"><a href="#">Contact Us</a></li>
           </div>
         </ul>
       </nav>
@@ -43,39 +36,36 @@ $applicantInformation = new Applicant();
   <div class="container">
     <div></div>
     <main>
-      <h1>Application Form</h1>
+      <h1>Course Catalogue</h1>
       <div>
         <?php
-        $record = $applicantInformation->selectApplicantByPhoneNumber($_SESSION['id']);
+        $course = new Course("courses_view", ""); // select from a view
+        $courses = $course->selectAll("department");
         ?>
-        <form action="" method="post" id="form">
-          <?php foreach ($record as $row) { ?>
-            <div>
-              <label for="firstName">Firstname<span id="firstname"></span></label>
-              <input type="text" name="firstname" id="firstName" value="<?php echo (isset($row['firstname']) ? $row['firstname'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="lastName">Lastname <span id="lastname"></span></label>
-              <input type="text" name="lastname" id="lastName" value="<?php echo (isset($row['lastname']) ? $row['lastname'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="emailAddress">Email<span id="email_address"></span></label>
-              <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
-            </div>
-            <div><input type="submit" name="submit" value="submit" id="submit" /></div>
-          <?php } ?>
-        </form>
-        <p id="message"></p>
-        <?php
-        // if (isset($_POST['submit'])) {
-        //   $form = new Form();
-        //   var_dump($form->createLog($_POST));
-        // }
-        ?>
+        <table>
+          <thead>
+            <th></th>
+            <th>Course</th>
+            <th>Department</th>
+            <th>Level</th>
+            <th>Exam Body</th>
+            <th>Duration</th>
+            <th>Apply</th>
+          </thead>
+          <tbody>
+            <?php foreach ($courses as $key => $row) { ?>
+              <tr>
+                <td><?php echo $key + 1; ?></td>
+                <td><?php echo $row['course']; ?></td>
+                <td><?php echo $row['department']; ?></td>
+                <td><?php echo $row['level']; ?></td>
+                <td><?php echo $row['exam_body']; ?></td>
+                <td><?php echo $row['duration']; ?></td>
+                <td class="apply"><button><a href="<?php echo "register.php?id=" . $row['id']; ?>">Apply</a></button></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
       </div>
     </main>
     <div></div>

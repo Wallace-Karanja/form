@@ -79,10 +79,10 @@ class Course
         }
     }
 
-    public function selectAll()
+    public function selectAll($orderBy = "id")
     {
         try {
-            $sql = "SELECT * FROM $this->table";
+            $sql = "SELECT * FROM $this->table ORDER BY $orderBy";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
