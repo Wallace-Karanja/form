@@ -1,8 +1,17 @@
+.nav-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 6fr 1fr;
 }
 
+h1{
+  text-align: center;
+}
 table tr {
   border-bottom: 1px;
 }

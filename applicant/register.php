@@ -30,6 +30,9 @@ include './Applicant.php';
                     <div>
                         <li class="links"><a href="login.php">Login</a></li>
                     </div>
+                    <div class="links">
+                        <li><a href="courses.php">Courses</a></li>
+                    </div>
                 </ul>
             </nav>
         </div>

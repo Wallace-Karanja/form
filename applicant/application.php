@@ -31,7 +31,7 @@ $applicantInformation = new Applicant();
             <li><a href="index.php">Home</a></li>
           </div>
           <div>
-            <li class="links"><a href="">About</a></li>
+            <li class="links"><a href="courses.php">Courses</a></li>
           </div>
           <div>
             <li class="links"><a href="logout.php">Logout</a></li>

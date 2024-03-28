@@ -31,6 +31,9 @@ include './Applicant.php';
                     <div class="links">
                         <li><a href="register.php">Register</a></li>
                     </div>
+                    <div class="links">
+                        <li><a href="courses.php">Courses</a></li>
+                    </div>
                 </ul>
             </nav>
         </div>
@@ -51,6 +54,7 @@ include './Applicant.php';
                     </div>
                     <div><input type="submit" name="submit" value="Login" id="submit" required /></div>
                 </form>
+                <p>Log in order to apply, If you dont have an account please <a href="register.php">Register</a></p>
                 <p id="message">
                     <?php
                     if (isset($_POST['submit'])) {
@@ -60,7 +64,7 @@ include './Applicant.php';
                         switch ($queryStatus) {
                             case 0:
                                 echo "Success";
-                                $url = "./index.php";
+                                $url = "./application.php";
                                 header("Location:" . $url);
                                 break;
                             case 1:
