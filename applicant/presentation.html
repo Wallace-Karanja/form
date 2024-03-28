@@ -21,26 +21,34 @@
             margin: auto;
 
         }
+        
+        .p-container {
+        position: relative;
+        width: 200px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        }
+
+        .overlay-paragraph {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7); /* Adjust overlay background color and opacity */
+        color: white; /* Adjust text color */
+        padding: 10px;
+        display: none;
+        }
+
+        .hover-element:hover + .overlay-paragraph {
+        display: block;
+        }
     </style>
     <div class="container">
         <div></div>
         <div class="table-container">
-            <table border="1">
-                <thead>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email Address</th>
-                    <th>ID</th>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td>Wallace Karanja</td>
-                    <td>0702632142</td>
-                    <td>wallacek10@gmail.com</td>
-                    <td>29334778</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="p-container">
+                <div class="hover-element">Hover over me</div>
+                <p class="overlay-paragraph">This is the overlay paragraph.</p>
+              </div>
         </div>
         <div></div>
     </div>

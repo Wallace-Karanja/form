@@ -48,7 +48,7 @@ body {
     column-gap: -10px;
   }
   
-  #form input, select {
+  #form input, select, textarea {
     display: inline;
     width: 90%;
     margin-bottom: 5px;

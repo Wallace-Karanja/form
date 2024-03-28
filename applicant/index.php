@@ -9,7 +9,7 @@ require '../admin/Course.php';
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/application_styles.css">
-  <!-- <script src="script.js" defer></script> -->
+  </style>
   <title>Form</title>
 </head>
 
@@ -40,7 +40,7 @@ require '../admin/Course.php';
       <div>
         <?php
         $course = new Course("courses_view", ""); // select from a view
-        $courses = $course->selectAll("department");
+        $courses = $course->selectAll("department"); // order by dpt
         ?>
         <table>
           <thead>
@@ -50,6 +50,7 @@ require '../admin/Course.php';
             <th>Level</th>
             <th>Exam Body</th>
             <th>Duration</th>
+            <th>Requirement</th>
             <th>Apply</th>
           </thead>
           <tbody>
@@ -61,12 +62,14 @@ require '../admin/Course.php';
                 <td><?php echo $row['level']; ?></td>
                 <td><?php echo $row['exam_body']; ?></td>
                 <td><?php echo $row['duration']; ?></td>
+                <td class="apply"><button><a href="<?php echo "requirement.php?id=" . $row['id']; ?>">Requirement</a></button></td>
                 <td class="apply"><button><a href="<?php echo "register.php?id=" . $row['id']; ?>">Apply</a></button></td>
               </tr>
             <?php } ?>
           </tbody>
         </table>
       </div>
+      <div>
     </main>
     <div></div>
   </div>

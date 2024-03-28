@@ -105,6 +105,19 @@ class Course
         }
     }
 
+    public function selectColumnsById()
+    {
+        try {
+            $sql = "SELECT $this->fields FROM $this->table WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(["id" => $_GET["id"]]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectColumn($id)
     {
         try {
@@ -137,7 +150,7 @@ class Course
             unset($this->post['submit']);
             $sql = null;
             if (count(explode(" ", $this->parameters)) > 1) {
-                $sql = "UPDATE $this->table SET course = :course, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id WHERE id = :id";
+                $sql = "UPDATE $this->table SET course = :course, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id,  requirement = :requirement, description = :description WHERE id = :id";
             } else {
                 $sql = "UPDATE $this->table SET $this->fields = :$this->fields WHERE id = :id";
             }

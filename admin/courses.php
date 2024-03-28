@@ -50,8 +50,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     <?php
                     if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
                         $table = "courses";
-                        $columns = "course, department_id, level_id, exam_body_id, duration_id";
-                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id";
+                        $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
+                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, description";
                         $course = new Course($table, $columns, $parameters);
                         $course->create();
                         $message = "created successifuly";
@@ -60,8 +60,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                     if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                         $table = "courses";
-                        $columns = "course, department_id, level_id, exam_body_id, duration_id";
-                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id";
+                        $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
+                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
                         $course = new Course($table, $columns, $parameters);
                         $course->update();
                         $message = " updated successifuly";
@@ -131,11 +131,6 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                             </div>
                             <div><label for="duration">Duration</label></div>
                             <div>
-                                <!-- <select name="duration_id" id="duration">
-                                    <option value="1">Duration 1</option>
-                                    <option value="2">Duration 2</option>
-                                    <option value="3">Duration N</option>
-                                </select> -->
                                 <?php
                                 $course = new Course("durations", "duration", ":duration");
                                 $durations = $course->selectAll();
@@ -149,6 +144,19 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                         <option value="<?php echo $row['id']; ?>"><?php echo $row['duration']; ?></option>
                                     <?php } ?>
                                 </select>
+                            </div>
+                            <div><label for="requirement">Requirements</label></div>
+                            <div>
+                                <textarea name="requirement" id="requirement" cols="20" rows="5" placeholder="Provide course requirements" required><?php echo (!empty($record['requirement']) ? $record['requirement'] : "Provide course requirement"); ?></textarea>
+                            </div>
+                            <div><label for="description">Description</label></div>
+                            <div>
+                                <textarea name="description" id="description" cols="20" rows="5" placeholder="Provide course description" required><?php echo (!empty($record['description']) ? $record['description'] : "Provide course description"); ?></textarea>
+                            </div>
+                            <div>
+                                <?php
+                                var_dump(!empty($record["description"]));
+                                ?>
                             </div>
                             <div><input type="submit" name="submit" value="Update" id="submit"></div>
                         </form>
@@ -210,6 +218,15 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                     <?php } ?>
                                 </select>
                             </div>
+                            <div><label for="requirement">Requirements</label></div>
+                            <div>
+                                <textarea name="requirement" id="requirement" cols="20" rows="5" placeholder="Provide course requirements" required></textarea>
+                            </div>
+                            <div><label for="description">Description</label></div>
+                            <div>
+                                <textarea name="description" id="description" cols="20" rows="5" placeholder="Provide a brief description of the course"></textarea>
+                            </div>
+                            <div></div>
                             <div><input type="submit" name="submit" value="Register" id="submit"></div>
                         </form>
                         <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
