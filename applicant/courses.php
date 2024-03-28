@@ -42,6 +42,15 @@ require '../admin/Course.php';
         $course = new Course("courses_view", ""); // select from a view
         $courses = $course->selectAll("department"); // order by dpt
         ?>
+        <form action="" method="post" id="form">
+          <div></div>
+          <div><label for="course">Course Title:</label></div>
+          <div><input type="text" name="course" id="course"></div>
+          <div><label for="department">Department:</label></div>
+          <div><input type="text" name="department" id="department"></div>
+          <div><input type="submit" name="search" id="submit" value="Search"></div>
+
+        </form>
         <table>
           <thead>
             <th></th>
