@@ -56,6 +56,7 @@ require '../admin/Course.php';
                     $courses = $course->searchCourse();
                 }
                 ?>
+                <div id="output"></div>
                 <table>
                     <thead>
                         <th></th>
@@ -90,6 +91,55 @@ require '../admin/Course.php';
         </main>
         <div></div>
     </div>
+    <script>
+        // var courseInput = document.getElementById("course");
+        // courseInput.addEventListener("input", (event) => {
+        //     course = courseInput.value;
+        //     fetch('search_request.php?course=' + course + '&department=' + '')
+        //         .then(response => {
+        //             // Check if the response is ok
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             }
+        //             // Parse the JSON response
+        //             return response.json();
+        //         })
+        //         .then(data => {
+        //             // Update the output div with the response data
+        //             document.getElementById('output').innerHTML = JSON.stringify(data);
+        //         })
+        //         .catch(error => {
+        //             console.error('There was a problem with the fetch operation:', error);
+        //         });
+        // })
+
+        var courseInput = document.getElementById("course");
+        var departmentInput = document.getElementById("department");
+
+        function updateUrl() {
+            var courseInputValue = courseInput.value.trim();
+            var departmentInputValue = departmentInput.value.trim();
+            var url = "search_request.php?course=" + courseInputValue + "&department=" + departmentInputValue;
+            console.log(url);
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) { // Check if the response is ok
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the JSON response
+                })
+                .then(data => {
+                    // Update the output div with the response data
+                    document.getElementById('output').innerHTML = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        courseInput.addEventListener("input", updateUrl);
+        departmentInput.addEventListener("input", updateUrl);
+    </script>
 </body>
 
 </html>
