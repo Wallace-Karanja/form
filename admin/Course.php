@@ -164,4 +164,20 @@ class Course
             return false;
         }
     }
+
+    public function searchCourse()
+    {
+        try {
+            unset($_GET["submit"]);
+            $sql = "SELECT * FROM $this->table WHERE course LIKE :course AND department LIKE :department";
+            $stmt = $this->connection->prepare($sql);
+            $course = "%" . $_GET['course'] . "%";
+            $department = "%" . $_GET['department'] . "%";
+            $stmt->execute(["course" => $course, "department" => $department]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }
