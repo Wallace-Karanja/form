@@ -61,8 +61,8 @@ require '../admin/Course.php';
                 }
                 ?>
                 <div id="output"></div>
-                <table>
-                    <thead>
+                <table id="courses-table">
+                    <thead id="thead">
                         <th></th>
                         <th>Course</th>
                         <th>Department</th>

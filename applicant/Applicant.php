@@ -16,7 +16,7 @@ class Applicant
         $this->connection = $this->createDbConnection();
     }
 
-    public function createDbConnection(): object
+    public function createDbConnection()
     {
         require_once './includes/config.php';
         $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";
@@ -27,6 +27,7 @@ class Applicant
             return $PDO;
         } catch (PDOException $e) {
             echo $e->getMessage();
+            return null;
         }
     }
 
@@ -218,20 +219,27 @@ class Applicant
             $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $record;
         } else {
-            return null;
+            return [];
         }
     }
 
     public function selectApplicantByPhoneNumber($phoneNumber): array
     {
-        $sql = "SELECT * FROM applicant_register WHERE phone_number = :phone_number"; # named parameters
-        $stmt = $this->connection->prepare($sql);
-        $result = $stmt->execute(["phone_number" => $phoneNumber]); // call the method after session is set
-        if ($result) {
-            $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $record;
-        } else {
-            return null;
+        try {
+            //code...
+
+            $sql = "SELECT * FROM applicant_register WHERE phone_number = :phone_number"; # named parameters
+            $stmt = $this->connection->prepare($sql);
+            $result = $stmt->execute(["phone_number" => $phoneNumber]); // call the method after session is set
+            if ($result) {
+                $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $record;
+            } else {
+                return []; // empty array
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return [];
         }
     }
 
@@ -243,7 +251,8 @@ class Applicant
             $records = json_decode($jsonLogs);
             return $records;
         } catch (Exception $e) {
-            return $e->getMessage();
+            echo $e->getMessage();
+            return [];
         }
     }
 

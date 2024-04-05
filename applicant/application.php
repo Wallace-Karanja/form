@@ -48,6 +48,7 @@ $applicantInformation = new Applicant();
           <li><a href="academics.php">Academic Information</a></li>
           <li><a href="demographics.php">Demographic Information</a></li>
           <li><a href="demographics.php">Parent/Guardian Information</a></li>
+          <li><a href="upload.php">Upload Documents</a></li>
         </ul>
       </nav>
     </div>
