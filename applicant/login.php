@@ -3,15 +3,17 @@ session_start();
 include './includes/helper_funcs.php';
 include './Applicant.php';
 
-if (isset($_SESSION['id']) && isset($_GET['id'])) {
-    $url = './application.php?id=' . $_GET['id']; // if both the session is set and course id
+if (isset($_SESSION['id']) && isset($_GET['courseId'])) {
+    $url = './application.php?courseId=' . $_GET['courseId']; // if both the session is set and course id
     redirect($url);
-} elseif (isset($_SESSION['id'])) {
+} elseif (isset($_SESSION['courseId'])) {
     $url = './application.php';
     redirect($url);
+} elseif (isset($_GET['id'])) {
+    $url = './application.php?id=' . $_GET['id']; // if both the session is set and course id
+    redirect($url);
 } else {
-    // $url = './login.php';
-    // redirect($url);
+    // pass
 }
 ?>
 <!DOCTYPE html>

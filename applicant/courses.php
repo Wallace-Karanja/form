@@ -84,7 +84,7 @@ require '../admin/Course.php';
                                     <td><?php echo $row['exam_body']; ?></td>
                                     <td><?php echo $row['duration']; ?></td>
                                     <td class="apply"><button><a href="<?php echo "requirement.php?id=" . $row['id']; ?>">Requirements/Details</a></button></td>
-                                    <td class="apply"><button><a href="<?php echo "login.php?id=" . $row['id']; ?>">Apply</a></button></td>
+                                    <td class="apply"><button><a href="<?php echo "login.php?courseId=" . $row['id']; ?>">Apply</a></button></td>
                                 </tr>
                         <?php }
                         } ?>
