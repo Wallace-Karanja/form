@@ -70,3 +70,8 @@ function refresh($url, $time)
 {
     header("refresh:$time;" . $url);
 }
+
+function redirect($url): void
+{
+    header("Location:" . $url);
+}

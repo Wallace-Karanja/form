@@ -51,11 +51,14 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
                         $table = "courses";
                         $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
-                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, description";
+                        $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
                         $course = new Course($table, $columns, $parameters);
-                        $course->create();
-                        $message = "created successifuly";
-                        header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                        if ($course->create()) {
+                            $message = "created successifuly";
+                            header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                        } else {
+                            $message = 'Logic Error contact admin';
+                        }
                     }
 
                     if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
@@ -63,9 +66,12 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
                         $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
                         $course = new Course($table, $columns, $parameters);
-                        $course->update();
-                        $message = " updated successifuly";
-                        header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                        if ($course->update()) {
+                            $message = " updated successifuly";
+                            header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                        } else {
+                            $message = 'Logic Error contact admin';
+                        }
                     }
 
                     if (isset($_GET['deleteId'])) {
@@ -154,9 +160,6 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 <textarea name="description" id="description" cols="20" rows="5" placeholder="Provide course description" required><?php echo (!empty($record['description']) ? $record['description'] : "Provide course description"); ?></textarea>
                             </div>
                             <div>
-                                <?php
-                                var_dump(!empty($record["description"]));
-                                ?>
                             </div>
                             <div><input type="submit" name="submit" value="Update" id="submit"></div>
                         </form>

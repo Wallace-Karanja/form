@@ -69,7 +69,7 @@ class Course
             unset($this->post['submit']);
             $sql = "INSERT INTO $this->table ($this->fields) VALUES ($this->parameters)";
             $stmt = $this->connection->prepare($sql);
-            $result = $stmt->execute($this->post);
+            $stmt->execute($this->post);
             if ($stmt->rowCount() == 1) {
                 return true;
             }

@@ -1,5 +1,18 @@
 <?php
+session_start();
+include './includes/helper_funcs.php';
 include './Applicant.php';
+
+if (isset($_SESSION['id']) && isset($_GET['id'])) {
+    $url = './application.php?id=' . $_GET['id']; // if both the session is set and course id
+    redirect($url);
+} elseif (isset($_SESSION['id'])) {
+    $url = './application.php';
+    redirect($url);
+} else {
+    // $url = './login.php';
+    // redirect($url);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,6 +21,7 @@ include './Applicant.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/course_details_styles.css">
     <!-- <script src="../script.js" defer></script> -->
     <title>Form</title>
     <style>

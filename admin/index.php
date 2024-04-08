@@ -13,7 +13,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../applicant/styles.css">
+  <link rel="stylesheet" href="./css/styles.css">
   <title>Form</title>
 </head>
 
@@ -60,7 +60,36 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
       </nav>
     </div>
   </div>
+  <style>
+    .container {
+      height: 800px;
+    }
 
+    footer {
+      margin: -10px -10px -10px;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background-color: black;
+      color: white;
+      /* margin-left: -10px; */
+    }
+
+    .copyright {
+      text-align: center;
+    }
+  </style>
+  <footer>
+    <div class="footer-container">
+      <div></div>
+      <div class="copyright">
+        <p>&copy; Wallace Karanja <?php echo "2023 - " . date("Y") ?></p>
+      </div>
+      <div></div>
+    </div>
+  </footer>
 </body>
 
 </html>
