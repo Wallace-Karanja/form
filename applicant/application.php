@@ -46,7 +46,7 @@ $applicantInformation = new Applicant();
         <ul>
           <li><a href="application.php">Personal Information</a></li>
           <li><a href="academics.php">Academic Information</a></li>
-          <li><a href="course.php<?php echo (isset($_GET['id']) ? '?id=' . $_GET['id'] : '') ?>">Select Course</a></li>
+          <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>">Select Course</a></li>
           <li><a href="demographics.php">Demographic Information</a></li>
           <li><a href="demographics.php">Parent/Guardian Information</a></li>
           <li><a href="upload.php">Upload Documents</a></li>
@@ -85,6 +85,9 @@ $applicantInformation = new Applicant();
           <?php } ?>
         </form>
         <p id="message"></p>
+        <?php
+        echo (isset($_SESSION['courseId']) ? $_SESSION['courseId'] : "not set");
+        ?>
       </div>
     </main>
     <div></div>

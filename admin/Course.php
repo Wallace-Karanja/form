@@ -110,7 +110,13 @@ class Course
         try {
             $sql = "SELECT $this->fields FROM $this->table WHERE id = :id";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute(["id" => $_GET["id"]]);
+            if (isset($_GET["courseId"])) {
+                $stmt->execute(["id" => $_GET["courseId"]]);
+            } elseif (isset($_SESSION["courseId"])) {
+                $stmt->execute(["id" => $_SESSION["courseId"]]);
+            } else {
+                $stmt->execute(["id" => $_GET["id"]]);
+            }
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             echo $e->getMessage();

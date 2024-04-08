@@ -7,6 +7,10 @@ if (!isset($_SESSION['id'])) {
     header("Location:" . $url);
 }
 
+if (isset($_GET["courseId"])) {
+    $_SESSION['courseId'] = $_GET['courseId'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +49,8 @@ if (!isset($_SESSION['id'])) {
                 <ul>
                     <li><a href="application.php">Personal Information</a></li>
                     <li><a href="academics.php">Academic Information</a></li>
-                    <li><a href="course.php">Select Course</a></li>
-                    <li><a href="demographics.php">Demographic Information</a></li>
+                    <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>"">Select Course</a></li>
+                    <li><a href=" demographics.php">Demographic Information</a></li>
                     <li><a href="demographics.php">Parent/Guardian Information</a></li>
                     <li><a href="upload.php">Upload Documents</a></li>
                 </ul>
@@ -54,13 +58,50 @@ if (!isset($_SESSION['id'])) {
         </div>
         <main>
             <h1>Application</h1>
-            <h2>Apply for a course</h2>
+            <h2>Select a Course</h2>
+
+            <style>
+                .container {
+                    display: grid;
+                    grid-template-columns: 1.1fr 1fr 1.1fr;
+                }
+            </style>
+            <form action="" method="post" id="form">
+                <div>
+                    <label for="course">Course</label>
+                </div>
+                <div>
+                    <select name="course_title" id="course">
+                        <?php
+                        if (isset($_GET["courseId"]) || isset($_SESSION["courseId"])) {
+                            $course = new Course("courses_view", "*");
+                            $record = $course->selectColumnsById()[0];
+                        ?>
+                            <option value="<?php echo $record['id']; ?>"><?php echo $record['course'] . ', ' . $record['level'] . ', ' . $record['exam_body']; ?></option>
+                            <?php
+                            $course = new Course("courses_view", "*");
+                            $courses = $course->selectAll();
+                            foreach ($courses as $course) { ?>
+                                <option value="<?php echo $course['id']; ?>"><?php echo $course['course'] . ', ' . $course['level'] . ', ' . $course['exam_body']; ?></option>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <option value="">--select a course --</option>
+                            <?php
+                            $course = new Course("courses_view", "*");
+                            $courses = $course->selectAll();
+                            foreach ($courses as $course) { ?>
+                                <option value="<?php echo $course['id']; ?>"><?php echo $course['course'] . ', ' . $course['level'] . ', ' . $course['exam_body']; ?></option>
+                        <?php }
+                        } ?>
+                    </select>
+                </div>
+                <!-- <div></div> -->
+                <div><input type="submit" name="submit" value="save" id="submit" /></div>
+
+            </form>
             <?php
-            // echo (isset($_GET["id"]) ? $_GET["id"] : "not set");
-            if (isset($_GET["id"])) {
-                // $id = $_GET["id"];
-                $course = new Course("courses_view", "*");
-                var_dump($course->selectColumnsById());
+            if (isset($_POST['submit'])) {
+                var_dump($_POST);
             }
             ?>
             <div>
