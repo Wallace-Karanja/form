@@ -56,9 +56,6 @@ $applicantInformation = new Applicant();
     <main>
       <h1>Application</h1>
       <h2>Personal information</h2>
-      <?php
-      //var_dump($_SESSION['courseId']); 
-      ?>
       <div>
         <?php
         $record = $applicantInformation->selectApplicantByPhoneNumber($_SESSION['id']);
@@ -74,19 +71,27 @@ $applicantInformation = new Applicant();
               <input type="text" name="lastname" id="lastName" value="<?php echo (isset($row['lastname']) ? $row['lastname'] : ""); ?>" required />
             </div>
             <div>
+              <label for="secondName">Second name <span id="second_name"></span></label>
+              <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ""); ?>" required />
+            </div>
+            <div>
               <label for="emailAddress">Email<span id="email_address"></span></label>
               <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
             </div>
             <div>
               <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
+              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" disabled required />
+            </div>
+            <div>
+              <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
+              <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ""); ?>" required />
             </div>
             <div><input type="submit" name="submit" value="save" id="submit" /></div>
           <?php } ?>
         </form>
         <p id="message"></p>
         <?php
-        echo (isset($_SESSION['courseId']) ? $_SESSION['courseId'] : "not set");
+        var_dump($record);
         ?>
       </div>
     </main>
