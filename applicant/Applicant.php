@@ -6,14 +6,20 @@ class Applicant
     public $queryStatus;
     private $fieldsOkay;
 
+    public $table;
+    public $columns;
+    public $parameters;
 
-    public function __construct()
+    public function __construct($table = null, $columns = null, $parameters = null)
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->post = $_POST;
             $this->checkFields($this->post);
         }
         $this->connection = $this->createDbConnection();
+        $this->table = $table;
+        $this->columns = $columns;
+        $this->parameters = $parameters;
     }
 
     public function createDbConnection()
@@ -256,8 +262,6 @@ class Applicant
         }
     }
 
-
-
     public function createLog(): void
     {
         // create a log containing the id, actor, date and time to a json file
@@ -269,5 +273,20 @@ class Applicant
         $logs[] = $log;
         $jsonLogs = json_encode($logs, JSON_PRETTY_PRINT);
         file_put_contents($logFile, $jsonLogs);
+    }
+
+    public function save(): bool
+    {
+        unset($this->post["submit"]);
+        try {
+            $sql = "INSERT INTO $this->table ($this->columns) VALUES ($this->parameters)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            $result = $stmt->rowCount();
+            return $result == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 }

@@ -62,6 +62,7 @@ $applicantInformation = new Applicant();
         ?>
         <form action="" method="post" id="form">
           <?php foreach ($record as $row) { ?>
+            <input type="hidden" name="applicant_id" value="<?php echo $row['id'] ?>">
             <div>
               <label for="firstName">Firstname<span id="firstname"></span></label>
               <input type="text" name="firstname" id="firstName" value="<?php echo (isset($row['firstname']) ? $row['firstname'] : ""); ?>" required />
@@ -75,12 +76,23 @@ $applicantInformation = new Applicant();
               <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ""); ?>" required />
             </div>
             <div>
+              <label for="gender">Gender</label>
+              <select name="gender" id="gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div>
+              <label for="birthday">Date of Birth</label>
+              <input type="date" name="birthday" id="birthday" required>
+            </div>
+            <div>
               <label for="emailAddress">Email<span id="email_address"></span></label>
               <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
             </div>
             <div>
               <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" disabled required />
+              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
             </div>
             <div>
               <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
@@ -91,7 +103,17 @@ $applicantInformation = new Applicant();
         </form>
         <p id="message"></p>
         <?php
-        var_dump($record);
+        if (isset($_POST["submit"])) {
+          $table = "personal_information";
+          $columns = "applicant_id, firstname, lastname, second_name, gender, birthday, email_address, phone_number, alternative_phone";
+          $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :birthday, :email_address, :phone_number, :alternative_phone";
+          $personalInformation = new Applicant($table, $columns, $parameters);
+          var_dump($personalInformation->save());
+        }
+        ?>
+
+        <?php
+        $info = new Applicant($table = "personal_information");
         ?>
       </div>
     </main>
