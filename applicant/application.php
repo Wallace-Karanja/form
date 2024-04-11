@@ -1,6 +1,7 @@
 <?php
 session_start();
 include './Applicant.php';
+include './includes/helper_funcs.php';
 if (!isset($_SESSION['id'])) {
   $url = './login.php';
   header("Location:" . $url);
@@ -59,61 +60,89 @@ $applicantInformation = new Applicant();
       <div>
         <?php
         $record = $applicantInformation->selectApplicantByPhoneNumber($_SESSION['id']);
+        $row = $record[0];
+        $applicantId = $row['id'];
+
+        $personalInformation = new Applicant($table = "personal_information");
+        if ($personalInformation->applicantPersonalInfoExists($applicantId)) {  // check if there is a record in personal information
+          $row = $personalInformation->selectByApplicantId($applicantId)[0];
+        }
+
         ?>
         <form action="" method="post" id="form">
-          <?php foreach ($record as $row) { ?>
-            <input type="hidden" name="applicant_id" value="<?php echo $row['id'] ?>">
-            <div>
-              <label for="firstName">Firstname<span id="firstname"></span></label>
-              <input type="text" name="firstname" id="firstName" value="<?php echo (isset($row['firstname']) ? $row['firstname'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="lastName">Lastname <span id="lastname"></span></label>
-              <input type="text" name="lastname" id="lastName" value="<?php echo (isset($row['lastname']) ? $row['lastname'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="secondName">Second name <span id="second_name"></span></label>
-              <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="gender">Gender</label>
-              <select name="gender" id="gender">
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </div>
-            <div>
-              <label for="birthday">Date of Birth</label>
-              <input type="date" name="birthday" id="birthday" required>
-            </div>
-            <div>
-              <label for="emailAddress">Email<span id="email_address"></span></label>
-              <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-              <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
-            </div>
-            <div>
-              <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
-              <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ""); ?>" required />
-            </div>
-            <div><input type="submit" name="submit" value="save" id="submit" /></div>
-          <?php } ?>
+          <?php //foreach ($record as $row) { 
+          ?>
+          <input type="hidden" name="applicant_id" value="<?php echo $row['applicant_id']; ?>">
+          <div>
+            <label for="firstName">Firstname<span id="firstname"></span></label>
+            <input type="text" name="firstname" id="firstName" value="<?php echo (isset($row['firstname']) ? $row['firstname'] : ""); ?>" required />
+          </div>
+          <div>
+            <label for="lastName">Lastname <span id="lastname"></span></label>
+            <input type="text" name="lastname" id="lastName" value="<?php echo (isset($row['lastname']) ? $row['lastname'] : ""); ?>" required />
+          </div>
+          <div>
+            <label for="secondName">Second name <span id="second_name"></span></label>
+            <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ""); ?>" required />
+          </div>
+          <div>
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender">
+              <option value="<?php echo (isset($row['gender']) ? $row['gender'] : "---select your gender---"); ?>"><?php echo (isset($row['gender']) ? $row['gender'] : "---select your gender---"); ?></option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+          </div>
+          <div>
+            <label for="birthday">Date of Birth</label>
+            <input type="date" name="birthday" id="birthday" value="<?php echo (isset($row['birthday']) ? $row['birthday'] : ""); ?>" required>
+          </div>
+          <div>
+            <label for="emailAddress">Email<span id="email_address"></span></label>
+            <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
+          </div>
+          <div>
+            <label for="phoneNumber">Phone<span id="phone_number"></span></label>
+            <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
+          </div>
+          <div>
+            <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
+            <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ""); ?>" required />
+          </div>
+          <div><input type="submit" name="submit" value="save" id="submit" /></div>
+          <?php // } 
+          ?>
         </form>
         <p id="message"></p>
         <?php
         if (isset($_POST["submit"])) {
-          $table = "personal_information";
-          $columns = "applicant_id, firstname, lastname, second_name, gender, birthday, email_address, phone_number, alternative_phone";
-          $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :birthday, :email_address, :phone_number, :alternative_phone";
-          $personalInformation = new Applicant($table, $columns, $parameters);
-          var_dump($personalInformation->save());
+          if ($personalInformation->applicantPersonalInfoExists($applicantId)) {
+            if ($personalInformation->updatePersonalInformation()) {
+              echo "Saved successifuly";
+              refresh($_SERVER['PHP_SELF'], 3);
+            } else {
+              echo "Saving failure";
+            }
+          } else {
+            $table = "personal_information";
+            $columns = "applicant_id, firstname, lastname, second_name, gender, birthday, email_address, phone_number, alternative_phone";
+            $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :birthday, :email_address, :phone_number, :alternative_phone";
+            $personalInformation = new Applicant($table, $columns, $parameters);
+            // $personalInformation->save();
+            echo ($personalInformation->save() ? "Saved successiful" : "Failed to save");
+            if ($personalInformation->save()) {
+              echo "Saved successifuly";
+              refresh($_SERVER['PHP_SELF'], 3);
+            } else {
+              echo "Saving failure";
+            }
+          }
         }
         ?>
 
         <?php
-        $info = new Applicant($table = "personal_information");
+
+        // var_dump($personalInformation->selectByApplicantId($id = '1'));
         ?>
       </div>
     </main>

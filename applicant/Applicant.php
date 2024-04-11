@@ -289,4 +289,49 @@ class Applicant
             return false;
         }
     }
+
+    public function updatePersonalInformation(): bool
+    {
+        unset($this->post["submit"]);
+        try {
+            $sql = "UPDATE $this->table SET firstname = :firstname, lastname = :lastname, second_name = :second_name , gender = :gender, birthday = :birthday , email_address = :email_address , phone_number = :phone_number, alternative_phone = :alternative_phone WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            $result = $stmt->rowCount();
+            return $result == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function selectByApplicantId($id)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $id]);
+            // $result = $stmt->rowCount();
+            // return $result >= 1 ? true : false;
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function applicantPersonalInfoExists($id)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $id]);
+            $result = $stmt->rowCount();
+            return $result >= 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }
