@@ -46,9 +46,9 @@ $applicantInformation = new Applicant();
       <nav>
         <ul>
           <li><a href="application.php">Personal Information</a></li>
+          <li><a href="demographics.php">Demographic Information</a></li>
           <li><a href="academics.php">Academic Information</a></li>
           <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>">Select Course</a></li>
-          <li><a href="demographics.php">Demographic Information</a></li>
           <li><a href="demographics.php">Parent/Guardian Information</a></li>
           <li><a href="upload.php">Upload Documents</a></li>
         </ul>
@@ -70,8 +70,6 @@ $applicantInformation = new Applicant();
 
         ?>
         <form action="" method="post" id="form">
-          <?php //foreach ($record as $row) { 
-          ?>
           <input type="hidden" name="applicant_id" value="<?php echo $row['applicant_id']; ?>">
           <div>
             <label for="firstName">Firstname<span id="firstname"></span></label>
@@ -110,8 +108,6 @@ $applicantInformation = new Applicant();
             <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ""); ?>" required />
           </div>
           <div><input type="submit" name="submit" value="save" id="submit" /></div>
-          <?php // } 
-          ?>
         </form>
         <p id="message"></p>
         <?php
@@ -138,11 +134,6 @@ $applicantInformation = new Applicant();
             }
           }
         }
-        ?>
-
-        <?php
-
-        // var_dump($personalInformation->selectByApplicantId($id = '1'));
         ?>
       </div>
     </main>
