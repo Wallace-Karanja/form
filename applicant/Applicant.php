@@ -217,6 +217,32 @@ class Applicant
         return $records;
     }
 
+    public function findAll()
+    {
+        try {
+            $sql = "SELECT * FROM $this->table";
+            $result = $this->connection->query($sql);
+            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $records;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function findById()
+    {
+        try {
+            $sql = "SELECT * FROM sub_counties WHERE county_id = :county_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($_GET);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectById(): array
     {
         $sql = "SELECT * FROM applicant_register WHERE id = :id"; # named parameters
