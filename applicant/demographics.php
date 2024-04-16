@@ -65,13 +65,7 @@ $applicantInformation = new Applicant();
                 echo "applicant id = " . $applicantId;
                 ?>
                 <form action="" method="post" id="form">
-                    <div>
-                        <label for="country">Country</label>
-                        <select name="country" id="country">
-                            <option value="">Kenya</option>
-                            <option value="">Unganda</option>
-                        </select>
-                    </div>
+                    <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
                     <div>
                         <label for="county">County</label>
                         <?php
@@ -105,12 +99,18 @@ $applicantInformation = new Applicant();
                         <input type="text" name="village" id="village" required>
                     </div>
                     <div>
-                        <input type="submit" value="Save" id="submit">
+
+                    </div>
+                    <div>
+                        <input type="submit" name="submit" value="Save" id="submit">
                     </div>
                 </form>
                 <p id="message"></p>
                 <?php
-
+                // next to save demographics data
+                if (isset($_POST['submit'])) {
+                    var_dump($_POST);
+                }
                 ?>
             </div>
         </main>
@@ -119,9 +119,6 @@ $applicantInformation = new Applicant();
     <script>
         document.getElementById("county").addEventListener("change", (event) => {
             var selectedCounty = document.getElementById("county");
-            // console.log(selectedCounty.value);
-            // get the selected value
-            // use the selected value to fetch for subcounties
             var url = "./get_sub_counties.php?county_id=" + encodeURIComponent(selectedCounty.value);
             console.log(url);
             fetch(url).then((response) => {
