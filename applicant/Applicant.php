@@ -229,6 +229,18 @@ class Applicant
         }
     }
 
+    public function findAllByApplicantId($applicantId)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = $applicantId";
+            $result = $this->connection->query($sql);
+            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $records;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function findById()
     {
         try {
@@ -331,6 +343,21 @@ class Applicant
         }
     }
 
+    public function updateDemographicInformation(): bool
+    {
+        unset($this->post["submit"]);
+        try {
+            $sql = "UPDATE $this->table SET county_id = :county_id, sub_county_id = :sub_county_id , location = :location, sub_location = :sub_location, village = :village WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            $result = $stmt->rowCount();
+            return $result == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectByApplicantId($id)
     {
         try {
@@ -348,6 +375,20 @@ class Applicant
     }
 
     public function applicantPersonalInfoExists($id)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $id]);
+            $result = $stmt->rowCount();
+            return $result >= 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function applicantDemographicInfoExists($id)
     {
         try {
             $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
