@@ -64,6 +64,7 @@ $demographicInformation = new Applicant();
                 $row = $record[0];
                 $applicantId = $row['id'];
                 $applicantInformation->table = "demographic_information";
+                $info = $applicantInformation->findAllByApplicantId($applicantId)[0];
                 var_dump($applicantInformation->findAllByApplicantId($applicantId));
                 echo "applicant id = " . $applicantId;
                 ?>
@@ -76,7 +77,8 @@ $demographicInformation = new Applicant();
                         $counties = $applicantInformation->findAll();
                         ?>
                         <select name="county_id" id="county">
-                            <option value="">--select your county--</option>
+                            <!-- <option value="">--select your county--</option> -->
+                            <option value=""><?php echo (isset($info['county_id']) ? $info['county_id'] : "--select your county--"); ?></option>
                             <?php foreach ($counties as $row) { ?>
                                 <option value="<?php echo $row['id']; ?>"><?php echo $row['county']; ?></option>
                             <?php } ?>
