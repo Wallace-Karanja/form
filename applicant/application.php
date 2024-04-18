@@ -1,145 +1,100 @@
 <?php
-session_start();
-include './Applicant.php';
-include './includes/helper_funcs.php';
-if (!isset($_SESSION['id'])) {
-  $url = './login.php';
-  header("Location:" . $url);
+class Application extends Applicant
+{
+    // personal information
+    // demographic information
+    // academic information
+    // course information
+    // guardian information
+
+    // create -- action for applicant
+    // read -- action for applicant
+    // update -- action for applicant
+
+    // get the applicant id => from register db 
+    // check if applicant id exists in the table => table can be any table 
+    // create if the applicant id does not exist, else update information
+
+    public $table;
+    public $post;
+    public $applicantId;
+    public $updateString;
+
+    public $connection;
+    public function __construct($table = null, $post = null, $applicantId = null, $columns = null, $parameters = null, $updateString = null)
+    {
+        $this->table = $table;
+        $this->post = $post;
+        $this->applicantId = $applicantId;
+        $this->columns = $columns;
+        $this->parameters = $parameters;
+        $this->updateString = $updateString;
+        $this->connection = parent::createDbConnection();
+    }
+
+    public function createInformation()
+    {
+        try {
+            unset($this->post['submit']);
+            $sql = "INSERT INTO $this->table ($this->columns) VALUES ($this->parameters)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function updateInformation(): bool
+    {
+        try {
+            unset($this->post['submit']);
+            $sql = "UPDATE $this->table SET $this->updateString WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function saveInformation()
+    {
+        if ($this->recordExists()) {
+            return $this->updateInformation();
+        } else {
+            return $this->createInformation();
+        }
+    }
+    public function recordExists(): bool
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() == 1 ? true : false;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function findInformationByApplicantId()
+    {
+        if ($this->recordExists()) {
+            try {
+                $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute(['applicant_id' => $this->applicantId]);
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                return false;
+            }
+        }
+        return false;
+    }
 }
-// generate applicant information
-$applicantInformation = new Applicant();
-
-?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./css/styles.css">
-  <!-- <script src="script.js" defer></script> -->
-  <title>Form</title>
-</head>
-
-<body>
-  <div class="header-container">
-    <div></div>
-    <div></div>
-    <div>
-      <nav>
-        <ul class="nav-container">
-          <div class="links">
-            <li><a href="index.php">Home</a></li>
-          </div>
-          <div>
-            <li class="links"><a href="courses.php">Courses</a></li>
-          </div>
-          <div>
-            <li class="links"><a href="logout.php">Logout</a></li>
-          </div>
-        </ul>
-      </nav>
-    </div>
-  </div>
-  <div class="container">
-    <div>
-      <nav>
-        <ul>
-          <li><a href="application.php">Personal Information</a></li>
-          <li><a href="demographics.php">Demographic Information</a></li>
-          <li><a href="academics.php">Academic Information</a></li>
-          <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>">Select Course</a></li>
-          <li><a href="demographics.php">Parent/Guardian Information</a></li>
-          <li><a href="upload.php">Upload Documents</a></li>
-        </ul>
-      </nav>
-    </div>
-    <main>
-      <h1>Application</h1>
-      <h2>Personal information</h2>
-      <div>
-        <?php
-        $record = $applicantInformation->selectApplicantByPhoneNumber($_SESSION['id']);
-        $row = $record[0];
-        $applicantId = $row['id'];
-
-        $personalInformation = new Applicant($table = "personal_information");
-        if ($personalInformation->applicantPersonalInfoExists($applicantId)) {  // check if there is a record in personal information
-          $row = $personalInformation->selectByApplicantId($applicantId)[0];
-        }
-
-        ?>
-        <form action="" method="post" id="form">
-          <input type="hidden" name="applicant_id" value="<?php echo $row['applicant_id']; ?>">
-          <div>
-            <label for="firstName">Firstname<span id="firstname"></span></label>
-            <input type="text" name="firstname" id="firstName" value="<?php echo (isset($row['firstname']) ? $row['firstname'] : ""); ?>" required />
-          </div>
-          <div>
-            <label for="lastName">Lastname <span id="lastname"></span></label>
-            <input type="text" name="lastname" id="lastName" value="<?php echo (isset($row['lastname']) ? $row['lastname'] : ""); ?>" required />
-          </div>
-          <div>
-            <label for="secondName">Second name <span id="second_name"></span></label>
-            <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ""); ?>" required />
-          </div>
-          <div>
-            <label for="gender">Gender</label>
-            <select name="gender" id="gender">
-              <option value="<?php echo (isset($row['gender']) ? $row['gender'] : "---select your gender---"); ?>"><?php echo (isset($row['gender']) ? $row['gender'] : "---select your gender---"); ?></option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-            </select>
-          </div>
-          <div>
-            <label for="birthday">Date of Birth</label>
-            <input type="date" name="birthday" id="birthday" value="<?php echo (isset($row['birthday']) ? $row['birthday'] : ""); ?>" required>
-          </div>
-          <div>
-            <label for="emailAddress">Email<span id="email_address"></span></label>
-            <input type="email" name="email_address" id="emailAddress" value="<?php echo (isset($row['email_address']) ? $row['email_address'] : ""); ?>" required />
-          </div>
-          <div>
-            <label for="phoneNumber">Phone<span id="phone_number"></span></label>
-            <input type="tel" name="phone_number" id="phoneNumber" value="<?php echo (isset($row['phone_number']) ? $row['phone_number'] : ""); ?>" required />
-          </div>
-          <div>
-            <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
-            <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ""); ?>" required />
-          </div>
-          <div><input type="submit" name="submit" value="save" id="submit" /></div>
-        </form>
-        <p id="message"></p>
-        <?php
-        if (isset($_POST["submit"])) {
-          if ($personalInformation->applicantPersonalInfoExists($applicantId)) {
-            if ($personalInformation->updatePersonalInformation()) {
-              echo "Saved successifuly";
-              refresh($_SERVER['PHP_SELF'], 3);
-            } else {
-              echo "Saving failure";
-            }
-          } else {
-            $table = "personal_information";
-            $columns = "applicant_id, firstname, lastname, second_name, gender, birthday, email_address, phone_number, alternative_phone";
-            $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :birthday, :email_address, :phone_number, :alternative_phone";
-            $personalInformation = new Applicant($table, $columns, $parameters);
-            // $personalInformation->save();
-            echo ($personalInformation->save() ? "Saved successiful" : "Failed to save");
-            if ($personalInformation->save()) {
-              echo "Saved successifuly";
-              refresh($_SERVER['PHP_SELF'], 3);
-            } else {
-              echo "Saving failure";
-            }
-          }
-        }
-        ?>
-      </div>
-    </main>
-    <div></div>
-  </div>
-
-</body>
-
-</html>

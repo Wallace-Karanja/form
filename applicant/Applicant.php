@@ -232,9 +232,10 @@ class Applicant
     public function findAllByApplicantId($applicantId)
     {
         try {
-            $sql = "SELECT * FROM $this->table WHERE applicant_id = $applicantId";
-            $result = $this->connection->query($sql);
-            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "SELECT * FROM $this->table WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->query($sql);
+            $stmt->execute(["applicant_id" => $applicantId]);
+            $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $records;
         } catch (Exception $e) {
             echo $e->getMessage();
