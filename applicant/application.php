@@ -97,4 +97,18 @@ class Application extends Applicant
         }
         return false;
     }
+
+    public function findColumnById($id)
+    {
+        try {
+            $sql = "SELECT $this->columns FROM $this->table WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['id' => $id]);
+            $result = $stmt->fetchColumn();
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }

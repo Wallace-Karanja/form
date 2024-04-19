@@ -5,14 +5,14 @@ include './Applicant.php';
 
 if (isset($_SESSION['id']) && isset($_GET['courseId'])) {
     $_SESSION['courseId'] = $_GET['courseId'];
-    $url = './application.php?courseId=' . $_GET['courseId']; // if both the session is set and course id
+    $url = './personal.php?courseId=' . $_GET['courseId']; // if both the session is set and course id
     redirect($url);
 } elseif (isset($_GET['courseId'])) {
     $_SESSION['courseId'] = $_GET['courseId'];
-    $url = './application.php';
+    $url = './personal.php';
     redirect($url);
 } elseif (isset($_GET['courseId'])) {
-    $url = './application.php?courseId=' . $_GET['id']; // if both the session is set and course id
+    $url = './personal.php?courseId=' . $_GET['id']; // if both the session is set and course id
     redirect($url);
 } else {
     // pass
@@ -82,7 +82,7 @@ if (isset($_SESSION['id']) && isset($_GET['courseId'])) {
                         switch ($queryStatus) {
                             case 0:
                                 echo "Success";
-                                $url = "./application.php";
+                                $url = "./personal.php";
                                 header("Location:" . $url);
                                 break;
                             case 1:
