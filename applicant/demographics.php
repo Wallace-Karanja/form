@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include './Applicant.php';
 include './Application.php';
@@ -80,9 +81,7 @@ $registrationInformation = new Applicant();
                         <select name="county_id" id="county">
                             <!-- <option value="">--select your county--</option> -->
                             <option value="<?php echo (isset($row['county_id']) ? $row['county_id'] : "--select your county--"); ?>">
-
                                 <?php echo (isset($row['county_id']) ? $application->findColumnById($row['county_id']) : "--select your county--"); ?>
-
                             </option>
                             <?php foreach ($counties as $county) { ?>
                                 <option value="<?php echo $county['id']; ?>"><?php echo $county['county']; ?></option>
@@ -116,7 +115,7 @@ $registrationInformation = new Applicant();
 
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="Save" id="submit">
+                        <input type="submit" name="submit" value="submit" id="submit">
                     </div>
                 </form>
                 <p id="message"></p>
@@ -124,13 +123,13 @@ $registrationInformation = new Applicant();
                 if (isset($_POST["submit"])) {
                     $columns = "applicant_id, county_id, sub_county_id, location, sub_location, village";
                     $parameters = ":applicant_id, :county_id, :sub_county_id, :location, :sub_location, :village";
-                    $updateString = "application_id = :applicant_id, county_id = :county_id, sub_county_id = :sub_county_id, location = :location, sub_location = :sub_location, village = :village";
+                    $updateString = "applicant_id = :applicant_id, county_id = :county_id, sub_county_id = :sub_county_id, location = :location, sub_location = :sub_location, village = :village";
                     $application = new Application("demographic_information", $_POST, $id, $columns, $parameters, $updateString);
                     if ($application->saveInformation()) {
                         echo "Saved Successifully";
                         refresh($_SERVER['PHP_SELF'], 3);
                     } else {
-                        echo "Saving failure";
+                        echo "Saving failure/no changes made";
                     }
                 }
                 ?>
@@ -180,3 +179,4 @@ $registrationInformation = new Applicant();
 </body>
 
 </html>
+<?php ob_end_flush(); ?>
