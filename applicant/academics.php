@@ -9,7 +9,7 @@ if (!isset($_SESSION['id'])) {
     header("Location:" . $url);
 }
 // generate applicant information
-$demographicInformation = new Applicant();
+$academicInformation = new Applicant();
 $registrationInformation = new Applicant();
 
 ?>
@@ -75,28 +75,34 @@ $registrationInformation = new Applicant();
                         margin: 20px;
                     }
                 </style>
+                <h3>Primary School Academic Information</h3>
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="primary_school_name">Primary School Name</label></div>
-                    <div><input type="text" name="primary_school_name" value="" required></div>
-                    <div><label for="index">KCPE index Number</label></div>
-                    <div><input type="text" name="kcpe_index_number" id="index"></div>
+                    <div><input type="text" name="primary_school_name" value="<?php echo (isset($row['primary_school_name']) ? $row['primary_school_name'] : ''); ?>" required></div>
+                    <div><label for="kcpe_index_number">KCPE index Number</label></div>
+                    <div><input type="text" name="kcpe_index_number" value="<?php echo (isset($row['kcpe_index_number']) ? $row['kcpe_index_number'] : ''); ?>" id="index" required></div>
                     <div><label for="kcpe_marks">Grade/Marks</label></div>
-                    <div><input type="text" name="kcpe_marks" id="grade"></div>
-                    <div><input type="submit" name="submit" value="submit" id="submit"></div>
+                    <div><input type="text" name="kcpe_marks" value="<?php echo (isset($row['kcpe_marks']) ? $row['kcpe_marks'] : ''); ?>" id="grade"></div>
+                    <div><label for="year">Date of Completion</label></div>
+                    <div><input type="date"></div>
+                    <div><input type="submit" name="submit" value="save" id="submit"></div>
                 </form>
-
+                <h3>Secondary School Academic Information</h3>
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
-                    <div><label for="primary">Secondary School Name</label></div>
-                    <div><input type="text" name="primary" id="primary" required></div>
-                    <div><label for="index">KCSE index Number</label></div>
-                    <div><input type="text" name="index" id="index"></div>
+                    <div><label for="secondary_school_name">Secondary School Name</label></div>
+                    <div><input type="text" name="secondary_school_name" value="<?php echo (isset($row['secondary_school_name']) ? $row['secondary_school_name'] : ''); ?>" id="primary" placeholder="provide the name of secondary School you attended" required></div>
+                    <div><label for="kcse_index_number">KCSE index Number</label></div>
+                    <div><input type="text" name="kcse_index_number" value="<?php echo (isset($row['kcse_index_number']) ? $row['kcse_index_number'] : ''); ?>" id="index" placeholder="provide your kcse index number" required></div>
                     <div><label for="grade">Grade</label></div>
-                    <div><input type="text" name="grade" id="grade"></div>
-                    <div><input type="submit" name="submit" value="submit" id="submit"></div>
+                    <div><input type="text" name="kcse_grade" value="<?php echo (isset($row['kcse_grade']) ? $row['kcse_grade'] : ''); ?>" id="grade" placeholder="provide your kcse grade" required></div>
+                    <div><label for="year">Date of Completion</label></div>
+                    <div><input type="date"></div>
+                    <div><input type="submit" name="submit" value="save" id="submit"></div>
                 </form>
-
+                <h3>Tertiary Education Information(Optional)</h3>
+                <p>If you have attended a tertiary institution fill the following form</p>
                 <form action="" method="post" id="form">
                     <div><label for="tertiary">Name of Institute/Polytechnic/College</label></div>
                     <div><input type="text" name="tertiary" id="tertiary" required></div>
@@ -104,15 +110,17 @@ $registrationInformation = new Applicant();
                     <div><input type="text" name="course" id="course"></div>
                     <div><label for="grade">Grade/Classification</label></div>
                     <div><input type="text" name="grade" id="grade"></div>
-                    <div><input type="submit" name="submit" value="submit" id="submit"></div>
+                    <div><label for="year">Date of Completion</label></div>
+                    <div><input type="date"></div>
+                    <div><input type="submit" name="submit" value="save" id="submit"></div>
                 </form>
                 <p id="message"></p>
                 <?php
-                if (isset($_POST["submit"])) {
-                    $columns = "applicant_id, county_id, sub_county_id, location, sub_location, village";
-                    $parameters = ":applicant_id, :county_id, :sub_county_id, :location, :sub_location, :village";
-                    $updateString = "applicant_id = :applicant_id, county_id = :county_id, sub_county_id = :sub_county_id, location = :location, sub_location = :sub_location, village = :village";
-                    $application = new Application("demographic_information", $_POST, $id, $columns, $parameters, $updateString);
+                if (isset($_POST["submit"]) && isset($_POST["primary_school_name"])) {
+                    $columns = "applicant_id, primary_school_name, kcpe_index_number, kcpe_marks";
+                    $parameters = ":applicant_id, :primary_school_name, :kcpe_index_number, :kcpe_marks";
+                    $updateString = "applicant_id = :applicant_id, primary_school_name = :primary_school_name, kcpe_index_number = :kcpe_index_number, kcpe_marks = :kcpe_marks";
+                    $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
                     if ($application->saveInformation()) {
                         echo "Saved Successifully";
                         refresh($_SERVER['PHP_SELF'], 3);
@@ -120,6 +128,22 @@ $registrationInformation = new Applicant();
                         echo "Saving failure/no changes made";
                     }
                 }
+
+                if (isset($_POST["submit"]) && isset($_POST["secondary_school_name"])) {
+                    // array(5) { ["applicant_id"]=> string(1) "1" ["secondary_school_name"]=> string(23) "Bavuni Secondary School" ["kcse_index_number"]=> string(9) "511142008" ["kcse_grade"]=> string(2) "A-" ["submit"]=> string(4) "save" } 
+                    $columns = "applicant_id, secondary_school_name, kcse_index_number, kcse_grade";
+                    $parameters = ":applicant_id, :secondary_school_name, :kcse_index_number, :kcse_grade";
+                    $updateString = "secondary_school_name = :secondary_school_name, kcse_index_number = :kcse_index_number, kcse_grade = :kcse_grade";
+                    $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
+                    if ($application->saveInformation()) {
+                        echo "Saved Successifully";
+                        refresh($_SERVER['PHP_SELF'], 3);
+                    } else {
+                        echo "Saving failure/no changes made";
+                    }
+                }
+
+
                 ?>
             </div>
         </main>
