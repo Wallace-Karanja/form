@@ -137,6 +137,19 @@ class Course
         }
     }
 
+    public function selectColumns($id)
+    {
+        try {
+            $sql = "SELECT $this->fields FROM $this->table WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(["id" => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectById()
     {
         try {

@@ -25,7 +25,7 @@ require '../admin/Course.php';
                         <li><a href="index.php">Home</a></li>
                     </div>
                     <div>
-                        <li class="links"><a href="application.php">My Application</a></li>
+                        <li class="links"><a href="personal.php">My Application</a></li>
                     </div>
                     <div>
                         <li class="links"><a href="logout.php">Logout</a></li>

@@ -72,7 +72,7 @@ $registrationInformation = new Applicant();
                 ?>
                 <style>
                     #form {
-                        margin: 20px;
+                        margin-bottom: 20px;
                     }
                 </style>
                 <h3>Primary School Academic Information</h3>
