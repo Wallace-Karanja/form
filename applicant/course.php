@@ -49,16 +49,7 @@ $registrationInformation = new Applicant();
     </div>
     <div class="container">
         <div>
-            <nav>
-                <ul>
-                    <li><a href="personal.php">Personal Information</a></li>
-                    <li><a href="academics.php">Academic Information</a></li>
-                    <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>"">Select Course</a></li>
-                    <li><a href=" demographics.php">Demographic Information</a></li>
-                    <li><a href="demographics.php">Parent/Guardian Information</a></li>
-                    <li><a href="upload.php">Upload Documents</a></li>
-                </ul>
-            </nav>
+            <?php include './includes/side_navigation.php'; ?>
         </div>
         <main>
             <h1>Application</h1>
@@ -127,8 +118,21 @@ $registrationInformation = new Applicant();
                 </div>
                 <!-- <div></div> -->
                 <div><input type="submit" name="submit" value="save" id="submit" /></div>
-
             </form>
+            <?php
+            if (isset($_POST["submit"])) {
+                $columns = "applicant_id, course_id";
+                $parameters = ":applicant_id, :course_id";
+                $updateString = "applicant_id = :applicant_id, course_id = :course_id";
+                $application = new Application("course_information", $_POST, $id, $columns, $parameters, $updateString);
+                if ($application->saveInformation()) {
+                    echo "Saved Successifully";
+                    refresh($_SERVER['PHP_SELF'], 3);
+                } else {
+                    echo "Saving failure/no changes made";
+                }
+            }
+            ?>
             <?php if (isset($courseRecord)) { ?>
                 <h3>Selected Course</h3>
                 <table style="margin: 0;">
@@ -158,20 +162,6 @@ $registrationInformation = new Applicant();
                     </tr>
                 </table>
             <?php } ?>
-            <?php
-            if (isset($_POST["submit"])) {
-                $columns = "applicant_id, course_id";
-                $parameters = ":applicant_id, :course_id";
-                $updateString = "applicant_id = :applicant_id, course_id = :course_id";
-                $application = new Application("course_information", $_POST, $id, $columns, $parameters, $updateString);
-                if ($application->saveInformation()) {
-                    echo "Saved Successifully";
-                    refresh($_SERVER['PHP_SELF'], 3);
-                } else {
-                    echo "Saving failure/no changes made";
-                }
-            }
-            ?>
             <div>
 
             </div>

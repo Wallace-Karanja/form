@@ -70,11 +70,6 @@ $registrationInformation = new Applicant();
                     $row = $academicInformation->findInformationByApplicantId()[0];
                 }
                 ?>
-                <style>
-                    #form {
-                        margin-bottom: 20px;
-                    }
-                </style>
                 <h3>Primary School Academic Information</h3>
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">

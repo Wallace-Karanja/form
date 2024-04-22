@@ -44,11 +44,14 @@ if (!isset($_SESSION['id'])) {
         </div>
     </div>
     <div class="container">
-        <div></div>
+        <div>
+            <?php include './includes/side_navigation.php'; ?>
+        </div>
         <main>
             <div class="main-content">
                 <div>
-                    <h1>Upload Documents</h1>
+                    <h1>Application</h1>
+                    <h2>Upload Documents</h2>
                 </div>
                 <div class="form-content">
                     <form action="" method="post" enctype="multipart/form-data">

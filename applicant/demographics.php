@@ -46,16 +46,7 @@ $registrationInformation = new Applicant();
     </div>
     <div class="container">
         <div>
-            <nav>
-                <ul>
-                    <li><a href="personal.php">Personal Information</a></li>
-                    <li><a href="demographics.php">Demographic Information</a></li>
-                    <li><a href="academics.php">Academic Information</a></li>
-                    <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>">Select Course</a></li>
-                    <li><a href="demographics.php">Parent/Guardian Information</a></li>
-                    <li><a href="upload.php">Upload Documents</a></li>
-                </ul>
-            </nav>
+            <?php include './includes/side_navigation.php'; ?>
         </div>
         <main>
             <h1>Application</h1>
@@ -115,7 +106,7 @@ $registrationInformation = new Applicant();
 
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="submit" id="submit">
+                        <input type="submit" name="submit" value="save" id="submit">
                     </div>
                 </form>
                 <p id="message"></p>
@@ -134,6 +125,34 @@ $registrationInformation = new Applicant();
                 }
                 ?>
             </div>
+            <?php
+            $counties = new Application("counties", null, null, "county", null, null);
+            $subCounties = new Application("sub_counties", null, null, "sub_county", null, null);
+            if (isset($row)) { ?>
+                <h3>Your Demographic Information</h3>
+                <table style="margin: 0;">
+                    <tr>
+                        <td>County</td>
+                        <td><?php echo $counties->findColumnById($row['county_id']); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Sub County</td>
+                        <td><?php echo $subCounties->findColumnById($row['sub_county_id']); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td><?php echo $row['location']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Sub Location</td>
+                        <td><?php echo $row['sub_location']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Village</td>
+                        <td><?php echo $row['village']; ?></td>
+                    </tr>
+                </table>
+            <?php } ?>
         </main>
         <div></div>
     </div>
