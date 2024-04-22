@@ -9,7 +9,7 @@ if (!isset($_SESSION['id'])) {
     header("Location:" . $url);
 }
 // generate applicant information
-$demographicInformation = new Applicant();
+$parentInformation = new Applicant();
 $registrationInformation = new Applicant();
 
 ?>
@@ -57,24 +57,24 @@ $registrationInformation = new Applicant();
                 $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
                 $id = $record['id'];
 
-                $demographicInformation = new Application("demographic_information", null, $applicantId = $id, null, null, null);
-                if ($demographicInformation->findInformationByApplicantId()) {
-                    $row = $demographicInformation->findInformationByApplicantId()[0];
+                $parentInformation = new Application("parent_information", null, $applicantId = $id, null, null, null);
+                if ($parentInformation->findInformationByApplicantId()) {
+                    $row = $parentInformation->findInformationByApplicantId()[0];
                 }
                 ?>
                 <h3>Father's Details</h3>
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="father">Full name</label></div>
-                    <div><input type="text" name="father" value=""></div>
+                    <div><input type="text" name="father" value="<?php echo ($row['father'] ?? ''); ?>"></div>
                     <div><label for="father_occupation">Occupation</label></div>
-                    <div><input type="text" name="father_occupation" value=""></div>
+                    <div><input type="text" name="father_occupation" value="<?php echo ($row['father_occupation'] ?? ''); ?>"></div>
                     <div><label for="father_phone_number">Telephone Number</label></div>
-                    <div><input type="tel" name="father_phone_number" value=""></div>
+                    <div><input type="tel" name="father_phone_number" value="<?php echo ($row['father_phone_number'] ?? ''); ?>"></div>
                     <div><label for="father_email_address">Email Address (optional)</label></div>
-                    <div><input type="email" name="father_email_address" id="email_adress"></div>
-                    <div><label for="father_postal_address">P.O Box</label></div>
-                    <div><input type="text" name="father_postal_address" value=""></div>
+                    <div><input type="email" name="father_email_address" value="<?php echo ($row['father_email_address'] ?? ''); ?>" id="email_adress"></div>
+                    <div><label for="father_postal_address">P.O. Box</label></div>
+                    <div><input type="text" name="father_postal_address" value="<?php echo ($row['father_postal_address'] ?? ''); ?>"></div>
                     <div>
                         <input type="submit" name="submit" value="save" id="submit">
                     </div>
@@ -84,15 +84,15 @@ $registrationInformation = new Applicant();
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="mother">Full name</label></div>
-                    <div><input type="text" name="mother" value=""></div>
-                    <div><label for="occupation">Occupation</label></div>
-                    <div><input type="text" name="occupation" value=""></div>
-                    <div><label for="phone_number">Telephone Number</label></div>
-                    <div><input type="tel" name="phone_number" value=""></div>
-                    <div><label for="email_address">Email Address (optional)</label></div>
-                    <div><input type="email" name="email_address" id="email_adress"></div>
-                    <div><label for="postal">P.O Box</label></div>
-                    <div><input type="text" name="postal" value=""></div>
+                    <div><input type="text" name="mother" value="<?php echo ($row['mother'] ?? ''); ?>"></div>
+                    <div><label for="mother_occupation">Occupation</label></div>
+                    <div><input type="text" name="mother_occupation" value="<?php echo ($row['mother_occupation'] ?? ''); ?>"></div>
+                    <div><label for="mother_phone_number">Telephone Number</label></div>
+                    <div><input type="tel" name="mother_phone_number" value="<?php echo ($row['mother_phone_number'] ?? ''); ?>"></div>
+                    <div><label for="mother_email_address">Email Address (optional)</label></div>
+                    <div><input type="email" name="mother_email_address" value="<?php echo ($row['mother_email_address'] ?? ''); ?>" id="email_adress"></div>
+                    <div><label for="mother_postal_address">P.O. Box</label></div>
+                    <div><input type="text" name="mother_postal_address" value="<?php echo ($row['mother_postal_address'] ?? ''); ?>"></div>
                     <div>
                         <input type="submit" name="submit" value="save" id="submit">
                     </div>
@@ -102,15 +102,15 @@ $registrationInformation = new Applicant();
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="guardian">Full name</label></div>
-                    <div><input type="text" name="guardian" value=""></div>
-                    <div><label for="occupation">Occupation</label></div>
-                    <div><input type="text" name="occupation" value=""></div>
-                    <div><label for="phone_number">Telephone Number</label></div>
-                    <div><input type="tel" name="phone_number" value=""></div>
-                    <div><label for="email_address">Email Address (optional)</label></div>
-                    <div><input type="email" name="email_address" id="email_adress"></div>
-                    <div><label for="postal">P.O Box</label></div>
-                    <div><input type="text" name="postal" value=""></div>
+                    <div><input type="text" name="guardian" value="<?php echo ($row['guardian'] ?? ''); ?>"></div>
+                    <div><label for="guardian_occupation">Occupation</label></div>
+                    <div><input type="text" name="guardian_occupation" value="<?php echo ($row['guardian_occupation'] ?? ''); ?>"></div>
+                    <div><label for="guardian_phone_number">Telephone Number</label></div>
+                    <div><input type="tel" name="guardian_phone_number" value="<?php echo ($row['guardian_phone_number'] ?? ''); ?>"></div>
+                    <div><label for="guardian_email_address">Email Address (optional)</label></div>
+                    <div><input type="email" name="guardian_email_address" value="<?php echo ($row['guardian_email_address'] ?? ''); ?>" id="email_adress"></div>
+                    <div><label for="guardian_postal_address">P.O. Box</label></div>
+                    <div><input type="text" name="guardian_postal_address" value="<?php echo ($row['guardian_postal_address'] ?? ''); ?>"></div>
                     <div>
                         <input type="submit" name="submit" value="save" id="submit">
                     </div>
@@ -120,39 +120,65 @@ $registrationInformation = new Applicant();
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="sponsor">Full name</label></div>
-                    <div><input type="text" name="guardian" value=""></div>
-                    <div><label for="occupation">Occupation</label></div>
-                    <div><input type="text" name="occupation" value=""></div>
-                    <div><label for="phone_number">Telephone Number</label></div>
-                    <div><input type="tel" name="phone_number" value=""></div>
-                    <div><label for="email_address">Email Address (optional)</label></div>
-                    <div><input type="email" name="email_address" id="email_adress"></div>
-                    <div><label for="postal">P.O Box</label></div>
-                    <div><input type="text" name="postal" value=""></div>
+                    <div><input type="text" name="sponsor" value="<?php echo ($row['sponsor'] ?? ''); ?>"></div>
+                    <div><label for="sponsor_occupation">Occupation</label></div>
+                    <div><input type="text" name="sponsor_occupation" value="<?php echo ($row['sponsor_occupation'] ?? ''); ?>"></div>
+                    <div><label for="sponsor_phone_number">Telephone Number</label></div>
+                    <div><input type="tel" name="sponsor_phone_number" value="<?php echo ($row['sponsor_phone_number'] ?? ''); ?>"></div>
+                    <div><label for="sponsor_email_address">Email Address (optional)</label></div>
+                    <div><input type="email" name="sponsor_email_address" value="<?php echo ($row['sponsor_email_address'] ?? ''); ?>" id="email_adress"></div>
+                    <div><label for="sponsor_postal_address">P.O. Box</label></div>
+                    <div><input type="text" name="sponsor_postal_address" value="<?php echo ($row['sponsor_postal_address'] ?? ''); ?>"></div>
                     <div>
                         <input type="submit" name="submit" value="save" id="submit">
                     </div>
                 </form>
 
-                <p id="message"></p>
-                <?php
 
-
-                if (isset($_POST["submit"])) {
-                    // array(7) { ["applicant_id"]=> string(1) "1" ["father"]=> string(15) "Wallace Karanja" ["father_occupation"]=> string(6) "Farmer" ["father_phone_number"]=> string(10) "0702632142" ["father_email_address"]=> string(20) "wallacek10@gmail.com" ["father_postal_address"]=> string(17) "4061-20100 Nakuru" ["submit"]=> string(4) "save" } 
-
-                    $columns = "applicant_id, father, father_occupation, father_phone_number, father_email_address, father_postal_address";
-                    $parameters = ":applicant_id, :father, :father_occupation, :father_phone_number, :father_email_address, :father_postal_address";
-                    $updateString = "applicant_id = :applicant_id, father = :father, father_occupation = :father_occupation, father_phone_number = :father_phone_number, father_email_address = :father_email_address, father_postal_address = :father_postal_address";
-                    $application = new Application("parent_information", $_POST, $id, $columns, $parameters, $updateString);
-                    if ($application->saveInformation()) {
-                        echo "Saved Successifully";
-                        refresh($_SERVER['PHP_SELF'], 3);
-                    } else {
-                        echo "Saving failure/no changes made";
+                <p id="message" style="color: green;">
+                    <?php
+                    function saveInformation($table, $id, $columns, $parameters, $updateString): void
+                    {
+                        $application = new Application($table, $_POST, $id, $columns, $parameters, $updateString);
+                        if ($application->saveInformation()) {
+                            echo "Saved Successifully";
+                            refresh($_SERVER['PHP_SELF'], 3);
+                        } else {
+                            echo "Saving failure/no changes made";
+                        }
                     }
-                }
-                ?>
+
+                    if (isset($_POST["submit"])) {
+                        if (isset($_POST["father"])) {
+                            $table = "parent_information";
+                            $columns = "applicant_id, father, father_occupation, father_phone_number, father_email_address, father_postal_address";
+                            $parameters = ":applicant_id, :father, :father_occupation, :father_phone_number, :father_email_address, :father_postal_address";
+                            $updateString = "applicant_id = :applicant_id, father = :father, father_occupation = :father_occupation, father_phone_number = :father_phone_number, father_email_address = :father_email_address, father_postal_address = :father_postal_address";
+                            saveInformation($table, $id, $columns, $parameters, $updateString);
+                        } elseif (isset($_POST["mother"])) {
+                            $table = "parent_information";
+                            $columns = "applicant_id, mother, mother_occupation, mother_phone_number, mother_email_address, mother_postal_address";
+                            $parameters = ":applicant_id, :mother, :mother_occupation, :mother_phone_number, :mother_email_address, :mother_postal_address";
+                            $updateString = "applicant_id = :applicant_id, mother = :mother, mother_occupation = :mother_occupation, mother_phone_number = :mother_phone_number, mother_email_address = :mother_email_address, mother_postal_address = :mother_postal_address";
+                            saveInformation($table, $id, $columns, $parameters, $updateString);
+                        } elseif (isset($_POST["guardian"])) {
+                            $table = "parent_information";
+                            $columns = "applicant_id, guardian, guardian_occupation, guardian_phone_number, guardian_email_address, guardian_postal_address";
+                            $parameters = ":applicant_id, :guardian, :guardian_occupation, :guardian_phone_number, :guardian_email_address, :guardian_postal_address";
+                            $updateString = "applicant_id = :applicant_id, guardian = :guardian, guardian_occupation = :guardian_occupation, guardian_phone_number = :guardian_phone_number, guardian_email_address = :guardian_email_address, guardian_postal_address = :guardian_postal_address";
+                            saveInformation($table, $id, $columns, $parameters, $updateString);
+                        } elseif (isset($_POST["sponsor"])) {
+                            $table = "parent_information";
+                            $columns = "applicant_id, sponsor, sponsor_occupation, sponsor_phone_number, sponsor_email_address, sponsor_postal_address";
+                            $parameters = ":applicant_id, :sponsor, :sponsor_occupation, :sponsor_phone_number, :sponsor_email_address, :sponsor_postal_address";
+                            $updateString = "applicant_id = :applicant_id, sponsor = :sponsor, sponsor_occupation = :sponsor_occupation, sponsor_phone_number = :sponsor_phone_number, sponsor_email_address = :sponsor_email_address, sponsor_postal_address = :sponsor_postal_address";
+                            saveInformation($table, $id, $columns, $parameters, $updateString);
+                        } else {
+                            echo '$_POST is not set';
+                        }
+                    }
+                    ?>
+                </p>
             </div>
         </main>
         <div></div>
