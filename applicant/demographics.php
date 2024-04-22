@@ -129,7 +129,7 @@ $registrationInformation = new Applicant();
             $counties = new Application("counties", null, null, "county", null, null);
             $subCounties = new Application("sub_counties", null, null, "sub_county", null, null);
             if (isset($row)) { ?>
-                <h3>Your Demographic Information</h3>
+                <h3>Saved Demographic Information</h3>
                 <table style="margin: 0;">
                     <tr>
                         <td>County</td>

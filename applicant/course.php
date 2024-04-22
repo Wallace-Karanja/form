@@ -137,27 +137,27 @@ $registrationInformation = new Applicant();
                 <h3>Selected Course</h3>
                 <table style="margin: 0;">
                     <tr>
-                        <td>Course:</td>
+                        <td>Course</td>
                         <td><?php echo $courseRecord['course']; ?></td>
                     </tr>
                     <tr>
-                        <td>Level:</td>
+                        <td>Level</td>
                         <td><?php echo $courseRecord['level']; ?></td>
                     </tr>
                     <tr>
-                        <td>Exam Body:</td>
+                        <td>Exam Body</td>
                         <td><?php echo $courseRecord['exam_body']; ?></td>
                     </tr>
                     <tr>
-                        <td>Course Duration:</td>
+                        <td>Course Duration</td>
                         <td><?php echo $courseRecord['duration']; ?></td>
                     </tr>
                     <tr>
-                        <td>Course Requirement:</td>
+                        <td>Course Requirement</td>
                         <td><?php echo $courseRecord['requirement']; ?></td>
                     </tr>
                     <tr>
-                        <td>Course Description:</td>
+                        <td>Course Description</td>
                         <td><?php echo $courseRecord['description']; ?></td>
                     </tr>
                 </table>
