@@ -90,6 +90,10 @@ $registrationInformation = new Applicant();
                             <option value="<?php echo (isset($row['sub_county_id']) ? $row['sub_county_id'] : ''); ?>"><?php echo (isset($row['sub_county_id']) ? $application->findColumnById($row['sub_county_id']) : '--select your sub county--'); ?></option>
                         </select>
                     </div>
+                    <div id="otherSubCounty" style="display: none;">
+                        <label for="other_sub_county">Other Sub County(specify)</label>
+                        <input type="text" name="other_sub_county">
+                    </div>
                     <div>
                         <label for="location">Location</label>
                         <input type="text" name="location" id="location" value="<?php echo (isset($row['location']) ? $row['location'] : '--provide your location--'); ?>" required>
@@ -188,10 +192,11 @@ $registrationInformation = new Applicant();
         // check if other is selected
         document.getElementById("sub_county").addEventListener("change", (event) => {
             var subCounty = document.getElementById("sub_county");
+
             if (subCounty.value == "other") { // check if other is selected
-                // create a div
-                // nest an input in that field
-                console.log("other has been selected");
+                document.getElementById("otherSubCounty").style.display = "block";
+            } else {
+                document.getElementById("otherSubCounty").style.display = "none";
             }
         });
     </script>
