@@ -229,6 +229,18 @@ class Applicant
         }
     }
 
+    public function findAllById($id)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE $this->columns =  $id";
+            $result = $this->connection->query($sql);
+            $records = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $records;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function findAllByApplicantId($applicantId)
     {
         try {

@@ -111,4 +111,17 @@ class Application extends Applicant
             return false;
         }
     }
+
+    public function insertNewSubCounty()
+    {
+        try {
+            $sql = "INSERT INTO sub_counties (county_id, sub_county) VALUES (:county_id, :sub_county)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['county_id' => $this->post['county_id'], 'sub_county' => $this->post['other_sub_county']]);
+            return $this->connection->lastInsertId(); //get the last id to be inserted
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
 }
