@@ -20,7 +20,7 @@ $registrationInformation = new Applicant();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/styles.css">
-    <!-- <script src="script.js" defer></script> -->
+    <script src="./js/demographic.js" defer></script>
     <title>Form</title>
 </head>
 
@@ -102,15 +102,15 @@ $registrationInformation = new Applicant();
                     </div>
                     <div>
                         <label for="location">Location</label>
-                        <input type="text" name="location" id="location" value="<?php echo (isset($row['location']) ? $row['location'] : '--provide your location--'); ?>" required>
+                        <input type="text" name="location" id="location" value="<?php echo (isset($row['location']) ? $row['location'] : ''); ?>" placeholder="--provide your location--" required>
                     </div>
                     <div>
                         <label for="sub_location">Sub-Location</label>
-                        <input type="text" name="sub_location" id="sub_location" value="<?php echo (isset($row['sub_location']) ? $row['sub_location'] : '--provide your sub location--'); ?>" required>
+                        <input type="text" name="sub_location" id="sub_location" value="<?php echo (isset($row['sub_location']) ? $row['sub_location'] : ''); ?>" placeholder="--provide your sub location--" required>
                     </div>
                     <div>
                         <label for="village">Village</label>
-                        <input type="text" name="village" id="village" value="<?php echo (isset($row['village']) ? $row['village'] : '--provide your village--'); ?>" required>
+                        <input type="text" name="village" id="village" value="<?php echo (isset($row['village']) ? $row['village'] : ''); ?>" placeholder="--provide your village--" required>
                     </div>
                     <div>
 
@@ -120,9 +120,6 @@ $registrationInformation = new Applicant();
                     </div>
                 </form>
                 <p id="message"></p>
-                <?php
-                // var_dump($subCounties->findAllById(32));
-                ?>
                 <?php
                 if (isset($_POST["submit"])) {
                     $columns = "applicant_id, county_id, sub_county_id, location, sub_location, village";
@@ -186,46 +183,6 @@ $registrationInformation = new Applicant();
         </main>
         <div></div>
     </div>
-    <script>
-        document.getElementById("county").addEventListener("change", (event) => {
-            var selectedCounty = document.getElementById("county");
-            var url = "./get_sub_counties.php?county_id=" + encodeURIComponent(selectedCounty.value);
-            fetch(url).then((response) => {
-                if (!response.ok) {
-                    console.log("response not okay");
-                }
-                return response.json();
-            }).then((data) => {
-                // get the select field
-                var subCounty = document.getElementById("sub_county");
-                subCounty.innerHTML = "";
-                data.forEach((element) => {
-                    var option = document.createElement("option");
-                    // console.log(element.id, element.county_id, element.sub_county_id, element.sub_county);
-                    option.value = element['id'];
-                    option.textContent = element['sub_county']
-                    subCounty.append(option)
-                });
-                var otherOption = document.createElement("option");
-                otherOption.value = "other";
-                otherOption.textContent = "Other";
-                subCounty.append(otherOption);
-            }).catch((error) => {
-                console.error("There was a problem with the fetch operation", error);
-            })
-        });
-
-        // check if other is selected
-        document.getElementById("sub_county").addEventListener("change", (event) => {
-            var subCounty = document.getElementById("sub_county");
-
-            if (subCounty.value == "other") { // check if other is selected
-                document.getElementById("otherSubCounty").style.display = "block";
-            } else {
-                document.getElementById("otherSubCounty").style.display = "none";
-            }
-        });
-    </script>
 </body>
 
 </html>

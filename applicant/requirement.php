@@ -34,6 +34,12 @@ require '../admin/Course.php';
             </nav>
         </div>
     </div>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr;
+        }
+    </style>
     <div class="container">
         <div></div>
         <main>
