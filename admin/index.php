@@ -85,7 +85,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     <div class="footer-container">
       <div></div>
       <div class="copyright">
-        <p>&copy; Wallace Karanja <?php echo "2023 - " . date("Y") ?></p>
+        <p>&copy; Wallace.Inc <i>Softwares</i> <?php echo "2023 - " . date("Y") ?></p>
       </div>
       <div></div>
     </div>
