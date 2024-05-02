@@ -124,4 +124,15 @@ class Application extends Applicant
             return null;
         }
     }
+
+    public function selectAllApplications(){
+        try {
+            $sql = "SELECT * FROM applications";
+            $stmt = $this->connection->query($sql);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }

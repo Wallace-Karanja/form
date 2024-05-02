@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include './Applicant.php';
 include './Application.php';
@@ -75,7 +76,7 @@ $registrationInformation = new Applicant();
                     </div>
                     <div>
                         <label for="secondName">Second name <span id="second_name"></span></label>
-                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ''); ?>" required />
+                        <input type="text" name="second_name" id="secondName" value="<?php echo (isset($row['second_name']) ? $row['second_name'] : ''); ?>" />
                     </div>
                     <div>
                         <label for="gender">Gender</label>
@@ -99,7 +100,7 @@ $registrationInformation = new Applicant();
                     </div>
                     <div>
                         <label for="alternativePhoneNumber">Alternative Phone<span id="alternative_phone"></span></label>
-                        <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ''); ?>" required />
+                        <input type="tel" name="alternative_phone" id="alternativePhoneNumber" value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ''); ?>" />
                     </div>
                     <div><input type="submit" name="submit" id="submit" value="save" /></div>
                 </form>
@@ -128,3 +129,4 @@ $registrationInformation = new Applicant();
 </body>
 
 </html>
+<?php ob_end_flush(); ?>
