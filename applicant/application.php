@@ -125,10 +125,24 @@ class Application extends Applicant
         }
     }
 
-    public function selectAllApplications(){
+    public function selectAllApplications()
+    {
         try {
             $sql = "SELECT * FROM applications";
             $stmt = $this->connection->query($sql);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function selectApplicationById()
+    {
+        try {
+            $sql = "SELECT * FROM applications WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($_GET);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $results;
         } catch (Exception $e) {
