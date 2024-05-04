@@ -149,4 +149,77 @@ class Application extends Applicant
             echo $e->getMessage();
         }
     }
+
+    public function selectApplicationByApplicantId()
+    {
+        try {
+            $sql = "SELECT * FROM applications WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function submitApplication()
+    {
+        $sql = null;
+
+        if ($this->submitRecordExist()) {
+            $sql = "UPDATE submitted_applications SET submitted = :submit WHERE applicant_id = :applicant_id";
+        } else {
+            $sql = "INSERT INTO submitted_applications (applicant_id, submitted) VALUES (:applicant_id, :submit)";
+        }
+        try {
+            $this->post['submit'] = 1;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function retractApplication()
+    {
+        try {
+            $sql = "UPDATE submitted_applications SET submitted = :retract WHERE applicant_id = :applicant_id";
+            $this->post['retract'] = 0;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function submitRecordExist()
+    {
+        try {
+            $sql = "SELECT id FROM submitted_applications WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() >= 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function applicationIsSubmitted()
+    {
+        try {
+            $sql = "SELECT submitted FROM submitted_applications WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->fetchColumn() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
 }

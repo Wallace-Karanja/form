@@ -1,12 +1,18 @@
 <?php
+ob_start();
 session_start();
-include '../applicant/Form.php';
-include '../applicant/Applicant.php';
-include '../applicant/Application.php';
+include 'Form.php';
+include 'Applicant.php';
+include 'Application.php';
+include './includes/helper_funcs.php';
 if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     $url = './login.php';
     header("Location:" . $url);
 }
+
+$registrationInformation = new Applicant();
+$record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
+$applicantId = $record['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +20,9 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../applicant/styles.css">
-        <link rel="stylesheet" href="./css/styles.css">
-        <link rel="stylesheet" href="./css/application_view_styles.css">
+        <link rel="stylesheet" href="./styles.css">
+        <link rel="stylesheet" href="../admin/css/styles.css">
+        <link rel="stylesheet" href="../admin/css/application_view_styles.css">
         <title>Form</title>
 
     </head>
@@ -39,16 +45,28 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
             </div>
         </div>
         <div class="container">
-            <div></div>
+            <div>
+                <div>
+                    <?php include './includes/side_navigation.php'; ?>
+                </div>
+            </div>
 
             <div class="main">
                 <div>
-                    <h1>Application no: <?php echo $_GET['id']; ?></h1>
+                    <p>
+                        <?php
+                        // find if application is submitted
+                        $application = new Application(null, null, $applicantId);
+                        ?>
+                    </p>
+                    <h1>Your Application
+                        (<?php echo ($application->submitRecordExist() && $application->applicationIsSubmitted() ? "submitted" : "not submitted"); ?>)
+                    </h1>
                 </div>
                 <div class="info">
                     <?php
-                    $application = new Application();
-                    $info = $application->selectApplicationById();
+                    $application = new Application(null, null, $applicantId, null, null, null);
+                    $info = $application->selectApplicationByApplicantId();
                     if (!empty($info)) { ?>
                         <?php foreach ($info as $row) { ?>
                             <div>
@@ -180,24 +198,35 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     <?php } ?>
                     <div>
                         <form action="" method="post" id="form">
-                            <div><input type="submit" name="admit" value="Admit" class="submit"
-                                    style="background-color: green;"></div>
-                            <div><input type="submit" name="decline" value="Decline" class="submit"
-                                    style="background-color: red;"></div>
+                            <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
+                            <div><input type="submit" name="submit" value="Submit Application" class="submit"
+                                    style="background-color: black;"></div>
+                            <div><input type="submit" name="retract" value="Withdraw Application" class="submit"
+                                    style="background-color: black;"></div>
                         </form>
                         <?php
-                        if (isset($_POST['admit'])) {
-                            var_dump($_POST['admit']);
+                        if (isset($_POST['submit'])) {
+                            $application = new Application(null, $_POST, $applicantId);
+                            if ($application->submitApplication()) {
+                                echo "You have submitted your application";
+                                refresh($_SERVER['PHP_SELF'], '3');
+                            }
                         }
-                        if (isset($_POST['decline'])) {
-                            var_dump($_POST['decline']);
+
+                        if (isset($_POST['retract'])) {
+                            $application = new Application(null, $_POST, $applicantId);
+                            if ($application->retractApplication()) {
+                                echo "You have withdrawn your application";
+                                refresh($_SERVER['PHP_SELF'], '3');
+                            }
                         }
                         ?>
                     </div>
 
                 <?php } else { ?>
                     <div>
-                        <p>Application with id <?php echo $_GET['id']; ?> does not exist !</p>
+                        <p>Your application is incomplete ! you must complete all of the application sections inorder to
+                            submit your application</p>
                     </div>
                 <?php } ?>
             </div>
@@ -208,3 +237,4 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     </body>
 
 </html>
+<?php ob_end_flush(); ?>
