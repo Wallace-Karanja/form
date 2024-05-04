@@ -43,12 +43,17 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
             <div class="main">
                 <div>
-                    <h1>Application no: <?php echo $_GET['id']; ?></h1>
-                </div>
-                <div class="info">
                     <?php
                     $application = new Application();
                     $info = $application->selectApplicationById();
+                    $submitted = $info[0]['submitted'];
+                    ?>
+                    <h1>Application no: <?php echo $_GET['id'];
+                    echo ($submitted ? "(submitted)" : "(on progress)") ?>
+                    </h1>
+                </div>
+                <div class="info">
+                    <?php
                     if (!empty($info)) { ?>
                         <?php foreach ($info as $row) { ?>
                             <div>

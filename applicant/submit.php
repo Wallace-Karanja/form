@@ -200,9 +200,9 @@ $applicantId = $record['id'];
                         <form action="" method="post" id="form">
                             <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
                             <div><input type="submit" name="submit" value="Submit Application" class="submit"
-                                    style="background-color: black;"></div>
+                                    style="background-color: green;"></div>
                             <div><input type="submit" name="retract" value="Withdraw Application" class="submit"
-                                    style="background-color: black;"></div>
+                                    style="background-color: red;"></div>
                         </form>
                         <?php
                         if (isset($_POST['submit'])) {

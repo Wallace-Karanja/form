@@ -183,6 +183,18 @@ class Application extends Applicant
         }
     }
 
+    public function submitRecordExist()
+    {
+        try {
+            $sql = "SELECT id FROM submitted_applications WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() >= 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function retractApplication()
     {
         try {
@@ -194,18 +206,6 @@ class Application extends Applicant
         } catch (Exception $e) {
             echo $e->getMessage();
             return false;
-        }
-    }
-
-    public function submitRecordExist()
-    {
-        try {
-            $sql = "SELECT id FROM submitted_applications WHERE applicant_id = :applicant_id";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute(['applicant_id' => $this->applicantId]);
-            return $stmt->rowCount() >= 1;
-        } catch (Exception $e) {
-            echo $e->getMessage();
         }
     }
 
@@ -221,5 +221,6 @@ class Application extends Applicant
         }
     }
 
+    // admit and decline application for admin
 
 }
