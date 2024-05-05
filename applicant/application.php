@@ -222,5 +222,53 @@ class Application extends Applicant
     }
 
     // admit and decline application for admin
+    public function admitApplicant()
+    {
+        $sql = null;
+        if ($this->applicationDecisionExist()) {
+            $sql = "UPDATE applications_decision SET admitted = :admit WHERE applicant_id = :applicant_id";
+        } else {
+            $sql = "INSERT INTO applications_decision (applicant_id, admitted) VALUES (:applicant_id, :admit)";
+        }
+
+        try {
+            $stmt = $this->connection->prepare($sql);
+            $this->post['admit'] = 1;
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function declineApplicant()
+    {
+        $sql = null;
+        if ($this->applicationDecisionExist()) {
+            $sql = "UPDATE applications_decision SET admitted = :decline WHERE applicant_id = :applicant_id";
+        } else {
+            $sql = "INSERT INTO applications_decision (applicant_id, admitted) VALUES (:applicant_id, :decline)";
+        }
+        try {
+            $stmt = $this->connection->prepare($sql);
+            $this->post['decline'] = 0;
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function applicationDecisionExist()
+    {
+        try {
+            $sql = "SELECT * FROM applications_decision WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 
 }

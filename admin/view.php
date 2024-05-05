@@ -1,8 +1,10 @@
 <?php
+ob_start();
 session_start();
 include '../applicant/Form.php';
 include '../applicant/Applicant.php';
 include '../applicant/Application.php';
+include '../applicant/includes/helper_funcs.php';
 if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     $url = './login.php';
     header("Location:" . $url);
@@ -46,10 +48,16 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     <?php
                     $application = new Application();
                     $info = $application->selectApplicationById();
-                    $submitted = $info[0]['submitted'];
+                    $submitted = $info[0]['submitted'] ?? null;
+                    $admitted = $info[0]['admitted'] ?? null;
+                    $applicantId = $info[0]['applicant_id'] ?? null;
                     ?>
-                    <h1>Application no: <?php echo $_GET['id'];
-                    echo ($submitted ? "(submitted)" : "(on progress)") ?>
+                    <!-- format output message -->
+                    <h1>Application no:
+                        <?php echo $_GET['id'];
+                        echo ($submitted ? "(submitted)" : "(on progress)");
+                        echo ($admitted ? "/admitted" : "/declined"); ?>
+
                     </h1>
                 </div>
                 <div class="info">
@@ -185,6 +193,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                     <?php } ?>
                     <div>
                         <form action="" method="post" id="form">
+                            <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
                             <div><input type="submit" name="admit" value="Admit" class="submit"
                                     style="background-color: green;"></div>
                             <div><input type="submit" name="decline" value="Decline" class="submit"
@@ -192,17 +201,27 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         </form>
                         <?php
                         if (isset($_POST['admit'])) {
-                            var_dump($_POST['admit']);
+                            $application = new Application(null, $_POST, $applicantId);
+                            if ($application->admitApplicant()) {
+                                echo "Successifully admitted";
+                                refresh($_SERVER['PHP_SELF'] . "?id=$_GET[id]", 3);
+                                // send a message to applicant
+                            }
                         }
                         if (isset($_POST['decline'])) {
-                            var_dump($_POST['decline']);
+                            $application = new Application(null, $_POST, $applicantId);
+                            if ($application->declineApplicant()) {
+                                // send a message to applicant
+                                echo "Application declined";
+                                refresh($_SERVER['PHP_SELF'] . "?id=$_GET[id]", 3);
+                            }
                         }
                         ?>
                     </div>
 
                 <?php } else { ?>
                     <div>
-                        <p>Application with id <?php echo $_GET['id']; ?> does not exist !</p>
+                        <p>Application with id <?php echo $_GET['id']; ?> is yet to be submitted !</p>
                     </div>
                 <?php } ?>
             </div>
@@ -213,3 +232,4 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
     </body>
 
 </html>
+<?php ob_end_flush(); ?>
