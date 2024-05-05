@@ -75,8 +75,11 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 <input type="hidden" name="id" value="<?php echo $_GET['updateId']; ?>">
                                 <div><label for="department">Department name</label></div>
                                 <div><input type="text" name="department" value="<?php echo $course->selectById(); ?>"
-                                        id="department" required />
+                                        id="department" placeholder="provide a name for the department" required />
                                 </div>
+                                <div><label for="abbr">Department Abbreviation</label></div>
+                                <div><input type="text" name="abbr" id="abbr"
+                                        placeholder="provide an abbreviation for department name" required></div>
                                 <div><input type="submit" name="submit" value="Update" id="submit"></div>
                             </form>
                             <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
@@ -84,8 +87,12 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                             <h1>Create Department</h1>
                             <form action="" method="post" id="form">
                                 <div><label for="department">Department name</label></div>
-                                <div><input type="text" name="department" id="department" required />
+                                <div><input type="text" name="department" id="department"
+                                        placeholder="provide a name for the department" required />
                                 </div>
+                                <div><label for="abbr">Department Abbreviation</label></div>
+                                <div><input type="text" name="abbr" id="abbr"
+                                        placeholder="provide an abbreviation for department name" required></div>
                                 <div><input type="submit" name="submit" value="Register" id="submit"></div>
                             </form>
                             <p class="message"><?php echo (isset($message) ? $message : ""); ?></p>
