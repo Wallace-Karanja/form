@@ -48,18 +48,30 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                     <div>
                         <?php
+                        # original
+                        // if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
+                        //     $course = new Course("departments", "department", ":department");
+                        //     $course->create();
+                        //     $message = " created successifuly";
+                        //     header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                        // }
+                        
+                        # modified
                         if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
-                            $course = new Course("departments", "department", ":department");
-                            $course->create();
-                            $message = " created successifuly";
-                            header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                            $course = new Course("departments", "department, abbr", ":department, :abbr");
+                            if ($course->createDepartment()) {
+                                $message = " created successifuly";
+                                header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                            }
                         }
 
                         if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
-                            $course = new Course("departments", "department", ":department");
-                            $course->update();
-                            $message = " updated successifuly";
-                            header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                            $updateString = "department = :department, abbr = :abbr";
+                            $course = new Course("departments", null, null, $updateString);
+                            if ($course->updateDepartment()) {
+                                $message = " updated successifuly";
+                                header("refresh:5;url=" . $_SERVER['PHP_SELF']);
+                            }
                         }
 
                         if (isset($_GET['deleteId'])) {
@@ -69,16 +81,18 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         ?>
 
                         <?php if (isset($_GET['updateId'])) {
-                            $course = new Course("departments", "department"); ?>
+                            $course = new Course("departments", "department, abbr"); ?>
                             <h1>Update Department</h1>
                             <form action="" method="post" id="form">
                                 <input type="hidden" name="id" value="<?php echo $_GET['updateId']; ?>">
                                 <div><label for="department">Department name</label></div>
-                                <div><input type="text" name="department" value="<?php echo $course->selectById(); ?>"
+                                <div><input type="text" name="department"
+                                        value="<?php echo $course->selectDepartmentById()[0]['department']; ?>"
                                         id="department" placeholder="provide a name for the department" required />
                                 </div>
                                 <div><label for="abbr">Department Abbreviation</label></div>
                                 <div><input type="text" name="abbr" id="abbr"
+                                        value="<?php echo $course->selectDepartmentById()[0]['abbr']; ?>"
                                         placeholder="provide an abbreviation for department name" required></div>
                                 <div><input type="submit" name="submit" value="Update" id="submit"></div>
                             </form>

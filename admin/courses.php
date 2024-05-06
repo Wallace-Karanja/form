@@ -50,8 +50,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <?php
                         if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
                             $table = "courses";
-                            $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
-                            $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
+                            $columns = "course, abbr, department_id, level_id, exam_body_id, duration_id, requirement, description";
+                            $parameters = ":course, :abbr, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
                             $course = new Course($table, $columns, $parameters);
                             if ($course->create()) {
                                 $message = "created successifuly";
@@ -63,8 +63,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                         if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                             $table = "courses";
-                            $columns = "course, department_id, level_id, exam_body_id, duration_id, requirement, description";
-                            $parameters = ":course, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
+                            $columns = "course, abbr, department_id, level_id, exam_body_id, duration_id, requirement, description";
+                            $parameters = ":course, :abbr, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
                             $course = new Course($table, $columns, $parameters);
                             if ($course->update()) {
                                 $message = " updated successifuly";
@@ -92,6 +92,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                         required /></div>
                                 <div><label for="abbr">Course Abbreviation</label></div>
                                 <div><input type="text" name="abbr" id="abbr"
+                                        value="<?php echo $record['abbr']; ?>"
                                         placeholder="provide an abbreviation of the course, e.g. CEE, DEE etc" required>
                                 </div>
                                 <div><label for="department">Department</label></div>

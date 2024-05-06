@@ -9,8 +9,10 @@ class Course
     public $fields;
     public $parameters;
 
+    public $updateString;
 
-    public function __construct($table, $column = null, $parameters = null)
+
+    public function __construct($table, $column = null, $parameters = null, $updateString = null)
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->post = $_POST;
@@ -19,6 +21,7 @@ class Course
         $this->table = $table;
         $this->fields = $column;
         $this->parameters = $parameters;
+        $this->updateString = $updateString;
         $this->connection = $this->createDbConnection();
     }
 
@@ -73,6 +76,21 @@ class Course
             if ($stmt->rowCount() == 1) {
                 return true;
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    # to be modified
+    public function createDepartment()
+    {
+        try {
+            unset($this->post['submit']);
+            $sql = "INSERT INTO $this->table ($this->fields) VALUES ($this->parameters)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
         } catch (Exception $e) {
             echo $e->getMessage();
             return false;
@@ -163,13 +181,46 @@ class Course
         }
     }
 
+    public function selectDepartmentById()
+    {
+        try {
+            $sql = "SELECT $this->fields FROM $this->table WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(["id" => $_GET['updateId']]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
     public function update()
     {
         try {
             unset($this->post['submit']);
             $sql = null;
             if (count(explode(" ", $this->parameters)) > 1) {
-                $sql = "UPDATE $this->table SET course = :course, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id,  requirement = :requirement, description = :description WHERE id = :id";
+                $sql = "UPDATE $this->table SET course = :course, abbr = :abbr, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id,  requirement = :requirement, description = :description WHERE id = :id";
+            } else {
+                $sql = "UPDATE $this->table SET $this->fields = :$this->fields WHERE id = :id";
+            }
+
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+
+    public function updateDepartment()
+    {
+        try {
+            unset($this->post['submit']);
+            $sql = null;
+            if ($this->updateString != null) {
+                $sql = "UPDATE $this->table SET $this->updateString WHERE id = :id";
             } else {
                 $sql = "UPDATE $this->table SET $this->fields = :$this->fields WHERE id = :id";
             }
