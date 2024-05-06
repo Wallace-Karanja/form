@@ -198,8 +198,8 @@ class Course
         try {
             unset($this->post['submit']);
             $sql = null;
-            if (count(explode(" ", $this->parameters)) > 1) {
-                $sql = "UPDATE $this->table SET course = :course, abbr = :abbr, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id,  requirement = :requirement, description = :description WHERE id = :id";
+            if ($this->updateString != null) {
+                $sql = "UPDATE $this->table SET $this->updateString WHERE id = :id";
             } else {
                 $sql = "UPDATE $this->table SET $this->fields = :$this->fields WHERE id = :id";
             }

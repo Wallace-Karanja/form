@@ -48,15 +48,6 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                     <div>
                         <?php
-                        # original
-                        // if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
-                        //     $course = new Course("departments", "department", ":department");
-                        //     $course->create();
-                        //     $message = " created successifuly";
-                        //     header("refresh:5;url=" . $_SERVER['PHP_SELF']);
-                        // }
-                        
-                        # modified
                         if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
                             $course = new Course("departments", "department, abbr", ":department, :abbr");
                             if ($course->createDepartment()) {
@@ -120,6 +111,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                             <thead>
                                 <th>Id</th>
                                 <th>Department</th>
+                                <th>Code</th>
                                 <th>Update</th>
                                 <th>Delete</th>
                             </thead>
@@ -128,6 +120,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                     <tr>
                                         <td><?php echo $row['id']; ?></td>
                                         <td><?php echo $row['department']; ?></td>
+                                        <td><?php echo $row['abbr']; ?></td>
                                         <td><a
                                                 href="<?php echo $_SERVER['PHP_SELF'] . "?updateId=" . $row['id'] ?>">Update</a>
                                         </td>

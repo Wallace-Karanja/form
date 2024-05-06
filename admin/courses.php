@@ -63,9 +63,8 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                         if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                             $table = "courses";
-                            $columns = "course, abbr, department_id, level_id, exam_body_id, duration_id, requirement, description";
-                            $parameters = ":course, :abbr, :department_id, :level_id, :exam_body_id, :duration_id, :requirement, :description";
-                            $course = new Course($table, $columns, $parameters);
+                            $updateString = "course = :course, abbr = :abbr, department_id = :department_id, level_id = :level_id, exam_body_id = :exam_body_id,  duration_id = :duration_id,  requirement = :requirement, description = :description";
+                            $course = new Course($table, null, null, $updateString);
                             if ($course->update()) {
                                 $message = " updated successifuly";
                                 header("refresh:5;url=" . $_SERVER['PHP_SELF']);
@@ -91,8 +90,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 <div><input type="text" name="course" value="<?php echo $record['course']; ?>" id="course"
                                         required /></div>
                                 <div><label for="abbr">Course Abbreviation</label></div>
-                                <div><input type="text" name="abbr" id="abbr"
-                                        value="<?php echo $record['abbr']; ?>"
+                                <div><input type="text" name="abbr" id="abbr" value="<?php echo $record['abbr']; ?>"
                                         placeholder="provide an abbreviation of the course, e.g. CEE, DEE etc" required>
                                 </div>
                                 <div><label for="department">Department</label></div>
