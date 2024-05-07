@@ -41,7 +41,9 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
             </div>
         </div>
         <div class="container">
-            <div></div>
+            <div>
+                <?php include './includes/side_navigation.html'; ?>
+            </div>
 
             <div class="main">
                 <div>
@@ -205,7 +207,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                             if ($application->admitApplicant()) {
                                 echo "Successifully admitted";
                                 refresh($_SERVER['PHP_SELF'] . "?id=$_GET[id]", 3);
-                                // send a message to applicant
+                                // send a notification message to applicant
                             }
                         }
                         if (isset($_POST['decline'])) {

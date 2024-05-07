@@ -258,6 +258,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                             <thead>
                                 <th>Id</th>
                                 <th>Course</th>
+                                <th>Code</th>
                                 <th>Department</th>
                                 <th>Level</th>
                                 <th>Exam Body</th>
@@ -270,6 +271,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                     <tr>
                                         <td><?php echo $row['id']; ?></td>
                                         <td><?php echo $row['course']; ?></td>
+                                        <td><?php echo $row['abbr']; ?></td>
                                         <td><?php echo $row['department']; ?></td>
                                         <td><?php echo $row['level']; ?></td>
                                         <td><?php echo $row['exam_body']; ?></td>

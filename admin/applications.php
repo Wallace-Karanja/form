@@ -50,9 +50,12 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <thead>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Date of birth</th>
                             <th>Application</th>
+                            <th>Submitted</th>
+                            <th>Admitted</th>
+                            <th>Adm no</th>
                         </thead>
                         <tbody>
                             <?php
@@ -61,9 +64,12 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                 <td><?php echo $row['id']; ?></td>
                                 <td><?php echo $row['firstname'] . " " . $row['second_name'] . " " . $row['lastname']; ?>
                                 </td>
-                                <td><?php echo $row['email_address']; ?></td>
-                                <td><?php echo $row['phone_number']; ?></td>
+                                <td><?php echo $row['gender']; ?></td>
+                                <td><?php echo $row['birthday']; ?></td>
                                 <td><a href="view.php?id=<?php echo $row['id']; ?>">View</a></td>
+                                <th><?php echo ($row['submitted'] ? "Yes" : "No"); ?></th>
+                                <th><?php echo ($row['admitted'] ? "Yes" : "Declined"); ?></th>
+                                <th><?php echo $row['admission_number'] ?? "Not available"; ?></th>
                                 </tr>
                             <?php } ?>
                         </tbody>

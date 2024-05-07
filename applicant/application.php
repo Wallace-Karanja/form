@@ -235,11 +235,126 @@ class Application extends Applicant
             $stmt = $this->connection->prepare($sql);
             $this->post['admit'] = 1;
             $stmt->execute($this->post);
+            $this->saveAdmissionNumber();
             return $stmt->rowCount() == 1;
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
+
+    public function generateAdmissionNumber()
+    {
+        $departmentCode = $this->getDepartmentCode();
+        $courseCode = $this->getCourseCode();
+        if (!is_null($departmentCode) && !is_null($courseCode)) {
+            $admissionNumber = $departmentCode . "/" . $courseCode . "/" . $this->applicantId . "/" . date('Y');
+            return $admissionNumber;
+        }
+        return null;
+    }
+
+    public function saveAdmissionNumber()
+    {
+        $admissionNumber = $this->generateAdmissionNumber();
+        if (!$this->admissionNumberAssigned()) {
+            if ($admissionNumber != null) {
+                $sql = null;
+                if ($this->admissionNumberRecordExist()) {
+                    $sql = "UPDATE admission_numbers SET admission_number = :admission_number WHERE applicant_id = :applicant_id ";
+                } else {
+                    $sql = "INSERT INTO admission_numbers (applicant_id, admission_number) VALUES (:applicant_id, :admission_number)";
+                }
+
+                try {
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->execute(['applicant_id' => $this->applicantId, 'admission_number' => $admissionNumber]);
+                    return $stmt->rowCount() == 1;
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                    return false;
+                }
+            } else {
+                echo "admission number is null";
+            }
+        } else {
+            echo "admission number already assigned";
+        }
+    }
+
+    // 
+
+    public function revokeAdmissionNumber()
+    {
+        if ($this->admissionNumberAssigned()) {
+            try {
+                $sql = "UPDATE admission_numbers SET admission_number = :admission_number WHERE applicant_id = :applicant_id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute(['admission_number' => '', 'applicant_id' => $this->applicantId]);
+                return $stmt->rowCount() == 1;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                return false;
+            }
+        }
+    }
+
+    public function admissionNumberAssigned()
+    {
+        try {
+            $sql = "SELECT admission_number FROM admission_numbers WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            $admissionNumber = $stmt->fetchColumn();
+            return $admissionNumber != null;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function admissionNumberRecordExist()
+    {
+        try {
+            $sql = "SELECT * FROM admission_numbers WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+
+
+    public function getDepartmentCode()
+    {
+        try {
+            $sql = "SELECT abbr FROM departments WHERE id = (SELECT department_id FROM applications WHERE applicant_id = :applicant_id)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->fetchColumn();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+
+    }
+
+    public function getCourseCode()
+    {
+        try {
+            $sql = "SELECT abbr FROM courses WHERE id = (SELECT course_id FROM applications WHERE applicant_id = :applicant_id)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->fetchColumn();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+
+    }
+
 
     public function declineApplicant()
     {
@@ -250,9 +365,13 @@ class Application extends Applicant
             $sql = "INSERT INTO applications_decision (applicant_id, admitted) VALUES (:applicant_id, :decline)";
         }
         try {
+            if ($this->admissionNumberAssigned()) { // if was already assigned
+                $this->revokeAdmissionNumber();
+            }
             $stmt = $this->connection->prepare($sql);
             $this->post['decline'] = 0;
             $stmt->execute($this->post);
+
             return $stmt->rowCount() == 1;
         } catch (Exception $e) {
             echo $e->getMessage();
