@@ -63,7 +63,7 @@ $applicantId = $record['id'];
                         (<?php echo ($application->submitRecordExist() && $application->applicationIsSubmitted() ? "submitted" : "not submitted"); ?>)
                     </h1>
                 </div>
-                <div class="info">
+                <div class="info" style="background-color: wheat;">
                     <?php
                     $application = new Application(null, null, $applicantId, null, null, null);
                     $info = $application->selectApplicationByApplicantId();
@@ -197,12 +197,32 @@ $applicantId = $record['id'];
                         </div>
                     <?php } ?>
                     <div>
+                        <?php
+                        $application = new Application(null, $_POST, $applicantId);
+                        ?>
+                        <style>
+                            #form {
+                                display: grid;
+                                grid-template-columns: 1fr;
+                                margin: auto;
+                                width: 50%;
+                                border: none;
+                            }
+                        </style>
                         <form action="" method="post" id="form">
                             <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
-                            <div><input type="submit" name="submit" value="Submit Application" class="submit"
-                                    style="background-color: green;"></div>
-                            <div><input type="submit" name="retract" value="Withdraw Application" class="submit"
-                                    style="background-color: red;"></div>
+                            <?php
+                            if (!$application->applicationIsSubmitted()) { ?>
+                                <div><input type="submit" name="submit" value="Submit Application" class="submit"
+                                        style="background-color: green; font-weight: bold;"></div>
+                            <?php } ?>
+                            <?php
+                            if ($application->applicationIsSubmitted()) { ?>
+                                <div><input type="submit" name="retract" value="Withdraw Application" class="submit"
+                                        style="background-color: red; color:black; font-weight: bold;"></div>
+                            <?php }
+                            ?>
+
                         </form>
                         <?php
                         if (isset($_POST['submit'])) {
@@ -231,9 +251,8 @@ $applicantId = $record['id'];
                 <?php } ?>
             </div>
 
-            <div>
-                <p>Hello world</p>
-            </div>
+            <div></div>
+        </div>
     </body>
 
 </html>
