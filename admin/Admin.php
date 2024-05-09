@@ -16,7 +16,7 @@ class Admin
         $this->connection = $this->createDbConnection();
     }
 
-    private function createDbConnection(): object
+    private function createDbConnection()
     {
         require_once './includes/config.php';
         $DSN = "mysql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . "";
@@ -181,7 +181,7 @@ class Admin
             $stmt = $this->connection->prepare($sql);
             $stmt->execute(['id_number' => $this->post['id_number']]);
             $hash = $stmt->fetchColumn();
-            return  password_verify(trim($this->post['password']), $hash);
+            return password_verify(trim($this->post['password']), $hash);
         } catch (Exception $e) {
             echo $e->getMessage();
             return false;
@@ -213,7 +213,7 @@ class Admin
             $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $record;
         } else {
-            return null;
+            return [];
         }
     }
 
@@ -225,11 +225,10 @@ class Admin
             $records = json_decode($jsonLogs);
             return $records;
         } catch (Exception $e) {
-            return $e->getMessage();
+            echo $e->getMessage();
+            return [];
         }
     }
-
-
 
     public function createLog(): void
     {
@@ -242,5 +241,73 @@ class Admin
         $logs[] = $log;
         $jsonLogs = json_encode($logs, JSON_PRETTY_PRINT);
         file_put_contents($logFile, $jsonLogs);
+    }
+
+    public function setIntakePeriod()
+    {
+        unset($this->post['submit']);
+        $this->post['intake'] = strtoupper($this->post['intake']);
+        try {
+            $sql = "INSERT INTO intakes (start_date, end_date, intake, active) VALUES (:start_date, :end_date, :intake, :active)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function updateIntakePeriod()
+    {
+        unset($this->post['update']);
+        $this->post['intake'] = strtoupper($this->post['intake']);
+        try {
+            $sql = "UPDATE intakes SET start_date = :start_date, end_date = :end_date, intake = :intake, active = :active WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function displayAllIntakes()
+    {
+        try {
+            $sql = "SELECT * FROM intakes ORDER BY id DESC";
+            $stmt = $this->connection->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    public function displayActiveIntakes()
+    {
+        try {
+            $sql = "SELECT * FROM intakes WHERE active = 'YES' ORDER BY id DESC";
+            $stmt = $this->connection->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    public function selectIntakeById()
+    {
+        try {
+            $sql = "SELECT * FROM intakes WHERE id = :id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($_GET);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+
     }
 }

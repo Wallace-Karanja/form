@@ -1,3 +1,6 @@
+<?php
+include '../admin/Admin.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,9 +38,27 @@
         <div class="container">
             <div></div>
             <main>
+                <?php
+                // applicants should be able to read intake table
+                $applicant = new Admin();
+                $intakes = $applicant->displayActiveIntakes();
+                ?>
                 <h1>Welcome</h1>
                 <div>
-                    <p>Welcome to Applicant Section</p>
+                    <p>Welcome to Course Application Section</p>
+                    <?php
+                    $today = date("Y-m-d");
+                    if (!empty($intakes)) { ?>
+                        <p>Apply a course for the following intake(s).</p>
+                        <ul>
+                            <?php foreach ($intakes as $intake) { ?>
+                                <?php if ($today < $intake['end_date']) { ?>
+                                    <li><?php echo "<b>" . $intake['intake'] . "</b>"; ?></li>
+                                <?php } ?>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                    </ul>
                 </div>
                 <div>
             </main>

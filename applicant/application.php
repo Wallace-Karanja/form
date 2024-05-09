@@ -32,6 +32,8 @@ class Application extends Applicant
         $this->connection = parent::createDbConnection();
     }
 
+    
+
     public function createInformation()
     {
         try {
