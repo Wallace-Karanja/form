@@ -69,8 +69,8 @@ $applicantId = $record['id'];
                                     $application->table = "departments";
                                     $application->columns = "id";
                                     $department = $application->findAllById($info['department_id'])[0]['department'];
-
-                                    echo "<p>Congratulations, after careful review of your application, we are pleased to inform you that you have been admitted to the program <b>$info[course], $level</b>. In the department of <b>$department</b>. Your admission number is : <i>$admissionNumber</i>.</p>";
+                                    // modify to html
+                                    echo "<p>Congratulations, after careful review of your application, we are pleased to inform you that you have been admitted to the program <b>$info[course], $level</b>. In the department of <b>$department</b>. Your admission number is : <i>$admissionNumber</i>.</p><p>If you choose to decline or accept the offer, click the appropriate button below</p>";
                                 } else {
                                     echo "<p>We regret to inform you that your application was not considered for the program you applied</p>";
                                 }
