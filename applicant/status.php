@@ -52,9 +52,9 @@ $applicantId = $record['id'];
                 <?php include './includes/side_navigation.php'; ?>
             </div>
             <div>
-                <main style="background-color: wheat; padding:5px; border: 1px solid black; border-radius: 5px;">
+                <main>
                     <h1>Application Status</h1>
-                    <div>
+                    <div style="background-color: wheat; padding:5px; border: 1px solid black; border-radius: 5px;">
                         <?php
                         $application = new Application(null, null, $applicantId);
                         if ($application->applicationIsSubmitted()) {
@@ -69,19 +69,43 @@ $applicantId = $record['id'];
                                     $application->table = "departments";
                                     $application->columns = "id";
                                     $department = $application->findAllById($info['department_id'])[0]['department'];
-                                    // modify to html
-                                    echo "<p>Congratulations, after careful review of your application, we are pleased to inform you that you have been admitted to the program <b>$info[course], $level</b>. In the department of <b>$department</b>. Your admission number is : <i>$admissionNumber</i>.</p><p>If you choose to decline or accept the offer, click the appropriate button below</p>";
-                                } else {
-                                    echo "<p>We regret to inform you that your application was not considered for the program you applied</p>";
-                                }
-                            } else {
-                                echo "<p>The decision about your application has not yet been reached</p>";
-                            }
+                                    ?>
+                                    <p>Congratulations, after careful review of your application, we are pleased to inform you that
+                                        you have been admitted to the program
+                                        <b><?php echo $info['course'] . ' ' . $level; ?></b>.In the department
+                                        of <b><?php echo $department; ?></b>. Your admission number is :
+                                        <i><?php //echo $admissionNumber; ?></i>.
+                                    </p>
+                                    <p>To <b>accept</b> or <b>decline</b> the admission offer, click the appropriate button below.
+                                    </p>
+                                    <form action="" method="post">
+                                        <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
+                                        <input type="submit" name="accept" value="Accept" style="color: green;">
+                                        <input type="submit" name="decline" value="Decline" style="color: red;">
+                                    </form>
+                                <?php } else { ?>
+                                    <p>We regret to inform you that your application was not considered for the program you
+                                        applied</p>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <p>The decision about your application has not yet been reached</p>
+                            <?php }
                         } else {
                             echo "<p>You have not submitted your application</p>";
                         }
                         ?>
+
                     </div>
+                    <?php
+                    if (isset($_POST['accept'])) {
+                        var_dump($_POST);
+                        // code
+                    }
+                    if (isset($_POST['decline'])) {
+                        var_dump($_POST);
+                        // code
+                    }
+                    ?>
                 </main>
             </div>
             <div></div>
