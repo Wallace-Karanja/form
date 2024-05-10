@@ -88,9 +88,14 @@ $registrationInformation = new Applicant();
                                     value="<?php echo (isset($row['gender']) ? $row['gender'] : '--select your gender--'); ?>">
                                     <?php echo (isset($row['gender']) ? $row['gender'] : '--select your gender--'); ?>
                                 </option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
                             </select>
+                        </div>
+                        <div>
+                            <label for="id_number">Id Number</label>
+                            <input type="text" name="id_number" id="id_number"
+                                value="<?php echo (isset($row['id_number']) ? $row['id_number'] : ''); ?>" required>
                         </div>
                         <div>
                             <label for="birthday">Date of Birth</label>
@@ -114,16 +119,17 @@ $registrationInformation = new Applicant();
                                     id="alternative_phone"></span></label>
                             <input type="tel" name="alternative_phone" id="alternativePhoneNumber"
                                 value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ''); ?>" />
-                        </div>
+			</div>
+			<div></div>
                         <div><input type="submit" name="submit" id="submit" value="save" /></div>
                     </form>
                     <p id="message">
                         <?php
                         if (isset($_POST["submit"])) {
                             // var_dump($_POST);
-                            $columns = "applicant_id, firstname, lastname, second_name, gender, birthday, email_address, phone_number, alternative_phone";
-                            $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :birthday, :email_address, :phone_number, :alternative_phone";
-                            $updateString = "firstname = :firstname, lastname = :lastname, second_name = :second_name, gender = :gender, birthday = :birthday, email_address = :email_address, phone_number = :phone_number, alternative_phone = :alternative_phone";
+                            $columns = "applicant_id, firstname, lastname, second_name, gender, id_number, birthday, email_address, phone_number, alternative_phone";
+                            $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :id_number, :birthday, :email_address, :phone_number, :alternative_phone";
+                            $updateString = "firstname = :firstname, lastname = :lastname, second_name = :second_name, gender = :gender, id_number = :id_number, birthday = :birthday, email_address = :email_address, phone_number = :phone_number, alternative_phone = :alternative_phone";
                             $application = new Application("personal_information", $_POST, $id, $columns, $parameters, $updateString);
                             if ($application->saveInformation()) {
                                 echo "Saved Successifully";
