@@ -32,7 +32,7 @@ class Application extends Applicant
         $this->connection = parent::createDbConnection();
     }
 
-    
+
 
     public function createInformation()
     {
@@ -389,6 +389,68 @@ class Application extends Applicant
             return $stmt->rowCount() == 1;
         } catch (Exception $e) {
             echo $e->getMessage();
+        }
+    }
+
+    public function selectSubmittedApplicationByApplicantId()
+    {
+        try {
+            $sql = "SELECT * FROM submitted_applications WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+
+    }
+
+    public function setAdmissionOfferDecision()
+    {
+        try {
+            $sql = null;
+            if ($this->admissionOfferDecisionExist()) {
+                $sql = "UPDATE admission_offers SET applicant_decision = :applicant_decision WHERE application_id = :application_id AND applicant_id = :applicant_id";
+            } else {
+                $sql = "INSERT INTO admission_offers (application_id, applicant_id, applicant_decision) VALUES ( :application_id, :applicant_id, :applicant_decision)";
+            }
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($this->post);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
+    public function getAdmissionOfferDecision()
+    {
+        if ($this->admissionOfferDecisionExist()) {
+            try {
+                $sql = "SELECT applicant_decision FROM admission_offers WHERE applicant_id = :applicant_id";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute(['applicant_id' => $this->applicantId]);
+                return $stmt->fetchColumn();
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                return null;
+            }
+        }
+        return null;
+
+    }
+
+    public function admissionOfferDecisionExist()
+    {
+        try {
+            $sql = "SELECT * FROM admission_offers WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->rowCount() == 1;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
         }
     }
 

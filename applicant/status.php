@@ -78,10 +78,15 @@ $applicantId = $record['id'];
                                     </p>
                                     <p>To <b>accept</b> or <b>decline</b> the admission offer, click the appropriate button below.
                                     </p>
+                                    <?php
+                                    $application = new Application(null, null, $applicantId);
+                                    $applicationId = $application->selectSubmittedApplicationByApplicantId()[0]['id'];
+                                    ?>
                                     <form action="" method="post">
                                         <input type="hidden" name="applicant_id" value="<?php echo $applicantId; ?>">
-                                        <input type="submit" name="accept" value="Accept" style="color: green;">
-                                        <input type="submit" name="decline" value="Decline" style="color: red;">
+                                        <input type="hidden" name="application_id" value="<?php echo $applicationId; ?>">
+                                        <input type="submit" name="applicant_decision" value="ACCEPT" style="color: green;">
+                                        <input type="submit" name="applicant_decision" value="DECLINE" style="color: red;">
                                     </form>
                                 <?php } else { ?>
                                     <p>We regret to inform you that your application was not considered for the program you
@@ -94,16 +99,25 @@ $applicantId = $record['id'];
                             echo "<p>You have not submitted your application</p>";
                         }
                         ?>
-
+                        <?php if ($application->getAdmissionOfferDecision() == !null) { ?>
+                            <?php
+                            $decision = $application->getAdmissionOfferDecision();
+                            ?>
+                            <p>You have
+                                <b><?php echo (preg_match('/T$/', $decision) ? $decision . "ED" : $decision . "D"); ?></b>
+                                the
+                                admission
+                                offer
+                            </p>
+                        <?php } ?>
                     </div>
                     <?php
-                    if (isset($_POST['accept'])) {
-                        var_dump($_POST);
-                        // code
-                    }
-                    if (isset($_POST['decline'])) {
-                        var_dump($_POST);
-                        // code
+                    if (isset($_POST['applicant_decision'])) {
+                        $application = new Application(null, $_POST, $applicantId);
+                        if ($application->setAdmissionOfferDecision()) {
+                            echo "Your decision has been saved";
+                            refresh($_SERVER['PHP_SELF'], '3');
+                        }
                     }
                     ?>
                 </main>
