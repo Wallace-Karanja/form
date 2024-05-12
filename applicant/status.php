@@ -56,6 +56,7 @@ $applicantId = $record['id'];
                     <h1>Application Status</h1>
                     <div style="background-color: wheat; padding:5px; border: 1px solid black; border-radius: 5px;">
                         <?php
+                        // $admissionNumber = null;
                         $application = new Application(null, null, $applicantId);
                         if ($application->applicationIsSubmitted()) {
                             if ($application->applicationDecisionExist()) {
@@ -73,8 +74,7 @@ $applicantId = $record['id'];
                                     <p>Congratulations, after careful review of your application, we are pleased to inform you that
                                         you have been admitted to the program
                                         <b><?php echo $info['course'] . ' ' . $level; ?></b>.In the department
-                                        of <b><?php echo $department; ?></b>. Your admission number is :
-                                        <i><?php //echo $admissionNumber; ?></i>.
+                                        of <b><?php echo $department; ?></b>.
                                     </p>
                                     <p>To <b>accept</b> or <b>decline</b> the admission offer, click the appropriate button below.
                                     </p>
@@ -88,6 +88,18 @@ $applicantId = $record['id'];
                                         <input type="submit" name="applicant_decision" value="ACCEPT" style="color: green;">
                                         <input type="submit" name="applicant_decision" value="DECLINE" style="color: red;">
                                     </form>
+                                    <?php if ($application->getAdmissionOfferDecision() == !null) { ?>
+                                        <?php
+                                        $decision = $application->getAdmissionOfferDecision();
+                                        ?>
+                                        <p>You have
+                                            <b><?php echo (preg_match('/[^AEIOU]$/', $decision) ? $decision . "ED" : $decision . "D"); ?></b>
+                                            the admission offer !
+                                            <?php if ($decision == "ACCEPT") { ?>
+                                            <p>Your Addmision number is : <b><?php echo $admissionNumber; ?></b></p>
+                                        <?php } ?>
+                                        </p>
+                                    <?php } ?>
                                 <?php } else { ?>
                                     <p>We regret to inform you that your application was not considered for the program you
                                         applied</p>
@@ -99,17 +111,7 @@ $applicantId = $record['id'];
                             echo "<p>You have not submitted your application</p>";
                         }
                         ?>
-                        <?php if ($application->getAdmissionOfferDecision() == !null) { ?>
-                            <?php
-                            $decision = $application->getAdmissionOfferDecision();
-                            ?>
-                            <p>You have
-                                <b><?php echo (preg_match('/T$/', $decision) ? $decision . "ED" : $decision . "D"); ?></b>
-                                the
-                                admission
-                                offer
-                            </p>
-                        <?php } ?>
+
                     </div>
                     <?php
                     if (isset($_POST['applicant_decision'])) {
