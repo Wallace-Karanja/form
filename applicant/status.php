@@ -4,7 +4,7 @@ session_start();
 include 'Applicant.php';
 include 'Application.php';
 include './includes/helper_funcs.php';
-if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
+if (!isset($_SESSION['id'])) {
     $url = './login.php';
     header("Location:" . $url);
 }
@@ -41,7 +41,7 @@ $applicantId = $record['id'];
                             <li class="links"><a href="">Contact Us</a></li>
                         </div>
                         <div>
-                            <li class="links"><a href="../admin/">Admin</a></li>
+                            <li class="links"><a href="logout.php">Logout</a></li>
                         </div>
                     </ul>
                 </nav>

@@ -454,4 +454,19 @@ class Application extends Applicant
         }
     }
 
+    public function searchApplications()
+    {
+        try {
+            unset($_GET['submit']);
+            // $sql = "SELECT * FROM applications WHERE firstname = :name OR lastname = :name OR second_name = :name OR id_number = :id_number OR phone_number = :id_number";
+            $sql = "SELECT * FROM applications WHERE (lastname = :name) OR (id_number = :id_number) OR (phone_number = :id_number)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($_GET);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
 }
