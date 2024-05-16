@@ -57,6 +57,8 @@ include '../admin/Admin.php';
                                 <?php } ?>
                             <?php } ?>
                         </ul>
+                    <?php } else { ?>
+                        <p>There are no active intakes currently, please check later !</p>
                     <?php } ?>
                     </ul>
                 </div>

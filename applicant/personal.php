@@ -50,7 +50,6 @@ $registrationInformation = new Applicant();
             </div>
             <main>
                 <h1>Application</h1>
-                <h2>Personal information</h2>
                 <div>
                     <?php
                     $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
@@ -63,7 +62,46 @@ $registrationInformation = new Applicant();
                         $row = $record;
                     }
                     ?>
-
+                    <h2>Intake Term</h2>
+                    <?php
+                    $applications = new Application($table = "intakes", null, $id, "active", null, null);
+                    $intakes = $applications->findAllByColumn("YES"); // active intake
+                    
+                    // selected Intake
+                    $applications->table = "intake_information";
+                    $selectedIntake = $applications->selectByApplicantId($id);
+                    $selected = !(empty($selectedIntake)) ? $selectedIntake[0]['intake'] : "--select and intake--";
+                    ?>
+                    <form action="" method="post" id="form">
+                        <input type="hidden" name="applicant_id" value="<?php echo (isset($id) ? $id : ""); ?>">
+                        <div><label for="intake">Intake</label></div>
+                        <div>
+                            <select name="intake" id="intake" <?php echo (empty($intakes) ? "disabled" : ""); ?>>
+                                <option value="<?php echo $selected; ?>"><?php echo $selected; ?></option>
+                                <?php foreach ($intakes as $intake) { ?>
+                                    <option value="<?php echo $intake['intake']; ?>"><?php echo $intake['intake']; ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div><input type="submit" name="submit" value="save" id="submit" <?php echo (empty($intakes) ? "disabled" : ""); ?>></div>
+                    </form>
+                    <?php
+                    if (isset($_POST["submit"]) && $_POST["submit"] == "save") {
+                        $table = "intake_information";
+                        $columns = "applicant_id, intake";
+                        $parameters = ":applicant_id, :intake";
+                        $updateString = "applicant_id = :applicant_id, intake = :intake";
+                        $application = new Application($table, $_POST, $id, $columns, $parameters, $updateString);
+                        if ($application->saveInformation()) {
+                            echo "Saved Successifully </br>";
+                            refresh($_SERVER['PHP_SELF'], 3);
+                        } else {
+                            echo "Saving failure/no changes made";
+                        }
+                    }
+                    ?>
+                    <h2>Personal information</h2>
                     <form action="" method="post" id="form">
                         <input type="hidden" name="applicant_id" value="<?php echo (isset($id) ? $id : ""); ?>">
                         <div>
@@ -119,23 +157,23 @@ $registrationInformation = new Applicant();
                                     id="alternative_phone"></span></label>
                             <input type="tel" name="alternative_phone" id="alternativePhoneNumber"
                                 value="<?php echo (isset($row['alternative_phone']) ? $row['alternative_phone'] : ''); ?>" />
-			</div>
-			<div></div>
-                        <div><input type="submit" name="submit" id="submit" value="save" /></div>
+                        </div>
+                        <div></div>
+                        <div><input type="submit" name="submit" id="submit" value="update" /></div>
                     </form>
                     <p id="message">
                         <?php
-                        if (isset($_POST["submit"])) {
+                        if (isset($_POST["submit"]) && $_POST["submit"] == "update") {
                             // var_dump($_POST);
                             $columns = "applicant_id, firstname, lastname, second_name, gender, id_number, birthday, email_address, phone_number, alternative_phone";
                             $parameters = ":applicant_id, :firstname, :lastname, :second_name, :gender, :id_number, :birthday, :email_address, :phone_number, :alternative_phone";
                             $updateString = "firstname = :firstname, lastname = :lastname, second_name = :second_name, gender = :gender, id_number = :id_number, birthday = :birthday, email_address = :email_address, phone_number = :phone_number, alternative_phone = :alternative_phone";
                             $application = new Application("personal_information", $_POST, $id, $columns, $parameters, $updateString);
                             if ($application->saveInformation()) {
-                                echo "Saved Successifully";
+                                echo "Saved Successifully </br>";
                                 refresh($_SERVER['PHP_SELF'], 3);
                             } else {
-                                echo "Saving failure";
+                                echo "Saving failure/no changes made";
                             }
                         }
                         ?>

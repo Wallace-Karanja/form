@@ -276,7 +276,7 @@ class Admin
     public function displayAllIntakes()
     {
         try {
-            $sql = "SELECT * FROM intakes ORDER BY id DESC";
+            $sql = "SELECT * FROM intakes ORDER BY id ASC";
             $stmt = $this->connection->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
@@ -288,7 +288,7 @@ class Admin
     public function displayActiveIntakes()
     {
         try {
-            $sql = "SELECT * FROM intakes WHERE active = 'YES' ORDER BY id DESC";
+            $sql = "SELECT * FROM intakes WHERE active = 'YES' ORDER BY id ASC";
             $stmt = $this->connection->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

@@ -114,6 +114,19 @@ class Application extends Applicant
         }
     }
 
+    public function findAllByColumn($columnValue)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE $this->columns = '" . $columnValue . "'";
+            $stmt = $this->connection->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
     public function insertNewSubCounty()
     {
         try {
@@ -244,20 +257,59 @@ class Application extends Applicant
         }
     }
 
-    public function generateAdmissionNumber()
+    public function assembleAdmissionNumber()
     {
         $departmentCode = $this->getDepartmentCode();
         $courseCode = $this->getCourseCode();
-        if (!is_null($departmentCode) && !is_null($courseCode)) {
-            $admissionNumber = $departmentCode . "/" . $courseCode . "/" . $this->applicantId . "/" . date('Y');
+        $number = $this->generateAdmissionNumber();
+        if (!is_null($departmentCode) && !is_null($courseCode) && !is_null($number)) {
+            $admissionNumber = $departmentCode . "/" . $courseCode . "/" . $number . "/" . date('Y');
             return $admissionNumber;
         }
         return null;
     }
 
+    public function generateAdmissionNumber()
+    {
+        if ($this->getAdmissionNumber() == "") {
+            try {
+                $this->connection->beginTransaction();
+                $sql = "INSERT INTO admission_numbers_counter (applicant_id) VALUES (:applicant_id)";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute(['applicant_id' => $this->applicantId]);
+                $this->connection->commit();
+                if ($stmt->rowCount() == 1) {
+                    return $this->getAdmissionNumber();
+                }
+                return null;
+            } catch (Exception $e) {
+                $this->connection->rollBack();
+                echo $e->getMessage();
+                return null;
+            }
+        } else {
+            return $this->getAdmissionNumber();
+        }
+
+    }
+
+    public function getAdmissionNumber()
+    {
+        try {
+            $sql = "SELECT admission_no FROM admission_numbers_counter WHERE applicant_id = :applicant_id";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute(['applicant_id' => $this->applicantId]);
+            return $stmt->fetchColumn();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+
     public function saveAdmissionNumber()
     {
-        $admissionNumber = $this->generateAdmissionNumber();
+        $admissionNumber = $this->assembleAdmissionNumber();
         if (!$this->admissionNumberAssigned()) {
             if ($admissionNumber != null) {
                 $sql = null;

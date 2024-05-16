@@ -43,13 +43,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
             <div>
                 <?php include './includes/side_navigation.html'; ?>
             </div>
-            <div>
-                <style>
-                    .container {
-                        grid-template-columns: 2fr 2fr 2fr;
-                    }
-                </style>
-
+            <div style="background-color: wheat; padding: 10px;">
                 <?php
                 $admin = new Admin();
                 if (isset($_GET['id']) && $admin->selectIntakeById()) {

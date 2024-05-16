@@ -67,7 +67,7 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
 
                     </h1>
                 </div>
-                <div class="info">
+                <div class="info" style="background-color: wheat;">
                     <?php
                     if (!empty($info)) { ?>
                         <?php foreach ($info as $row) { ?>
@@ -84,6 +84,9 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                                     </div>
                                     <div>
                                         <p><b>Date of Birth</b> : <?php echo $row['birthday']; ?></p>
+                                    </div>
+                                    <div>
+                                        <p><b>ID Number</b> : <?php echo $row['id_number']; ?></p>
                                     </div>
                                     <div>
                                         <p><b>Phone Number</b> : <?php echo $row['phone_number']; ?></p>

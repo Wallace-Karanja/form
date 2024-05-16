@@ -193,7 +193,7 @@ class Applicant
             $stmt = $this->connection->prepare($sql);
             $stmt->execute(['phone_number' => $this->post['phone_number']]);
             $hash = $stmt->fetchColumn();
-            return  password_verify(trim($this->post['password']), $hash);
+            return password_verify(trim($this->post['password']), $hash);
         } catch (Exception $e) {
             echo $e->getMessage();
             return false;
@@ -226,6 +226,7 @@ class Applicant
             return $records;
         } catch (Exception $e) {
             echo $e->getMessage();
+            return null;
         }
     }
 
@@ -238,6 +239,7 @@ class Applicant
             return $records;
         } catch (Exception $e) {
             echo $e->getMessage();
+            return null;
         }
     }
 

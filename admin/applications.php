@@ -54,13 +54,15 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <input type="submit" name="submit" value="Search">
                     </form>
                     <?php
-                    if (isset($_GET)) {
-                        $applications = new Application();
-                        $search = $applications->searchApplications();
-                        if (!empty($search)) {
-                            echo "search yielded results";
-                        }
-                    }
+                    // if (isset($_GET['submit'])) {
+                    //     $applications = new Application();
+                    //     $search = $applications->searchApplications();
+                    //     if (!empty($search)) {
+                    //         echo "search yielded results";
+                    //     } else {
+                    //         echo "search yielded no results";
+                    //     }
+                    // }
                     ?>
                     <table style="margin: 0;">
                         <thead>
@@ -77,7 +79,19 @@ if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
                         <tbody>
                             <?php
                             $applications = new Application();
-                            $allApplications = $applications->selectAllApplications();
+                            if (isset($_GET['submit'])) {
+                                $search = $applications->searchApplications();
+                                if (!empty($search)) { // if there are result
+                                    $allApplications = $search;
+                                    echo "search yielded : " . count($allApplications) . " results";
+                                } else {
+                                    $allApplications = $applications->selectAllApplications();
+                                    echo "search yielded 0 results";
+                                }
+                            } else {  
+                                $allApplications = $applications->selectAllApplications();
+                            }
+
                             foreach ($allApplications as $row) { ?>
                                 <td><?php echo $row['id']; ?></td>
                                 <td><?php echo $row['firstname'] . " " . $row['second_name'] . " " . $row['lastname']; ?>
