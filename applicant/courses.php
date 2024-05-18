@@ -40,7 +40,8 @@ require '../admin/Course.php';
             <h1>Course Catalogue</h1>
             <div>
                 <?php
-                $course = new Course("courses_view", ""); // select from a view
+                $columns = "id, course, department, level, exam_body, duration, requirement, description";
+                $course = new Course("courses_view", $columns); // select from a view
                 $courses = $course->selectAll("department"); // order by dpt
                 ?>
                 <form action="" method="get" id="form">
@@ -56,7 +57,8 @@ require '../admin/Course.php';
 
                 <?php
                 if (isset($_GET['submit'])) {
-                    $course = new Course('courses_view');
+                    $columns = "id, course, department, level, exam_body, duration, requirement, description";
+                    $course = new Course('courses_view', $columns);
                     $courses = $course->searchCourse();
                 }
                 ?>

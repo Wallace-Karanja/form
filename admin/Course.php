@@ -239,7 +239,7 @@ class Course
     {
         try {
             unset($_GET["submit"]);
-            $sql = "SELECT * FROM $this->table WHERE course LIKE :course AND department LIKE :department";
+            $sql = "SELECT $this->fields FROM $this->table WHERE course LIKE :course AND department LIKE :department";
             $stmt = $this->connection->prepare($sql);
             $course = "%" . $_GET['course'] . "%";
             $department = "%" . $_GET['department'] . "%";

@@ -121,11 +121,12 @@ $registrationInformation = new Applicant();
                 </form>
                 <p id="message"></p>
                 <?php
-                if (isset($_POST["submit"])) {
+                if (isset($_POST["submit"]) && $_POST["sub_county_id"] !== "other") {
                     $columns = "applicant_id, county_id, sub_county_id, location, sub_location, village";
                     $parameters = ":applicant_id, :county_id, :sub_county_id, :location, :sub_location, :village";
                     $updateString = "applicant_id = :applicant_id, county_id = :county_id, sub_county_id = :sub_county_id, location = :location, sub_location = :sub_location, village = :village";
                     $application = new Application("demographic_information", $_POST, $id, $columns, $parameters, $updateString);
+                    unset($application->post["other_sub_county"]); //unset this value
                     if ($application->saveInformation()) {
                         echo "Saved Successifully";
                         refresh($_SERVER['PHP_SELF'], 3);
@@ -133,7 +134,7 @@ $registrationInformation = new Applicant();
                         echo "Saving failure/no changes made";
                     }
 
-                    if (isset($_POST["sub_county_id"]) && $_POST["sub_county_id"] == "other") {
+                    if (isset($_POST["submit"]) && $_POST["sub_county_id"] == "other") {
                         $columns = "applicant_id, county_id, sub_county_id, location, sub_location, village";
                         $parameters = ":applicant_id, :county_id, :sub_county_id, :other_sub_county, :location, :sub_location, :village";
                         $updateString = "applicant_id = :applicant_id, county_id = :county_id, sub_county_id = :sub_county_id, location = :location, sub_location = :sub_location, village = :village";

@@ -87,13 +87,13 @@ $registrationInformation = new Applicant();
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
                     <div><label for="secondary_school_name">Secondary School Name</label></div>
-                    <div><input type="text" name="secondary_school_name" value="<?php echo (isset($row['secondary_school_name']) ? $row['secondary_school_name'] : ''); ?>" id="primary" placeholder="provide the name of secondary School you attended" required></div>
+                    <div><input type="text" name="secondary_school_name" value="<?php echo (isset($row['secondary_school_name']) ? $row['secondary_school_name'] : ''); ?>" id="primary" required></div>
                     <div><label for="kcse_index_number">KCSE index Number</label></div>
-                    <div><input type="text" name="kcse_index_number" value="<?php echo (isset($row['kcse_index_number']) ? $row['kcse_index_number'] : ''); ?>" id="index" placeholder="provide your kcse index number" required></div>
+                    <div><input type="text" name="kcse_index_number" value="<?php echo (isset($row['kcse_index_number']) ? $row['kcse_index_number'] : ''); ?>" id="index" required></div>
                     <div><label for="grade">Grade</label></div>
-                    <div><input type="text" name="kcse_grade" value="<?php echo (isset($row['kcse_grade']) ? $row['kcse_grade'] : ''); ?>" id="grade" placeholder="provide your kcse grade" required></div>
+                    <div><input type="text" name="kcse_grade" value="<?php echo (isset($row['kcse_grade']) ? $row['kcse_grade'] : ''); ?>" id="grade" required></div>
                     <div><label for="date_of_primary_education_completion">Date of Completion</label></div>
-                    <div><input type="date" name="date_of_secondary_education_completion" value="<?php echo (isset($row['date_of_secondary_education_completion']) ? $row['date_of_secondary_education_completion'] : ''); ?>" id="grade" placeholder="provide the date of secondary education completion"></div>
+                    <div><input type="date" name="date_of_secondary_education_completion" value="<?php echo (isset($row['date_of_secondary_education_completion']) ? $row['date_of_secondary_education_completion'] : ''); ?>"></div>
                     <div><input type="submit" name="submit" value="save" id="submit"></div>
                 </form>
                 <h3>Tertiary Education Information(Optional)</h3>
