@@ -46,21 +46,12 @@ $registrationInformation = new Applicant();
     </div>
     <div class="container">
         <div>
-            <nav>
-                <ul>
-                    <li><a href="personal.php">Personal Information</a></li>
-                    <li><a href="demographics.php">Demographic Information</a></li>
-                    <li><a href="academics.php">Academic Information</a></li>
-                    <li><a href="course.php<?php echo (isset($_GET['courseId']) ? '?courseId=' . $_GET['courseId'] : '') ?>">Select Course</a></li>
-                    <li><a href="demographics.php">Parent/Guardian Information</a></li>
-                    <li><a href="upload.php">Upload Documents</a></li>
-                </ul>
-            </nav>
+            <?php include "./includes/side_navigation.php"; ?>
         </div>
         <main>
             <h1>Application</h1>
             <h2>Academic Information</h2>
-            <div>
+            <div style="background-color: wheat; padding: 10px; border: 1px solid grey; border-radius: 5px;">
                 <?php
                 $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
                 $id = $record['id'];
@@ -83,6 +74,24 @@ $registrationInformation = new Applicant();
                     <div><input type="date" name="date_of_primary_education_completion" value="<?php echo (isset($row['date_of_primary_education_completion']) ? $row['date_of_primary_education_completion'] : ''); ?>" id="grade" placeholder="provide the date of primary education completion"></div>
                     <div><input type="submit" name="submit" value="save" id="submit"></div>
                 </form>
+                <div>
+                    <p style="color:green">
+                        <?php
+                        if (isset($_POST["submit"]) && isset($_POST["primary_school_name"])) {
+                            $columns = "applicant_id, primary_school_name, kcpe_index_number, kcpe_marks, date_of_primary_education_completion";
+                            $parameters = ":applicant_id, :primary_school_name, :kcpe_index_number, :kcpe_marks, :date_of_primary_education_completion";
+                            $updateString = "applicant_id = :applicant_id, primary_school_name = :primary_school_name, kcpe_index_number = :kcpe_index_number, kcpe_marks = :kcpe_marks, date_of_primary_education_completion = :date_of_primary_education_completion";
+                            $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
+                            if ($application->saveInformation()) {
+                                echo "Saved Successifully";
+                                refresh($_SERVER['PHP_SELF'], 3);
+                            } else {
+                                echo "Saving failure/no changes made";
+                                refresh($_SERVER['PHP_SELF'], 5);
+                            }
+                        } ?>
+                    </p>
+                </div>
                 <h3>Secondary School Academic Information</h3>
                 <form action="" method="post" id="form">
                     <input type="hidden" name="applicant_id" value="<?php echo $id; ?>">
@@ -95,6 +104,19 @@ $registrationInformation = new Applicant();
                     <div><label for="date_of_primary_education_completion">Date of Completion</label></div>
                     <div><input type="date" name="date_of_secondary_education_completion" value="<?php echo (isset($row['date_of_secondary_education_completion']) ? $row['date_of_secondary_education_completion'] : ''); ?>"></div>
                     <div><input type="submit" name="submit" value="save" id="submit"></div>
+                    <?php
+                    if (isset($_POST["submit"]) && isset($_POST["secondary_school_name"])) {
+                        $columns = "applicant_id, secondary_school_name, kcse_index_number, kcse_grade, date_of_secondary_education_completion";
+                        $parameters = ":applicant_id, :secondary_school_name, :kcse_index_number, :kcse_grade, :date_of_secondary_education_completion";
+                        $updateString = "secondary_school_name = :secondary_school_name, kcse_index_number = :kcse_index_number, kcse_grade = :kcse_grade, date_of_secondary_education_completion = :date_of_secondary_education_completion";
+                        $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
+                        if ($application->saveInformation()) {
+                            echo "Saved Successifully";
+                            refresh($_SERVER['PHP_SELF'], 3);
+                        } else {
+                            echo "Saving failure/no changes made";
+                        }
+                    } ?>
                 </form>
                 <h3>Tertiary Education Information(Optional)</h3>
                 <p>If you have attended a tertiary institution fill the following form</p>
@@ -112,32 +134,6 @@ $registrationInformation = new Applicant();
                 </form>
                 <p id="message"></p>
                 <?php
-                if (isset($_POST["submit"]) && isset($_POST["primary_school_name"])) {
-                    $columns = "applicant_id, primary_school_name, kcpe_index_number, kcpe_marks, date_of_primary_education_completion";
-                    $parameters = ":applicant_id, :primary_school_name, :kcpe_index_number, :kcpe_marks, :date_of_primary_education_completion";
-                    $updateString = "applicant_id = :applicant_id, primary_school_name = :primary_school_name, kcpe_index_number = :kcpe_index_number, kcpe_marks = :kcpe_marks, date_of_primary_education_completion = :date_of_primary_education_completion";
-                    $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
-                    if ($application->saveInformation()) {
-                        echo "Saved Successifully";
-                        refresh($_SERVER['PHP_SELF'], 3);
-                    } else {
-                        echo "Saving failure/no changes made";
-                    }
-                }
-
-                if (isset($_POST["submit"]) && isset($_POST["secondary_school_name"])) {
-                    $columns = "applicant_id, secondary_school_name, kcse_index_number, kcse_grade, date_of_secondary_education_completion";
-                    $parameters = ":applicant_id, :secondary_school_name, :kcse_index_number, :kcse_grade, :date_of_secondary_education_completion";
-                    $updateString = "secondary_school_name = :secondary_school_name, kcse_index_number = :kcse_index_number, kcse_grade = :kcse_grade, date_of_secondary_education_completion = :date_of_secondary_education_completion";
-                    $application = new Application("academic_information", $_POST, $id, $columns, $parameters, $updateString);
-                    if ($application->saveInformation()) {
-                        echo "Saved Successifully";
-                        refresh($_SERVER['PHP_SELF'], 3);
-                    } else {
-                        echo "Saving failure/no changes made";
-                    }
-                }
-
                 if (isset($_POST["submit"]) && isset($_POST["tertiary_institute_name"])) {
                     $columns = "applicant_id, tertiary_institute_name, tertiary_course_name, tertiary_classification, date_of_tertiary_education_completion";
                     $parameters = ":applicant_id, :tertiary_institute_name, :tertiary_course_name, :tertiary_classification, :date_of_tertiary_education_completion";

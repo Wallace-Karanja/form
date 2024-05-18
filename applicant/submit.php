@@ -66,7 +66,7 @@ $applicantId = $record['id'];
                 </p>
                 <h1>Your Application
                     (<?php echo ($application->submitRecordExist() && $application->applicationIsSubmitted() ? "submitted" : "not submitted"); ?><?php if ($application->applicationIsSubmitted()) {
-                                                                                                                                                        echo ($application->admissionNumberAssigned() ? "admitted" : "Declined");
+                                                                                                                                                        echo ($application->admissionNumberAssigned() ? " & admitted" : " & Declined");
                                                                                                                                                     } ?>)
                 </h1>
                 <?php

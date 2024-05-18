@@ -51,7 +51,7 @@ $registrationInformation = new Applicant();
         <main>
             <h1>Application</h1>
             <h2>Demographic Information</h2>
-            <div>
+            <div style="background-color: wheat; padding: 10px; border: 1px solid grey; border-radius: 5px;">
                 <?php
                 $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
                 $id = $record['id'];
@@ -152,35 +152,36 @@ $registrationInformation = new Applicant();
                     }
                 }
                 ?>
+
+                <?php
+                $counties = new Application("counties", null, null, "county", null, null);
+                $subCounties = new Application("sub_counties", null, null, "sub_county", null, null);
+                if (isset($row)) { ?>
+                    <h3>Saved Demographic Information</h3>
+                    <table style="margin: 0;">
+                        <tr>
+                            <td>County</td>
+                            <td><?php echo $counties->findColumnById($row['county_id']); ?></td>
+                        </tr>
+                        <tr>
+                            <td>Sub County</td>
+                            <td><?php echo $subCounties->findColumnById($row['sub_county_id']); ?></td>
+                        </tr>
+                        <tr>
+                            <td>Location</td>
+                            <td><?php echo $row['location']; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Sub Location</td>
+                            <td><?php echo $row['sub_location']; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Village</td>
+                            <td><?php echo $row['village']; ?></td>
+                        </tr>
+                    </table>
+                <?php } ?>
             </div>
-            <?php
-            $counties = new Application("counties", null, null, "county", null, null);
-            $subCounties = new Application("sub_counties", null, null, "sub_county", null, null);
-            if (isset($row)) { ?>
-                <h3>Saved Demographic Information</h3>
-                <table style="margin: 0;">
-                    <tr>
-                        <td>County</td>
-                        <td><?php echo $counties->findColumnById($row['county_id']); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Sub County</td>
-                        <td><?php echo $subCounties->findColumnById($row['sub_county_id']); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Location</td>
-                        <td><?php echo $row['location']; ?></td>
-                    </tr>
-                    <tr>
-                        <td>Sub Location</td>
-                        <td><?php echo $row['sub_location']; ?></td>
-                    </tr>
-                    <tr>
-                        <td>Village</td>
-                        <td><?php echo $row['village']; ?></td>
-                    </tr>
-                </table>
-            <?php } ?>
         </main>
         <div></div>
     </div>

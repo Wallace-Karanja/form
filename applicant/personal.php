@@ -50,7 +50,7 @@ $registrationInformation = new Applicant();
         </div>
         <main>
             <h1>Application</h1>
-            <div>
+            <div style="background-color: wheat; padding: 10px; border: 1px solid grey; border-radius: 5px;">
                 <?php
                 $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
                 $id = $record['id'];
