@@ -5,7 +5,7 @@ include 'Form.php';
 include 'Applicant.php';
 include 'Application.php';
 include './includes/helper_funcs.php';
-if (!isset($_SESSION['id']) && $_SESSION['id'] !== 29334778) {
+if (!isset($_SESSION['id'])) {
     $url = './login.php';
     header("Location:" . $url);
 }
