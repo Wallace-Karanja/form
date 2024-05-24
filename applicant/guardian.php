@@ -52,7 +52,7 @@ $registrationInformation = new Applicant();
             <h1>Application</h1>
             <h2>Parent/Guardian/Sponsor Information</h2>
             <p>Provide details of your parent, a guardian or a sponsor who is supporting your education</p>
-            <div style="background-color: wheat; padding: 10px; border: 1px solid grey; border-radius: 5px;">
+            <div class="main-div">
                 <?php
                 $record = $registrationInformation->selectApplicantByPhoneNumber($_SESSION['id'])[0];
                 $id = $record['id'];

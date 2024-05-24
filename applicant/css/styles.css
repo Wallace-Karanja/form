@@ -2,6 +2,15 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: navy;
+  margin-top: 0;
+}
+
+a {
+  color: teal;
+}
+
 .header-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -40,6 +49,14 @@ body {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
+
+.main-div {
+  background-color: wheat; 
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
 
 #form {
   display: grid;

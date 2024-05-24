@@ -20,7 +20,7 @@ $applicantId = $record['id'];
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="../admin/css/styles.css">
     <link rel="stylesheet" href="../admin/css/application_view_styles.css">
     <title>Form</title>
@@ -73,7 +73,7 @@ $applicantId = $record['id'];
                 ($application->admissionNumberAssigned());
                 ?>
             </div>
-            <div class="info" style="background-color: wheat;">
+            <div class="main-div">
                 <?php
                 $application = new Application(null, null, $applicantId, null, null, null);
                 $info = $application->selectApplicationByApplicantId();
@@ -321,8 +321,8 @@ $applicantId = $record['id'];
                                 </div>
                             </div>
                         </div>
-            </div>
         <?php } ?>
+		</div>
         <div>
             <?php
                     $application = new Application(null, $_POST, $applicantId);
